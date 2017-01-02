@@ -41,7 +41,7 @@ public class SExprReference extends SimpleExpression {
     }
 
     public Class<?>[] acceptChange(Changer.ChangeMode changeMode) {
-        return refProp.expr.acceptChange(changeMode);
+        return CollectionUtils.array(Object.class);
     }
 
     public void change(Event e, Object[] o, Changer.ChangeMode changeMode) {
