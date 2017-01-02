@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import static java.lang.Math.PI;
 
 /**
- * Created by ARTHUR on 29/12/2016.
+ * Created by Syst3ms on 29/12/2016.
  */
 public class QuarSk extends JavaPlugin {
 
@@ -30,8 +30,9 @@ public class QuarSk extends JavaPlugin {
         getLogger().log(Level.INFO, "Enabling QuarSk " + this.getConfig().get("version") + " to give these numbers a boost !");
         Skript.registerAddon(this);
         Skript.registerEffect(EffOrientTowards.class, "(orient %entity%|(make %entity%|force %entity% to) (face|look)) (0¦towards|1¦away from) %location%");
-        Skript.registerEffect(EffLinkReference.class, "link @<.+?> to %object%");
-        Skript.registerExpression(SExprReference.class,Object.class, ExpressionType.SIMPLE, "@<.+>");
+        Skript.registerEffect(EffLinkReference.class, "link @<\\S+> to %object%");
+        Skript.registerEffect(EffUnlinkReference.class, "unlink @<\\S+>");
+        Skript.registerExpression(SExprReference.class,Object.class, ExpressionType.SIMPLE, "@<\\S+>");
         getLogger().log(Level.INFO, "Now, there are " + Skript.getEvents().size() + " events, " + Skript.getConditions().size() + " conditions and " + Skript.getEffects().size() + " effects registered ! Good game !");
     }
 
