@@ -1,0 +1,5 @@
+name: QuarSk
+version: 1.0
+author: Syst3ms
+main: fr.syst3ms.quarsk.QuarSk
+depend: [Skript]
