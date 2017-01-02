@@ -30,8 +30,29 @@ send "%@reference%"
 unlink @reference
 ```
 
+**Syntaxes :**
+Everything is in the example, but I thought I'd put the actual syntaxes.
+**Link/unlink :**
+```
+link @<\\S+> to %object%
+unlink @<\\S+>
+```
+**Accessing a reference :**
+```
+@<\\S+>
+```
+The parts between < and > is regex. But you don't need to know that.
 **NOTE :**
 You can't use spaces in a reference's name. As for naming references, I recommend using [lowerCamelCase](http://wiki.c2.com/?LowerCamelCase).
 
 
+###Orientation :
 
+There is also an easy-to-use orienting effect that allows you to make any entity face a defined location !
+
+**Syntaxes :**
+```
+orient %entity% (towards|away from) %location%"
+make %entity% (face|look [at]) ([towards]|away from) %location%
+force %entity% to (look [at]|face) ([towards]|away from) %location%
+```
