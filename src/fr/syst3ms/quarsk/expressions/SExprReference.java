@@ -8,6 +8,7 @@ import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.StringMode;
 import ch.njol.util.Kleenean;
+import ch.njol.util.coll.CollectionUtils;
 import fr.syst3ms.quarsk.Reference;
 import org.bukkit.event.Event;
 
