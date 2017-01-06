@@ -52,7 +52,7 @@ There is also an easy-to-use orienting effect that allows you to make any entity
 
 **Syntaxes :**
 ```
-orient %entity% (towards|away from) %location%"
+orient %entity% (towards|away from) %location%
 make %entity% (face|look [at]) ([towards]|away from) %location%
 force %entity% to (look [at]|face) ([towards]|away from) %location%
 ```
