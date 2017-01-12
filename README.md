@@ -34,12 +34,12 @@ unlink @reference
 Everything is in the example, but I thought I'd put the actual syntaxes.
 **Link/unlink :**
 ```
-link @<\\S+> to %object%
-unlink @<\\S+>
+link @<.+> to %object%
+unlink @<.+>
 ```
 **Accessing a reference :**
 ```
-@<\\S+>
+@<.+>
 ```
 The parts between < and > is regex. But you don't need to know that.
 **NOTE :**
@@ -56,3 +56,42 @@ orient %entity% (towards|away from) %location%
 make %entity% (face|look [at]) ([towards]|away from) %location%
 force %entity% to (look [at]|face) ([towards]|away from) %location%
 ```
+
+###Potion stuff
+
+I'm glad to present you Potion Control, the new QuarSk 1.1 feature ! It adds 2 effects, 1 condition, 8 expressions and 1 type to this addon ! If you have any suggestion, suggest it anywhere !
+
+**Syntaxes :**
+```java
+//Effects :
+apply [potion] [effect[s] [of]] %potioneffects% to %livingentities%
+
+milk %livingentities% //Removes all potion effects from an entity
+
+//Condition :
+[entity] %livingentity% (has [got]|has( not|n't) [got]) [(the|a)] %potioneffecttype% [potion] effect
+
+//Expressions :
+[[potion] effect [(with|by)]] %potioneffecttype% for %timespan% with [a] [tier [of]] %number% [particles %-boolean%[ with ambient [effect] %-boolean%[ and [particle] colo[u]r[ed] %-color%]]]]] //Returns a "potioneffect" type, which is used quite a lot
+
+[(normal|splash|linger[ing])] potion (of|by|with|from) [effect[s]] %potioneffects%
+
+[(all|every|each)] [active] [potion] effects (on|in) %livingentities%
+[(every|all|each) of] %livingentities%['s] [active] [potion] effect[s]
+
+[(all|every|each)] [potion] effect[s] (on|of) %itemstack% //The item can only be a potion
+[(all|every|each) of] %itemstack%['s] [potion] effect[s]
+
+//A "potioneffect" is made of a potion effect type (speed, strength...), duration and other parameters. This only returns the potion effect type 
+potion[ ]effect[[ ]type][s] of %potioneffect% 
+%potioneffect%['s] potion[ ]effect[[ ]type][s]
+
+//Cannot be set because Spigot doesn't allow it
+(duration|length) of [potion] effect[s] %potioneffect%
+[potion] effect[s] %potioneffect%['s] (duration|length)
+
+//Same here
+(tier|level|amplifier|power) of [potion] [effect] %potioneffect%
+[potion] [effect] %potioneffect%['s] (tier|amplifier|level|power)
+```
+Hope you enjoy !
