@@ -29,6 +29,9 @@ public class ExprCustomPotionItem extends SimpleExpression {
             case 2:
                 material = Material.LINGERING_POTION;
                 break;
+            case 3:
+                material = Material.TIPPED_ARROW;
+                break;
             default:
                 material = Material.POTION;
                 break;
