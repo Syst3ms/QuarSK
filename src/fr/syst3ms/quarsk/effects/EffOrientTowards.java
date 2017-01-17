@@ -22,6 +22,8 @@ public class EffOrientTowards extends Effect {
     @Override
     protected void execute(Event e) {
         Entity ent = entity.getSingle(e);
+        Vector velocity = ent.getVelocity();
+        float fallDistance = ent.getFallDistance();
         Location from = ent.getLocation();
         Location to = (Location)((Expression<?>)towards).getSingle(e);//Getting the target location the location from the expression
         Vector direction = (mode == "toward") ? QuarSk.vectorFromLocations(from, to) : QuarSk.vectorFromLocations(to, from); //Reversing the vector if the mdoe is "away"
@@ -35,6 +37,8 @@ public class EffOrientTowards extends Effect {
                         QuarSk.notchPitch(QuarSk.getPitch(direction))
                 )
         );
+        ent.setVelocity(velocity);
+        ent.setFallDistance(fallDistance);
     }
 
     @Override
