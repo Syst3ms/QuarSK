@@ -15,9 +15,13 @@ import fr.syst3ms.quarsk.effects.EffUnlinkReference;
 import fr.syst3ms.quarsk.effects.potion.EffApplyPotionEffects;
 import fr.syst3ms.quarsk.effects.potion.EffMilkEntity;
 import fr.syst3ms.quarsk.expressions.SExprReference;
+import fr.syst3ms.quarsk.expressions.beacon.ExprBeaconTier;
+import fr.syst3ms.quarsk.expressions.beacon.ExprEntitiesInRange;
+import fr.syst3ms.quarsk.expressions.beacon.SExprBeaconEffects;
 import fr.syst3ms.quarsk.expressions.potion.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionData;
@@ -87,7 +91,7 @@ public class QuarSk extends JavaPlugin {
          * EFFECTS
          */
         //Orientation
-        registerEffect(EffOrientTowards.class, "(orient %entity%|(make %entity%|force %entity% to) (face|look)) (0¦towards|1¦away from) %location%");
+        registerEffect(EffOrientTowards.class, "orient %livingentity% (0¦towards|1¦away from) %location%", "make %livingentity% (face|look [at]) (0¦[towards]|1¦away from) %location%", "force %livingentity% to (face|look [at]) (0¦[towards]|1¦away from) %location%");
         //References
         registerEffect(EffLinkReference.class, "link @<\\S+> to %object%");
         registerEffect(EffUnlinkReference.class, "unlink @<\\S+>");
@@ -107,10 +111,14 @@ public class QuarSk extends JavaPlugin {
         registerExpression(ExprCustomPotionEffect.class, PotionEffect.class, ExpressionType.COMBINED, "[[potion] effect [(with|by)]] %potioneffecttype% for %timespan% with [a] [tier [of]] %number% [particles %-boolean%[ with ambient [effect] %-boolean%[ and [particle] colo[u]r[ed] %-color%]]]]]");
         registerExpression(ExprCustomPotionItem.class, ItemStack.class, ExpressionType.COMBINED, "(0¦[normal] potion|1¦splash potion|2¦linger[ing] potion|3¦(potion|tipped) arrow) (of|by|with|from|using) [effect[s]] %potioneffects%");
         registerExpression(ExprEntityPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [active] [potion] effects (on|in) %livingentities%", "[(every|all|each) of] %livingentities%['s] [active] [potion] effect[s]");
-        registerExpression(ExprPotionItemEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [potion] effect[s] (on|of) %itemstack%", "[(all|every|each) of] %itemstack%['s] [potion] effect[s]");
+        registerExpression(SExprPotionItemEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [potion] effect[s] (on|of) %itemstack%", "[(all|every|each) of] %itemstack%['s] [potion] effect[s]");
         registerExpression(ExprPotionEffectType.class, PotionEffectType.class, ExpressionType.COMBINED, "potion[ ]effect[[ ]type][s] of %potioneffect%", "%potioneffect%['s] potion[ ]effect[[ ]type][s]");
         registerExpression(ExprPotionEffectDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [potion] effect[s] %potioneffect%", "[potion] effect[s] %potioneffect%['s] (duration|length)");
         registerExpression(ExprPotionEffectTier.class, Number.class, ExpressionType.COMBINED, "(tier|level|amplifier|power) of [potion] [effect] %potioneffect%", "[potion] [effect] %potioneffect%['s] (tier|amplifier|level|power)");
+        //Beacons
+        registerExpression(ExprEntitiesInRange.class, LivingEntity.class, ExpressionType.COMBINED, "[(all|every|each)] ([living] entit(ies|y)|player[s]) in range of %block%");
+        registerExpression(ExprBeaconTier.class, Number.class, ExpressionType.COMBINED, "(tier|level) of [beacon] %block%", "[beacon] %block%['s] (tier|level)");
+        registerExpression(SExprBeaconEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[the] (0¦(first|primary)|1¦second[ary]) [potion] effect of [beacon] %block%", "[beacon] %block%['s] (0¦(first|primary)|1¦second[ary]) [potion] effect");
     }
 
 
@@ -158,6 +166,7 @@ public class QuarSk extends JavaPlugin {
     public static PotionData emptyPotionData() {
         return new PotionData(PotionType.WATER);
     }
+
     //Conventions
     public static String getPrefix() {
         return "[QuarSk] ";
