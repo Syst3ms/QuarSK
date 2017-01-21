@@ -26,15 +26,15 @@ public class EffOrientTowards extends Effect {
         float fallDistance = ent.getFallDistance();
         Location from = ent.getLocation();
         Location to = (Location)((Expression<?>)towards).getSingle(e);//Getting the target location the location from the expression
-        Vector direction = (mode == "toward") ? QuarSk.vectorFromLocations(from, to) : QuarSk.vectorFromLocations(to, from); //Reversing the vector if the mdoe is "away"
+        Vector direction = (mode == "toward") ? QuarSk.getInstance().vectorFromLocations(from, to) : QuarSk.getInstance().vectorFromLocations(to, from); //Reversing the vector if the mdoe is "away"
         entity.getSingle(e).teleport(
                 new Location(
                         ent.getWorld(),
                         ent.getLocation().getX(),
                         ent.getLocation().getY(),
                         ent.getLocation().getZ(),
-                        QuarSk.notchYaw(QuarSk.getYaw(direction)),
-                        QuarSk.notchPitch(QuarSk.getPitch(direction))
+                        QuarSk.getInstance().notchYaw(QuarSk.getInstance().getYaw(direction)),
+                        QuarSk.getInstance().notchPitch(QuarSk.getInstance().getPitch(direction))
                 )
         );
         ent.setVelocity(velocity);
@@ -50,13 +50,8 @@ public class EffOrientTowards extends Effect {
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
         mode = (parseResult.mark == 0) ? "toward" : "away";
-        for (Expression<?> e : expr) {
-            if (e != null && e.getReturnType() == Entity.class) {
-                entity = (Expression<Entity>) e;
-            } else if (e != null && e.getReturnType() == Location.class) {
-                towards = e;
-            }
-        }
+        entity = (Expression<Entity>) expr[0];
+        towards = expr[1];
         return true;
     }
 }

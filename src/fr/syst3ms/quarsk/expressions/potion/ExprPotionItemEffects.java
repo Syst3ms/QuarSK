@@ -40,7 +40,7 @@ public class ExprPotionItemEffects extends SimpleExpression<PotionEffect> {
                         PotionMeta meta = (PotionMeta) potionItem.getSingle(e).getItemMeta();
                         List<PotionEffect> list = new ArrayList<>();
                         if (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) {
-                            list.add(QuarSk.fromPotionData(meta.getBasePotionData()));
+                            list.add(QuarSk.getInstance().fromPotionData(meta.getBasePotionData()));
                         }
                         for (PotionEffect eff : meta.getCustomEffects()) {
                             list.add(eff);
@@ -76,7 +76,7 @@ public class ExprPotionItemEffects extends SimpleExpression<PotionEffect> {
                                 break;
                             case SET:
                                 meta.clearCustomEffects();
-                                meta.setBasePotionData(QuarSk.emptyPotionData());
+                                meta.setBasePotionData(QuarSk.getInstance().emptyPotionData());
                                 for (Object o : delta) {
                                     meta.addCustomEffect(((PotionEffect) o), false);
                                 }
@@ -86,8 +86,8 @@ public class ExprPotionItemEffects extends SimpleExpression<PotionEffect> {
                             case REMOVE_ALL:
                                 for (Object o : delta) {
                                     meta.removeCustomEffect(((PotionEffect) o).getType());
-                                    if (QuarSk.fromPotionData(meta.getBasePotionData()).getType() == ((PotionEffect) o).getType()) {
-                                        meta.setBasePotionData(QuarSk.emptyPotionData());
+                                    if (QuarSk.getInstance().fromPotionData(meta.getBasePotionData()).getType() == ((PotionEffect) o).getType()) {
+                                        meta.setBasePotionData(QuarSk.getInstance().emptyPotionData());
                                     }
                                 }
                                 potionItem.getSingle(e).setItemMeta(meta);
@@ -95,7 +95,7 @@ public class ExprPotionItemEffects extends SimpleExpression<PotionEffect> {
                             case DELETE:
                             case RESET:
                                 meta.clearCustomEffects();
-                                meta.setBasePotionData(QuarSk.emptyPotionData());
+                                meta.setBasePotionData(QuarSk.getInstance().emptyPotionData());
                                 potionItem.getSingle(e).setItemMeta(meta);
                                 break;
                         }
