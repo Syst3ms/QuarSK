@@ -59,6 +59,7 @@ public class SExprBeaconEffects extends SimpleExpression<PotionEffect> {
                         }
                         break;
                 }
+                state.update(true, false);
             }
         }
     }

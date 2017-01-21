@@ -48,23 +48,6 @@ public class SExprReference extends SimpleExpression {
     public void change(Event e, Object[] o, Changer.ChangeMode changeMode) {
         if (this.acceptChange(changeMode) != null) {
             refProp.expr.change(e, o, changeMode);
-        } else {
-            switch (changeMode) {
-                case ADD:
-                    Skript.error("'" + refProp.expr.toString() + "' cannot have anything added to it");
-                    break;
-                case DELETE:
-                    Skript.error("'" + refProp.expr.toString() + "' cannot be deleted");
-                    break;
-                case RESET:
-                    Skript.error("'" + refProp.expr.toString() + "' cannot be reset");
-                    break;
-                case SET:
-                    Skript.error("'" + refProp.expr.toString() + "' cannot be set");
-                    break;
-                default:
-                    Skript.error("'" + refProp.expr.toString() + "' cannot be changed");
-            }
         }
     }
 
