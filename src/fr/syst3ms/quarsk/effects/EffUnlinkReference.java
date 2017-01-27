@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.util.StringMode;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.Reference;
+import fr.syst3ms.quarsk.classes.Reference;
 import org.bukkit.event.Event;
 
 /**
