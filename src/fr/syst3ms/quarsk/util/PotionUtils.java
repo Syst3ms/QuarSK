@@ -3,6 +3,7 @@ package fr.syst3ms.quarsk.util;
 import com.sun.istack.internal.NotNull;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;

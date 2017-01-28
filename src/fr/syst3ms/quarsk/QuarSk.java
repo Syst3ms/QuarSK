@@ -13,6 +13,7 @@ import fr.syst3ms.quarsk.conditions.CondHasPotionEffect;
 import fr.syst3ms.quarsk.effects.EffLinkReference;
 import fr.syst3ms.quarsk.effects.EffOrientTowards;
 import fr.syst3ms.quarsk.effects.EffUnlinkReference;
+import fr.syst3ms.quarsk.effects.banner.EffApplyBannerItemToBlock;
 import fr.syst3ms.quarsk.effects.potion.EffApplyPotionEffects;
 import fr.syst3ms.quarsk.effects.potion.EffMilkEntity;
 import fr.syst3ms.quarsk.expressions.SExprReference;
@@ -127,8 +128,11 @@ public class QuarSk extends JavaPlugin {
         //References
         newEffect(EffLinkReference.class, "link @<\\S+> to %object%");
         newEffect(EffUnlinkReference.class, "unlink @<\\S+>");
+        //Potions
         newEffect(EffApplyPotionEffects.class, "apply [potion] [effect[s] [of]] %potioneffects% to %livingentities%");
         newEffect(EffMilkEntity.class, "milk %livingentities%");
+        //Banners
+        newEffect(EffApplyBannerItemToBlock.class, "apply (banner|shield) [item] pattern[s] of %itemstack% to [banner] [block] %block%", "apply [item] %itemstack%['s] (banner|shield) pattern[s] to [banner] [block] %block%");
         /*
          * CONDITIONS
          */
@@ -160,6 +164,7 @@ public class QuarSk extends JavaPlugin {
         newExpression(SExprItemLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] layer[s] of [(shield|banner|item)] %itemstack%", "[(all|every|each) of] %itemstack%['s] [banner] layers");
         newExpression(SExprItemBaseColor.class, Color.class, ExpressionType.COMBINED, "[(banner|shield)] bas(e|ic) color of item %itemstack%", "item %itemstack%['s] [(banner|shield)] bas(e|ic) color");
         newExpression(SExprBannerBlockBaseColor.class, Color.class, ExpressionType.COMBINED, "[banner] block bas(e|ic) color of block %block%", "block %block%['s] [banner] bas(e|ic) color");
+        newExpression(ExprBannerItemFromMnc.class, ItemStack.class, ExpressionType.COMBINED, "(0¦banner|1¦shield) [item] from [m[iners]]n[eed]c[ool][s[hoes]] [code] %string%");
     }
 
     public void onDisable() {
