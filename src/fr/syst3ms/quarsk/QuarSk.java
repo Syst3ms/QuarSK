@@ -3,14 +3,12 @@ package fr.syst3ms.quarsk;
 import ch.njol.skript.Skript;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
-import ch.njol.skript.classes.Serializer;
-import ch.njol.skript.effects.EffCommand;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Color;
 import ch.njol.skript.util.Timespan;
-import ch.njol.yggdrasil.Fields;
 import com.sun.istack.internal.Nullable;
+import fr.syst3ms.quarsk.classes.EnumType;
 import fr.syst3ms.quarsk.conditions.CondHasPotionEffect;
 import fr.syst3ms.quarsk.effects.EffLinkReference;
 import fr.syst3ms.quarsk.effects.EffOrientTowards;
@@ -23,40 +21,29 @@ import fr.syst3ms.quarsk.expressions.beacon.ExprBeaconTier;
 import fr.syst3ms.quarsk.expressions.beacon.ExprEntitiesInRange;
 import fr.syst3ms.quarsk.expressions.beacon.SExprBeaconEffects;
 import fr.syst3ms.quarsk.expressions.potion.*;
-import net.minecraft.server.v1_11_R1.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
 
-import java.io.NotSerializableException;
-import java.io.StreamCorruptedException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
 import static ch.njol.skript.Skript.registerAddon;
 
 
-/**
- * Created by Syst3ms on 29/12/2016.
- */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class QuarSk extends JavaPlugin {
 
-    public static final double RAD_TO_DEG = 180 / Math.PI;
+    private static final double RAD_TO_DEG = 180 / Math.PI;
     private static QuarSk instance;
     private int events;
     private int conditions;
@@ -156,10 +143,12 @@ public class QuarSk extends JavaPlugin {
         newExpression(ExprCustomPotionEffect.class, PotionEffect.class, ExpressionType.COMBINED, "[[potion] effect [(with|by)]] %potioneffecttype% for %timespan% with [a] [tier [of]] %number% [particles %-boolean%[ with ambient [effect] %-boolean%[ and [particle] colo[u]r[ed] %-color%]]]]]");
         newExpression(ExprCustomPotionItem.class, ItemStack.class, ExpressionType.COMBINED, "(0¦[normal] potion|1¦splash potion|2¦linger[ing] potion|3¦(potion|tipped) arrow) (of|by|with|from|using) [effect[s]] %potioneffects%");
         newExpression(ExprEntityPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [active] [potion] effects (on|in) %livingentities%", "[(every|all|each) of] %livingentities%['s] [active] [potion] effect[s]");
-        newExpression(ExprPotionItemEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [potion] effect[s] (on|of) %itemstack%", "[(all|every|each) of] %itemstack%['s] [potion] effect[s]");
+        newExpression(SExprPotionItemEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [potion] effect[s] (on|of) %itemstack%", "[(all|every|each) of] %itemstack%['s] [potion] effect[s]");
         newExpression(ExprPotionEffectType.class, PotionEffectType.class, ExpressionType.COMBINED, "potion[ ]effect[[ ]type][s] of %potioneffect%", "%potioneffect%['s] potion[ ]effect[[ ]type][s]");
         newExpression(ExprPotionEffectDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [potion] effect[s] %potioneffect%", "[potion] effect[s] %potioneffect%['s] (duration|length)");
         newExpression(ExprPotionEffectTier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [potion] [effect] %potioneffect%", "[potion] [effect] %potioneffect%['s] (tier|amplifier)");
+        newExpression(SExprItemEffectTypeAmplifier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (tier|amplifier) on [item] %itemstack%");
+        newExpression(SExprItemEffectTypeDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (duration|length) on [item] %itemstack%");
         //Beacons
         newExpression(ExprEntitiesInRange.class, LivingEntity.class, ExpressionType.COMBINED, "[(all|every|each)] ([living] entit(ies|y)|player[s]) in range of %block%");
         newExpression(ExprBeaconTier.class, Number.class, ExpressionType.COMBINED, "beacon (tier|level) of %block%", "%block%['s] beacon (tier|level)");
@@ -198,49 +187,6 @@ public class QuarSk extends JavaPlugin {
     }
 
     //Potions
-    //I know I could have used ternary operators, but it makes the code much less readable
-    public PotionEffect fromPotionData(PotionData data) {
-        PotionEffectType type = data.getType().getEffectType();
-        if (type == PotionEffectType.HEAL || type == PotionEffectType.HARM) { //Instant potions
-            if (data.isUpgraded()) {
-                return new PotionEffect(type, 1, 2);
-            } else {
-                return new PotionEffect(type, 1, 1);
-            }
-        } else if (type == PotionEffectType.REGENERATION || type == PotionEffectType.POISON) { //Regen and poison potions have smaller durations
-            if (data.isExtended()) {
-                return new PotionEffect(type, 1800, 1);
-            } else if (data.isUpgraded()) {
-                return new PotionEffect(type, 440, 2);
-            } else {
-                return new PotionEffect(type, 900, 1);
-            }
-        } else if (type == PotionEffectType.NIGHT_VISION || type == PotionEffectType.INVISIBILITY || type == PotionEffectType.FIRE_RESISTANCE || type == PotionEffectType.WATER_BREATHING) { //Potions that don't have an upgraded version
-            if (data.isExtended()) {
-                return new PotionEffect(type, 9600, 1);
-            } else {
-                return new PotionEffect(type, 3600, 1);
-            }
-        } else if (type == PotionEffectType.WEAKNESS || type == PotionEffectType.SLOW) { //Those potions don't have an upgraded version AND have smaller durations
-            if (data.isExtended()) {
-                return new PotionEffect(type, 4800, 1);
-            } else {
-                return new PotionEffect(type, 1800, 1);
-            }
-        } else {
-            if (data.isExtended()) {
-                return new PotionEffect(type, 9600, 1);
-            } else if (data.isUpgraded()) {
-                return new PotionEffect(type, 1800, 2);
-            } else {
-                return new PotionEffect(type, 3600, 1);
-            }
-        }
-    }
-
-    public PotionData emptyPotionData() {
-        return new PotionData(PotionType.WATER);
-    }
 
     //Conventions
     public String getPrefix() {
