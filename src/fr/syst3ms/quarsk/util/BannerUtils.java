@@ -1,18 +1,24 @@
 package fr.syst3ms.quarsk.util;
 
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
+
+import java.util.Arrays;
 
 /**
  * Created by ARTHUR on 25/01/2017.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class BannerUtils {
-    private final BannerUtils instance = new BannerUtils();
+    private static BannerUtils instance = new BannerUtils();
 
     private BannerUtils() {}
 
-    public BannerUtils getInstance() {
+    public static BannerUtils getInstance() {
         return instance;
     }
 
@@ -23,38 +29,38 @@ public class BannerUtils {
      */
     public DyeColor colorFromMnc(char c) { //Don't question the characters, it's just like that.
         switch (c) {
-            case 'p':
-                return DyeColor.WHITE;
+            case 'a':
+                return DyeColor.BLACK;
+            case 'b':
+                return DyeColor.RED;
+            case 'c':
+                return DyeColor.GREEN;
+            case 'd':
+                return DyeColor.BROWN;
+            case 'e':
+                return DyeColor.BLUE;
+            case 'f':
+                return DyeColor.PURPLE;
+            case 'g':
+                return DyeColor.CYAN;
             case 'h':
                 return DyeColor.SILVER;
             case 'i':
                 return DyeColor.GRAY;
-            case 'a':
-                return DyeColor.BLACK;
-            case 'c':
-                return DyeColor.YELLOW;
-            case 'o':
-                return DyeColor.ORANGE;
-            case '2':
-                return DyeColor.RED;
-            case '4':
-                return DyeColor.BROWN;
-            case 'b':
-                return DyeColor.LIME;
-            case '3':
-                return DyeColor.GREEN;
-            case 'm':
-                return DyeColor.LIGHT_BLUE;
-            case 'g':
-                return DyeColor.CYAN;
-            case 'e':
-                return DyeColor.BLUE;
             case 'j':
                 return DyeColor.PINK;
+            case 'k':
+                return DyeColor.LIME;
+            case 'l':
+                return DyeColor.YELLOW;
+            case 'm':
+                return DyeColor.LIGHT_BLUE;
             case 'n':
                 return DyeColor.MAGENTA;
-            case 'f':
-                return DyeColor.PURPLE;
+            case 'o':
+                return DyeColor.ORANGE;
+            case 'p':
+                return DyeColor.WHITE;
             default:
                 return null;
         }
@@ -65,7 +71,7 @@ public class BannerUtils {
      * @param c the char representing the pattern
      * @return PatternType
      */
-    public PatternType patternTypeFromInternet(char c) {
+    public PatternType patternTypeFromMnc(char c) {
         switch (c) {
             case 'b':
                 return PatternType.SQUARE_BOTTOM_LEFT;
@@ -146,5 +152,26 @@ public class BannerUtils {
             default:
                 return null;
         }
+    }
+    
+    public BannerMeta emptyBannerMeta() {
+        return ((BannerMeta) new ItemStack(Material.BANNER).getItemMeta());
+    }
+
+    public boolean isMncPattern(String code) {
+        return code.matches("[a-p]a([a-p][b-zA-M])+");
+    }
+
+    public BannerMeta parseMncPattern(String mnc) {
+        if (mnc.matches("[a-p]a([a-p][b-zA-M])+")) {
+            String[] groups = mnc.split("(?<=[a-p][b-zA-M])");
+            BannerMeta meta = emptyBannerMeta();
+            meta.setBaseColor(colorFromMnc(mnc.charAt(0)));
+            for (String str : Arrays.copyOfRange(groups, 1, groups.length - 1)) {
+                meta.addPattern(new Pattern(colorFromMnc(str.charAt(0)), patternTypeFromMnc(str.charAt(1))));
+            }
+            return meta;
+        }
+        return null;
     }
 }
