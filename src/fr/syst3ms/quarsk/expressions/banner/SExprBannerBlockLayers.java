@@ -33,7 +33,7 @@ public class SExprBannerBlockLayers extends SimpleExpression<Pattern> {
     protected Pattern[] get(Event e) {
         if (block != null) {
             if (block.getSingle(e) != null) {
-                if (block.getSingle(e).getType() == Material.BANNER) {
+                if (block.getSingle(e).getType() == Material.STANDING_BANNER || block.getSingle(e).getType() == Material.WALL_BANNER) {
                     Banner banner = ((Banner) block.getSingle(e).getState());
                     return banner.getPatterns().toArray(new Pattern[banner.getPatterns().size()]);
                 }

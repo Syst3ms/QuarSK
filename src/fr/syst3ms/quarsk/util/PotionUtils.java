@@ -1,9 +1,16 @@
 package fr.syst3ms.quarsk.util;
 
 import com.sun.istack.internal.NotNull;
+import jdk.nashorn.internal.runtime.regexp.joni.constants.EncloseType;
+import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
@@ -11,6 +18,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by PRODSEB on 27/01/2017.
@@ -81,5 +90,14 @@ public class PotionUtils {
 
     public PotionData emptyPotionData() {
         return new PotionData(PotionType.WATER);
+    }
+
+    public boolean isEntityThrownPotion(Entity entity) {
+        return entity.getType() == EntityType.SPLASH_POTION || entity.getType() == EntityType.LINGERING_POTION;
+    }
+
+    public PotionMeta emptyPotionMeta() {
+        ItemStack item = new ItemStack(Material.POTION);
+        return (PotionMeta) item.getItemMeta();
     }
 }

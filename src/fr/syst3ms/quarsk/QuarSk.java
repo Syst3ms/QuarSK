@@ -6,10 +6,12 @@ import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.Color;
+import ch.njol.skript.util.PotionEffectUtils;
 import ch.njol.skript.util.Timespan;
 import com.sun.istack.internal.Nullable;
 import fr.syst3ms.quarsk.classes.EnumType;
 import fr.syst3ms.quarsk.conditions.CondHasPotionEffect;
+import fr.syst3ms.quarsk.conditions.CondIsWallBanner;
 import fr.syst3ms.quarsk.effects.EffLinkReference;
 import fr.syst3ms.quarsk.effects.EffOrientTowards;
 import fr.syst3ms.quarsk.effects.EffUnlinkReference;
@@ -79,7 +81,7 @@ public class QuarSk extends JavaPlugin {
 
                             @Override
                             public String toString(PotionEffect potionEffect, int i) {
-                                return "effect" + potionEffect.getType() + ", tier " + potionEffect.getAmplifier() + ", duration " + potionEffect.getDuration() + ", particles " + potionEffect.hasParticles() + ", ambient " + potionEffect.isAmbient() + ", color " + potionEffect.getColor();
+                                return PotionEffectUtils.toString(potionEffect.getType()) + " of tier " + potionEffect.getAmplifier() + " lasting " + potionEffect.getDuration() + " with particles " + (potionEffect.hasParticles() ? "enabled" : "disabled") + ", ambient effect " + (potionEffect.isAmbient() ? "enabled" : "disabled");
                             }
 
                             @Override
@@ -138,6 +140,7 @@ public class QuarSk extends JavaPlugin {
          */
         //Potions
         newCondition(CondHasPotionEffect.class, "[entity] %livingentity% (0¦has [got]|1¦has( not|n't) [got]) [(the|a)] %potioneffecttype% [potion] effect");
+        newCondition(CondIsWallBanner.class, "[banner] [block] %block% (0¦is|1¦is(n't| not)) [a] wall banner");
         /*
          * EXPRESSIONS
          */
@@ -153,6 +156,7 @@ public class QuarSk extends JavaPlugin {
         newExpression(ExprPotionEffectTier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [potion] [effect] %potioneffect%", "[potion] [effect] %potioneffect%['s] (tier|amplifier)");
         newExpression(SExprItemEffectTypeAmplifier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (tier|amplifier) on [item] %itemstack%");
         newExpression(SExprItemEffectTypeDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (duration|length) on [item] %itemstack%");
+        newExpression(SExprThrownPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[all] [potion] effects (of|on) (entity|thrown potion|tipped arrow) %entity%");
         //Beacons
         newExpression(ExprEntitiesInRange.class, LivingEntity.class, ExpressionType.COMBINED, "[(all|every|each)] ([living] entit(ies|y)|player[s]) in range of %block%");
         newExpression(ExprBeaconTier.class, Number.class, ExpressionType.COMBINED, "beacon (tier|level) of %block%", "%block%['s] beacon (tier|level)");

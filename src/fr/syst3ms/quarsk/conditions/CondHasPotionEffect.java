@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Created by ARTHUR on 12/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class CondHasPotionEffect extends Condition {
     private Expression<LivingEntity> entity;
     private Expression<PotionEffectType> type;
@@ -19,16 +20,18 @@ public class CondHasPotionEffect extends Condition {
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
         entity = (Expression<LivingEntity>) expr[0];
         type = (Expression<PotionEffectType>) expr[1];
+        setNegated(parseResult.mark == 1);
         return true;
     }
 
     @Override
     public boolean check(Event e) {
-        if (entity.getSingle(e) != null && type.getSingle(e) != null) {
-            return (entity.getSingle(e).hasPotionEffect(type.getSingle(e)));
-        } else {
-            return false;
+        if (entity != null && type != null) {
+            if (entity.getSingle(e) != null && type.getSingle(e) != null) {
+                return isNegated() != entity.getSingle(e).hasPotionEffect(type.getSingle(e));
+            }
         }
+        return false;
     }
 
     @Override
