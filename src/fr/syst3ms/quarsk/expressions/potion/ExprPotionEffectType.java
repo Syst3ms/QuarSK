@@ -4,16 +4,14 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.List;
-
 /**
  * Created by ARTHUR on 08/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class ExprPotionEffectType extends SimpleExpression<PotionEffectType> {
     private Expression<PotionEffect> effect;
 
@@ -25,11 +23,12 @@ public class ExprPotionEffectType extends SimpleExpression<PotionEffectType> {
 
     @Override
     protected PotionEffectType[] get(Event e) {
-        if (effect.getSingle(e) != null) {
-            return new PotionEffectType[]{effect.getSingle(e).getType()};
-        } else {
-            return null;
+        if (effect != null) {
+            if (effect.getSingle(e) != null) {
+                return new PotionEffectType[]{effect.getSingle(e).getType()};
+            }
         }
+        return null;
     }
 
     @Override
@@ -38,12 +37,12 @@ public class ExprPotionEffectType extends SimpleExpression<PotionEffectType> {
     }
 
     @Override
-    public String toString(Event e, boolean b) {
-        return getClass().getName();
+    public boolean isSingle() {
+        return true;
     }
 
     @Override
-    public boolean isSingle() {
-        return false;
+    public String toString(Event e, boolean b) {
+        return getClass().getName();
     }
 }

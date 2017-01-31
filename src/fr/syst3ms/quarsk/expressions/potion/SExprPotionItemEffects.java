@@ -36,18 +36,16 @@ public class SExprPotionItemEffects extends SimpleExpression<PotionEffect> {
     protected PotionEffect[] get(Event e) {
         if (potionItem != null) {
             if (potionItem.getSingle(e) != null) {
-                if (potionItem.getSingle(e).getType() != Material.AIR) {
-                    if ((potionItem.getSingle(e).getType() == Material.POTION || potionItem.getSingle(e).getType() == Material.SPLASH_POTION || potionItem.getSingle(e).getType() == Material.LINGERING_POTION || potionItem.getSingle(e).getType() == Material.TIPPED_ARROW)) {
-                        PotionMeta meta = (PotionMeta) potionItem.getSingle(e).getItemMeta();
-                        List<PotionEffect> list = new ArrayList<>();
-                        if (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) {
-                            list.add(PotionUtils.getInstance().fromPotionData(meta.getBasePotionData()));
-                        }
-                        for (PotionEffect eff : meta.getCustomEffects()) {
-                            list.add(eff);
-                        }
-                        return list.toArray(new PotionEffect[meta.getCustomEffects().size() + ((meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) ? 1 : 0)]);
+                if (PotionUtils.getInstance().isPotionItem(potionItem.getSingle(e))) {
+                    PotionMeta meta = (PotionMeta) potionItem.getSingle(e).getItemMeta();
+                    List<PotionEffect> list = new ArrayList<>();
+                    if (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) {
+                        list.add(PotionUtils.getInstance().fromPotionData(meta.getBasePotionData()));
                     }
+                    for (PotionEffect eff : meta.getCustomEffects()) {
+                        list.add(eff);
+                    }
+                    return list.toArray(new PotionEffect[meta.getCustomEffects().size() + ((meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) ? 1 : 0)]);
                 }
             }
         }
@@ -59,7 +57,7 @@ public class SExprPotionItemEffects extends SimpleExpression<PotionEffect> {
         if (potionItem != null) {
             if (potionItem.getSingle(e) != null) {
                 if (potionItem.getSingle(e).getType() != Material.AIR) {
-                    if ((potionItem.getSingle(e).getType() == Material.POTION || potionItem.getSingle(e).getType() == Material.SPLASH_POTION || potionItem.getSingle(e).getType() == Material.LINGERING_POTION || potionItem.getSingle(e).getType() == Material.TIPPED_ARROW)) {
+                    if (potionItem.getSingle(e).getItemMeta() instanceof PotionMeta) {
                         PotionMeta meta = ((PotionMeta) potionItem.getSingle(e).getItemMeta());
                         switch (mode) {
                             case ADD:

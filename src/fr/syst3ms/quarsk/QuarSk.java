@@ -23,6 +23,7 @@ import fr.syst3ms.quarsk.expressions.banner.*;
 import fr.syst3ms.quarsk.expressions.beacon.ExprBeaconTier;
 import fr.syst3ms.quarsk.expressions.beacon.ExprEntitiesInRange;
 import fr.syst3ms.quarsk.expressions.beacon.SExprBeaconEffects;
+import fr.syst3ms.quarsk.expressions.beacon.SExprBeaconFuel;
 import fr.syst3ms.quarsk.expressions.potion.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -161,6 +162,7 @@ public class QuarSk extends JavaPlugin {
         newExpression(ExprEntitiesInRange.class, LivingEntity.class, ExpressionType.COMBINED, "[(all|every|each)] ([living] entit(ies|y)|player[s]) in range of %block%");
         newExpression(ExprBeaconTier.class, Number.class, ExpressionType.COMBINED, "beacon (tier|level) of %block%", "%block%['s] beacon (tier|level)");
         newExpression(SExprBeaconEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[the] (0¦(first|primary)|1¦second[ary]) [potion] effect of [beacon] %block%", "[beacon] %block%['s] (0¦(first|primary)|1¦second[ary]) [potion] effect");
+        newExpression(SExprBeaconFuel.class, ItemStack.class, ExpressionType.COMBINED, "[the] beacon fuel[ing item[[ ]stack]] of [beacon] %block%", " %block%['s] beacon fuel[ing item[[ ]stack]]");
         //Banners
         newExpression(ExprCustomBannerLayer.class, Pattern.class, ExpressionType.COMBINED, "[new] [banner] layer (with|using|of|from) pattern [type] %bannerpattern% colo[u]r[ed] %color%");
         newExpression(ExprBannerOrShieldWithLayers.class, ItemStack.class, ExpressionType.COMBINED, "[new] (0¦banner|1¦shield) (from|with|using|of) [[banner] patterns] %bannerlayers%");

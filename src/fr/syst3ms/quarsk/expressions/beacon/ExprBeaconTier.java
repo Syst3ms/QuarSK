@@ -4,7 +4,6 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import org.bukkit.Material;
 import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -24,7 +23,7 @@ public class ExprBeaconTier extends SimpleExpression<Number> {
     @Override
     protected Number[] get(Event e) {
         if (beacon.getSingle(e) != null) {
-            if (beacon.getSingle(e).getType() == Material.BEACON) {
+            if (beacon.getSingle(e).getState() instanceof Beacon) {
                 return new Number[]{((Beacon) beacon.getSingle(e).getState()).getTier()};
             }
         }

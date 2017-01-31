@@ -34,10 +34,10 @@ public class SExprThrownPotionEffects extends SimpleExpression<PotionEffect> {
     protected PotionEffect[] get(Event e) {
         if (entity != null) {
             if (entity.getSingle(e) != null) {
-                if (PotionUtils.getInstance().isEntityThrownPotion(entity.getSingle(e))) {
+                if (entity.getSingle(e) instanceof ThrownPotion) {
                     ThrownPotion thrownPotion = ((ThrownPotion) entity.getSingle(e));
                     return thrownPotion.getEffects().toArray(new PotionEffect[thrownPotion.getEffects().size()]);
-                } else if (entity.getSingle(e).getType() == EntityType.TIPPED_ARROW) {
+                } else if (entity.getSingle(e) instanceof TippedArrow) {
                     TippedArrow tippedArrow = ((TippedArrow) entity.getSingle(e));
                     return tippedArrow.getCustomEffects().toArray(new PotionEffect[tippedArrow.getCustomEffects().size()]);
                 }
