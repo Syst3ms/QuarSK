@@ -1,5 +1,6 @@
 package fr.syst3ms.quarsk.util;
 
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
@@ -164,11 +165,15 @@ public class BannerUtils {
 
     public BannerMeta parseMncPattern(String mnc) {
         if (mnc.matches("[a-p]a([a-p][b-zA-M])+")) {
-            String[] groups = mnc.split("(?<=[a-p][b-zA-M])");
+            String[] groups = mnc.split("(?=(?:[a-p][b-zA-M])*$)");
             BannerMeta meta = emptyBannerMeta();
             meta.setBaseColor(colorFromMnc(mnc.charAt(0)));
             for (String str : Arrays.copyOfRange(groups, 1, groups.length - 1)) {
-                meta.addPattern(new Pattern(colorFromMnc(str.charAt(0)), patternTypeFromMnc(str.charAt(1))));
+                if (!str.isEmpty())
+                    meta.addPattern(new Pattern(colorFromMnc(str.toCharArray()[0]), patternTypeFromMnc(str.toCharArray()[1])));
+            }
+            for (Pattern pat : meta.getPatterns()) {
+                QuarSk.getInstance().debug(pat.getPattern().toString().toLowerCase().replace('_', ' '));
             }
             return meta;
         }
