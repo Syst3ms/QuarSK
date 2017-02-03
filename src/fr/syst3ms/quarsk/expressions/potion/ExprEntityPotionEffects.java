@@ -7,8 +7,8 @@ import ch.njol.util.Kleenean;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
+
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**

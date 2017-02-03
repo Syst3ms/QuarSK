@@ -164,13 +164,15 @@ public class QuarSk extends JavaPlugin {
         newExpression(SExprBeaconEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[the] (0¦(first|primary)|1¦second[ary]) [potion] effect of [beacon] %block%", "[beacon] %block%['s] (0¦(first|primary)|1¦second[ary]) [potion] effect");
         newExpression(SExprBeaconFuel.class, ItemStack.class, ExpressionType.COMBINED, "[the] beacon fuel[ing item[[ ]stack]] of [beacon] %block%", " %block%['s] beacon fuel[ing item[[ ]stack]]");
         //Banners
-        newExpression(ExprCustomBannerLayer.class, Pattern.class, ExpressionType.COMBINED, "[new] [banner] layer (with|using|of|from) pattern [type] %bannerpattern% colo[u]r[ed] %color%");
-        newExpression(ExprBannerOrShieldWithLayers.class, ItemStack.class, ExpressionType.COMBINED, "[new] (0¦banner|1¦shield) (from|with|using|of) [[banner] patterns] %bannerlayers%");
-        newExpression(SExprBannerBlockLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] layer[s] of [(block|banner)] %block%", "[(all|every|each) of] %block%['s] [banner] layers");
-        newExpression(SExprItemLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] layer[s] of [(shield|banner|item)] %itemstack%", "[(all|every|each) of] %itemstack%['s] [banner] layers");
+        newExpression(ExprCustomBannerLayer.class, Pattern.class, ExpressionType.COMBINED, "[new] [banner] (layer|pattern) (with|using|of|from) pattern [type] %bannerpattern% colo[u]r[ed] %color%");
+        newExpression(ExprBannerOrShieldWithLayers.class, ItemStack.class, ExpressionType.COMBINED, "[new] (0¦banner|1¦shield) (from|with|using|of) [[banner] (layer|pattern)[s]] %bannerlayers%");
+        newExpression(SExprBannerBlockLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] (layer|pattern)[s] of [(block|banner)] %block%", "[(all|every|each) of] %block%['s] [banner] (layer|pattern)[s]");
+        newExpression(SExprItemLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] (layer|pattern)[s] of [(shield|banner|item)] %itemstack%", "[(all|every|each) of] %itemstack%['s] [banner] (layer|pattern)[s]");
         newExpression(SExprItemBaseColor.class, Color.class, ExpressionType.COMBINED, "[(banner|shield)] bas(e|ic) color of item %itemstack%", "item %itemstack%['s] [(banner|shield)] bas(e|ic) color");
         newExpression(SExprBannerBlockBaseColor.class, Color.class, ExpressionType.COMBINED, "[banner] block bas(e|ic) color of block %block%", "block %block%['s] [banner] bas(e|ic) color");
         newExpression(ExprBannerItemFromMnc.class, ItemStack.class, ExpressionType.COMBINED, "(0¦banner|1¦shield) [item] from [m[iners]]n[eed]c[ool][s[hoes]] [code] %string%");
+        newExpression(ExprBannerItemToMnc.class, String.class, ExpressionType.COMBINED, "[m[iners]]n[eed]c[ool][s[hoes]] code of [(banner|shield|item)] %itemstack%", "[(banner|shield|item)] %itemstack%['s] [m[iners]]n[eed]c[ool][s[hoes]] code");
+        newExpression(ExprRandomBanner.class, ItemStack.class, ExpressionType.SIMPLE, "[a] [new] random (0¦banner|1¦shield)");
     }
 
     public void onDisable() {
@@ -229,7 +231,7 @@ public class QuarSk extends JavaPlugin {
     }
 
     public String getVersion() {
-        return "1.1.3";
+        return "1.2";
     }
 
     //All of the below functions are by bi0qaw cause I honestly can't do that kind of math. Thanks to you.

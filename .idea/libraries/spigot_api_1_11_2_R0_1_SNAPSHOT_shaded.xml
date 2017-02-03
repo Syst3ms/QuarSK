@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="spigot-api-1.11.2-R0.1-SNAPSHOT-shaded">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../BuildTools/test-server/plugins/Skript-oldparser.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../BuildTools/spigot-api-1.11.2-R0.1-SNAPSHOT-shaded.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../BuildTools/spigot-1.11.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/lib/Skript.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/lib/spigot-1.11.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/lib/spigot-api-1.11.2-R0.1-SNAPSHOT-shaded.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../BuildTools/spigot-1.11.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/lib/spigot-1.11.2.jar!/" />
     </SOURCES>
   </library>
 </component>

@@ -12,7 +12,6 @@ import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

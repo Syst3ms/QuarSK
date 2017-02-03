@@ -1,6 +1,5 @@
 package fr.syst3ms.quarsk.util;
 
-import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
@@ -8,7 +7,8 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ARTHUR on 25/01/2017.
@@ -16,8 +16,6 @@ import java.util.Arrays;
 @SuppressWarnings({"unused", "unchecked"})
 public class BannerUtils {
     private static BannerUtils instance = new BannerUtils();
-
-    private BannerUtils() {}
 
     public static BannerUtils getInstance() {
         return instance;
@@ -165,18 +163,47 @@ public class BannerUtils {
 
     public BannerMeta parseMncPattern(String mnc) {
         if (mnc.matches("[a-p]a([a-p][b-zA-M])+")) {
-            String[] groups = mnc.split("(?=(?:[a-p][b-zA-M])*$)");
+            List<String> groups = StringUtils.getInstance().sizedSplitString(mnc, 2, true);
             BannerMeta meta = emptyBannerMeta();
             meta.setBaseColor(colorFromMnc(mnc.charAt(0)));
-            for (String str : Arrays.copyOfRange(groups, 1, groups.length - 1)) {
+
+            for (String str : groups.subList(1, groups.size())) {
                 if (!str.isEmpty())
                     meta.addPattern(new Pattern(colorFromMnc(str.toCharArray()[0]), patternTypeFromMnc(str.toCharArray()[1])));
-            }
-            for (Pattern pat : meta.getPatterns()) {
-                QuarSk.getInstance().debug(pat.getPattern().toString().toLowerCase().replace('_', ' '));
             }
             return meta;
         }
         return null;
+    }
+
+    public char colorToMnc(DyeColor color) {
+        for (char c : StringUtils.getInstance().alphabetLetters()) {
+            if (colorFromMnc(c) == color)
+                return c;
+        }
+        return 0; //Will never happen
+    }
+
+    public char patternTypeToMnc(PatternType patternType) {
+        for (char c : StringUtils.getInstance().alphabetLetters()) {
+            if (patternTypeFromMnc(c) == patternType)
+                return c;
+        }
+        return 0; //Will never happen
+    }
+
+    public String toMncPattern(BannerMeta meta) {
+        List<String> stringList = new ArrayList<>();
+        stringList.add(colorToMnc(meta.getBaseColor()) + "a");
+        for (Pattern pattern : meta.getPatterns()) {
+            stringList.add(new String(
+                new char[]{
+                        colorToMnc(pattern.getColor()),
+                        patternTypeToMnc(pattern.getPattern())
+                    }
+                )
+            );
+        }
+        return StringUtils.getInstance().join(stringList.toArray(new String[stringList.size()]));
     }
 }

@@ -13,6 +13,11 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Created by ARTHUR on 06/01/2017.
  */
+/*
+@ExpressionRegistry.ReturnType(PotionEffect.class)
+@ExpressionRegistry.Type(ExpressionType.COMBINED)
+@ExpressionRegistry.Syntax("[[potion] effect [(with|by)]] %potioneffecttype% for %timespan% with [a] [tier [of]] %number% [particles %-boolean%[ with ambient [effect] %-boolean%[ and [particle] colo[u]r[ed] %-color%]]]]]")
+*/
 public class ExprCustomPotionEffect extends SimpleExpression<PotionEffect> {
     private Expression<PotionEffectType> type;
     private Expression<Timespan> duration;

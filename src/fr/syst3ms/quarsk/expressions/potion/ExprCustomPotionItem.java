@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffect;
 /**
  * Created by ARTHUR on 07/01/2017.
  */
-public class ExprCustomPotionItem extends SimpleExpression {
+public class ExprCustomPotionItem extends SimpleExpression<ItemStack> {
     private Material material;
     private Expression<PotionEffect> potionEffects;
 
@@ -41,7 +41,7 @@ public class ExprCustomPotionItem extends SimpleExpression {
     }
 
     @Override
-    protected Object[] get(Event e) {
+    protected ItemStack[] get(Event e) {
         ItemStack item = new ItemStack(material, 1);
         PotionMeta meta = ((PotionMeta)item.getItemMeta()); //Getting PotionMeta
         PotionEffect[] effect = potionEffects.getAll(e);

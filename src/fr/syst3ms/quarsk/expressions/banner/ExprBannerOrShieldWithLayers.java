@@ -9,6 +9,7 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+
 import java.util.Arrays;
 
 /**

@@ -6,7 +6,6 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.QuarSk;
 import fr.syst3ms.quarsk.util.PotionUtils;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -22,7 +21,6 @@ import java.util.List;
 /**
  * Created by ARTHUR on 07/01/2017.
  */
-
 public class SExprPotionItemEffects extends SimpleExpression<PotionEffect> {
     private Expression<ItemStack> potionItem;
 

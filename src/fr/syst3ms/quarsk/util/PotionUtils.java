@@ -20,8 +20,6 @@ import java.util.List;
 public class PotionUtils {
     private static final PotionUtils instance = new PotionUtils();
 
-    private PotionUtils() {}
-
     public static PotionUtils getInstance() {
         return instance;
     }
