@@ -59,7 +59,7 @@ public class PotionUtils {
     }
 
     public boolean isEntityThrownPotion(Entity entity) {
-        return entity.getType() == EntityType.SPLASH_POTION || entity.getType() == EntityType.LINGERING_POTION;
+        return entity instanceof ThrownPotion;
     }
 
     public PotionMeta emptyPotionMeta() {
