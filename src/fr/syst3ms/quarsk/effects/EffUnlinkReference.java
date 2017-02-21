@@ -7,6 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.util.StringMode;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import fr.syst3ms.quarsk.classes.Reference;
 import org.bukkit.event.Event;
 
@@ -15,6 +16,10 @@ import org.bukkit.event.Event;
  */
 public class EffUnlinkReference extends Effect {
     private VariableString refName;
+
+    static {
+        QuarSk.newEffect(EffUnlinkReference.class, "unlink @<.+>@");
+    }
 
     @Override
     protected void execute(Event e) {
@@ -26,7 +31,7 @@ public class EffUnlinkReference extends Effect {
 
     @Override
     public String toString(Event e, boolean b) {
-        return "Reference unlink";
+        return getClass().getName();
     }
 
     @Override

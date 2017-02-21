@@ -1,71 +1,62 @@
 package fr.syst3ms.quarsk;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.SkriptAddon;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.registrations.Classes;
-import ch.njol.skript.util.Color;
 import ch.njol.skript.util.PotionEffectUtils;
-import ch.njol.skript.util.Timespan;
 import com.sun.istack.internal.Nullable;
 import fr.syst3ms.quarsk.classes.EnumType;
-import fr.syst3ms.quarsk.conditions.CondHasPotionEffect;
-import fr.syst3ms.quarsk.conditions.CondIsWallBanner;
-import fr.syst3ms.quarsk.effects.EffLinkReference;
-import fr.syst3ms.quarsk.effects.EffOrientTowards;
-import fr.syst3ms.quarsk.effects.EffUnlinkReference;
-import fr.syst3ms.quarsk.effects.banner.EffApplyBannerItemToBlock;
-import fr.syst3ms.quarsk.effects.potion.EffApplyPotionEffects;
-import fr.syst3ms.quarsk.effects.potion.EffMilkEntity;
-import fr.syst3ms.quarsk.expressions.SExprReference;
-import fr.syst3ms.quarsk.expressions.banner.*;
-import fr.syst3ms.quarsk.expressions.beacon.ExprBeaconTier;
-import fr.syst3ms.quarsk.expressions.beacon.ExprEntitiesInRange;
-import fr.syst3ms.quarsk.expressions.beacon.SExprBeaconEffects;
-import fr.syst3ms.quarsk.expressions.beacon.SExprBeaconFuel;
-import fr.syst3ms.quarsk.expressions.potion.*;
+import fr.syst3ms.quarsk.util.ListUtils;
+import fr.syst3ms.quarsk.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
-
-import static ch.njol.skript.Skript.registerAddon;
-
+import java.util.stream.Stream;
 
 @SuppressWarnings({"unused", "unchecked"})
 public class QuarSk extends JavaPlugin {
 
     private static final double RAD_TO_DEG = 180 / Math.PI;
-    private static QuarSk instance;
-    private int events;
-    private int conditions;
-    private int effects;
-    private int expressions;
+    private static SkriptAddon addonInstance;
+    private static HashMap<Class<?>, String[]> events = new HashMap<>();
+    private static HashMap<Class<?>, String[]> conditions = new HashMap<>();
+    private static HashMap<Class<?>, String[]> effects = new HashMap<>();
+    private static HashMap<Class<?>, String[]> expressions = new HashMap<>();
+    private static JavaPlugin plugin;
 
     public void onEnable() {
         if (getServer().getBukkitVersion().startsWith("1.7")) {
             getLogger().log(Level.INFO, "");
             getServer().getPluginManager().disablePlugin(this);
         }
-        instance = this;
+        plugin = this;
         normalRegister();
-        getLogger().log(Level.INFO, "Registered " + events + " events, " + conditions + " conditions, " + effects + " effects and " + expressions + " expressions ! Good game !");
+        if (generateFolder())
+            getLogger().log(Level.INFO, "Created QuarSk's folder !");
+        if (generateSyntaxFile())
+            getLogger().log(Level.INFO, "Generated QuarSk's syntax file !");
+        getLogger().log(Level.INFO, "Registered " + events.size() + " events, " + conditions.size() + " conditions, " + effects.size() + " effects and " + expressions.size() + " expressions ! Good game !");
     }
 
     private void normalRegister() {
-        registerAddon(this);
+        addonInstance = Skript.registerAddon(this);
         /*
          * TYPES
          */
@@ -122,136 +113,159 @@ public class QuarSk extends JavaPlugin {
                 }
             })
         );
-        new EnumType(PatternType.class, "bannerpattern", "banner ?pattern(?: ?type)?");
-        /*
-         * EFFECTS
-         */
-        //Orientation
-        newEffect(EffOrientTowards.class, "orient %livingentity% (0¦towards|1¦away from) %location%", "make %livingentity% (face|look [at]) (0¦[towards]|1¦away from) %location%", "force %livingentity% to (face|look [at]) (0¦[towards]|1¦away from) %location%");
-        //References
-        newEffect(EffLinkReference.class, "link @<\\S+> to %object%");
-        newEffect(EffUnlinkReference.class, "unlink @<\\S+>");
-        //Potions
-        newEffect(EffApplyPotionEffects.class, "apply [potion] [effect[s] [of]] %potioneffects% to %livingentities%");
-        newEffect(EffMilkEntity.class, "milk %livingentities%");
-        //Banners
-        newEffect(EffApplyBannerItemToBlock.class, "apply (banner|shield) [item] pattern[s] of %itemstack% to [banner] [block] %block%", "apply [item] %itemstack%['s] (banner|shield) pattern[s] to [banner] [block] %block%");
-        /*
-         * CONDITIONS
-         */
-        //Potions
-        newCondition(CondHasPotionEffect.class, "[entity] %livingentity% (0¦has [got]|1¦has( not|n't) [got]) [(the|a)] %potioneffecttype% [potion] effect");
-        newCondition(CondIsWallBanner.class, "[banner] [block] %block% (0¦is|1¦is(n't| not)) [a] wall banner");
-        /*
-         * EXPRESSIONS
-         */
-        //References
-        newExpression(SExprReference.class, Object.class, ExpressionType.SIMPLE, "@<\\S+>");
-        //Potions
-        newExpression(ExprCustomPotionEffect.class, PotionEffect.class, ExpressionType.COMBINED, "[[potion] effect [(with|by)]] %potioneffecttype% for %timespan% with [a] [tier [of]] %number% [particles %-boolean%[ with ambient [effect] %-boolean%[ and [particle] colo[u]r[ed] %-color%]]]]]");
-        newExpression(ExprCustomPotionItem.class, ItemStack.class, ExpressionType.COMBINED, "(0¦[normal] potion|1¦splash potion|2¦linger[ing] potion|3¦(potion|tipped) arrow) (of|by|with|from|using) [effect[s]] %potioneffects%");
-        newExpression(ExprEntityPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [active] [potion] effects (on|in) %livingentities%", "[(every|all|each) of] %livingentities%['s] [active] [potion] effect[s]");
-        newExpression(SExprPotionItemEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [potion] effect[s] (on|of) %itemstack%", "[(all|every|each) of] %itemstack%['s] [potion] effect[s]");
-        newExpression(ExprPotionEffectType.class, PotionEffectType.class, ExpressionType.COMBINED, "potion[ ]effect[[ ]type][s] of %potioneffect%", "%potioneffect%['s] potion[ ]effect[[ ]type][s]");
-        newExpression(ExprPotionEffectDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [potion] effect[s] %potioneffect%", "[potion] effect[s] %potioneffect%['s] (duration|length)");
-        newExpression(ExprPotionEffectTier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [potion] [effect] %potioneffect%", "[potion] [effect] %potioneffect%['s] (tier|amplifier)");
-        newExpression(SExprItemEffectTypeAmplifier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (tier|amplifier) on [item] %itemstack%");
-        newExpression(SExprItemEffectTypeDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (duration|length) on [item] %itemstack%");
-        newExpression(SExprThrownPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[all] [potion] effects (of|on) (entity|thrown potion|tipped arrow) %entity%");
-        //Beacons
-        newExpression(ExprEntitiesInRange.class, LivingEntity.class, ExpressionType.COMBINED, "[(all|every|each)] ([living] entit(ies|y)|player[s]) in range of %block%");
-        newExpression(ExprBeaconTier.class, Number.class, ExpressionType.COMBINED, "beacon (tier|level) of %block%", "%block%['s] beacon (tier|level)");
-        newExpression(SExprBeaconEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[the] (0¦(first|primary)|1¦second[ary]) [potion] effect of [beacon] %block%", "[beacon] %block%['s] (0¦(first|primary)|1¦second[ary]) [potion] effect");
-        newExpression(SExprBeaconFuel.class, ItemStack.class, ExpressionType.COMBINED, "[the] beacon fuel[ing item[[ ]stack]] of [beacon] %block%", " %block%['s] beacon fuel[ing item[[ ]stack]]");
-        //Banners
-        newExpression(ExprCustomBannerLayer.class, Pattern.class, ExpressionType.COMBINED, "[new] [banner] (layer|pattern) (with|using|of|from) pattern [type] %bannerpattern% colo[u]r[ed] %color%");
-        newExpression(ExprBannerOrShieldWithLayers.class, ItemStack.class, ExpressionType.COMBINED, "[new] (0¦banner|1¦shield) (from|with|using|of) [[banner] (layer|pattern)[s]] %bannerlayers%");
-        newExpression(SExprBannerBlockLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] (layer|pattern)[s] of [(block|banner)] %block%", "[(all|every|each) of] %block%['s] [banner] (layer|pattern)[s]");
-        newExpression(SExprItemLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] (layer|pattern)[s] of [(shield|banner|item)] %itemstack%", "[(all|every|each) of] %itemstack%['s] [banner] (layer|pattern)[s]");
-        newExpression(SExprItemBaseColor.class, Color.class, ExpressionType.COMBINED, "[(banner|shield)] bas(e|ic) color of item %itemstack%", "item %itemstack%['s] [(banner|shield)] bas(e|ic) color");
-        newExpression(SExprBannerBlockBaseColor.class, Color.class, ExpressionType.COMBINED, "[banner] block bas(e|ic) color of block %block%", "block %block%['s] [banner] bas(e|ic) color");
-        newExpression(ExprBannerItemFromMnc.class, ItemStack.class, ExpressionType.COMBINED, "(0¦banner|1¦shield) [item] from [m[iners]]n[eed]c[ool][s[hoes]] [code] %string%");
-        newExpression(ExprBannerItemToMnc.class, String.class, ExpressionType.COMBINED, "[m[iners]]n[eed]c[ool][s[hoes]] code of [(banner|shield|item)] %itemstack%", "[(banner|shield|item)] %itemstack%['s] [m[iners]]n[eed]c[ool][s[hoes]] code");
-        newExpression(ExprRandomBanner.class, ItemStack.class, ExpressionType.SIMPLE, "[a] [new] random (0¦banner|1¦shield)");
+        EnumType.newType(PatternType.class, "bannerpattern", "banner ?pattern(?: ?type)?");
+        //Syntax registration
+        try {
+            getAddon().loadClasses("fr.syst3ms.quarsk", "conditions",  "effects", "events", "expressions");
+            getAddon().loadClasses("fr.syst3ms.quarsk.effects", "banner", "potion");
+            getAddon().loadClasses("fr.syst3ms.quarsk.expressions", "banner", "beacon", "eventvalues", "potion");
+        } catch (IOException e) {
+            Skript.exception(e, "An error has occured while registering QuarSk's syntax", "Report this error to me, Syst3ms, and I will (hopefully) fix it");
+        }
     }
 
     public void onDisable() {
 
     }
 
-    private <E extends Expression<T>, T> void newExpression(Class<E> clazz, Class<T> returnType, ExpressionType type, String... syntaxes) {
+    public static <E extends Expression<T>, T> void newExpression(Class<E> clazz, Class<T> returnType, ExpressionType type, String... syntaxes) {
         Skript.registerExpression(clazz, returnType, type, prefixEachString(getSyntaxPrefix(), syntaxes));
-        expressions++;
+        expressions.put(clazz, syntaxes);
     }
 
-    private <E extends Effect> void newEffect(Class<E> clazz, String... syntaxes) {
+    public static <E extends Effect> void newEffect(Class<E> clazz, String... syntaxes) {
         Skript.registerEffect(clazz, prefixEachString(getSyntaxPrefix(), syntaxes));
-        effects++;
+        effects.put(clazz, syntaxes);
     }
 
-    private <C extends Condition> void newCondition(Class<C> clazz, String... syntaxes) {
+    public static <C extends Condition> void newCondition(Class<C> clazz, String... syntaxes) {
         Skript.registerCondition(clazz, prefixEachString(getSyntaxPrefix(), syntaxes));
-        conditions++;
+        conditions.put(clazz, syntaxes);
     }
 
-    private <E extends SkriptEvent> void newEvent(Class<E> c, Class<? extends Event> eventClass, String name, String... syntaxes){
-        Skript.registerEvent(name, c, eventClass, prefixEachString(getSyntaxPrefix(), syntaxes));
-        events++;
+    public static  <E extends SkriptEvent> void newEvent(String name, Class<E> skriptEvent, Class<? extends Event> event, String... syntaxes) {
+        Skript.registerEvent(name, skriptEvent, event, syntaxes);
+        events.put(skriptEvent, syntaxes);
     }
 
-    //Potions
+    private static boolean generateFolder() {
+        if (!getPlugin().getDataFolder().exists()) {
+            return getPlugin().getDataFolder().mkdirs();
+        }
+        return false;
+    }
+
+    private static boolean generateSyntaxFile() {
+        File syntaxFile = new File(getPlugin(QuarSk.class).getDataFolder(), "syntax.txt");
+        String newLine = System.getProperty("line.separator");
+        if (!syntaxFile.exists()) {
+            try {
+                syntaxFile.createNewFile();
+            } catch (IOException e) {
+                return false;
+            }
+        } else {
+            syntaxFile.delete();
+        }
+        BufferedWriter fileWriter;
+        try {
+            fileWriter = new BufferedWriter(new FileWriter(syntaxFile));
+        } catch (IOException e) {
+            return false;
+        }
+        try {
+            writeLine(fileWriter, "Events :");
+            for (Map.Entry<Class<?>, String[]> entry : events.entrySet()) {
+                String syntaxName = StringUtils.space("(?<!^)(?=[A-Z])" , entry.getKey().getSimpleName().replaceAll("Skript", ""));
+                for (String s : entry.getValue()) {
+                    writeLine(fileWriter, "  - " + syntaxName + " : " + s);
+                }
+            }
+            writeLine(fileWriter, "Conditions :");
+            for (Map.Entry<Class<?>, String[]> entry : conditions.entrySet()) {
+                String syntaxName = StringUtils.space("(?<!^)(?=[A-Z])" , entry.getKey().getSimpleName().replaceAll("^Cond", ""));
+                for (String s : entry.getValue()) {
+                    writeLine(fileWriter, "  - " + syntaxName + " : " + s);
+                }
+            }
+            writeLine(fileWriter, "Effects :");
+            for (Map.Entry<Class<?>, String[]> entry : effects.entrySet()) {
+                String syntaxName = StringUtils.space("(?<!^)(?=[A-Z])" , entry.getKey().getSimpleName().replaceAll("^Eff", ""));
+                for (String s : entry.getValue()) {
+                    writeLine(fileWriter, "  - " + syntaxName + " : " + s);
+                }
+            }
+            writeLine(fileWriter, "Expressions :");
+            for (Map.Entry<Class<?>, String[]> entry : expressions.entrySet()) {
+                String syntaxName = StringUtils.space("(?<!^)(?=[A-Z])" , entry.getKey().getSimpleName().replaceAll("^S?Expr", ""));
+                for (String s : entry.getValue()) {
+                    writeLine(fileWriter, "  - " + syntaxName + " : " + s);
+                }
+            }
+            return true;
+        } catch (IOException e) {
+            return false;
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (IOException e) {
+                Skript.exception(e);
+            }
+        }
+    }
 
     //Conventions
-    public String getPrefix() {
+    public static String getPrefix() {
         return "[QuarSk] ";
     }
 
-    public String getSyntaxPrefix() {
+    public static void writeLine(BufferedWriter writer, String s) throws IOException {
+        writer.write(s);
+        writer.newLine();
+    }
+
+    public static SkriptAddon getAddon() {
+        return addonInstance;
+    }
+
+    public static JavaPlugin getPlugin() {
+        return plugin;
+    }
+
+    public static String getSyntaxPrefix() {
         return "[quar[s]k] ";
     }
 
-    public String[] prefixEachString(String prefix, String... strings) {
-        List<String> stringList = new ArrayList<>();
-        for (String str : strings) {
-            stringList.add(prefix + str);
-        }
-        return stringList.toArray(new String[strings.length]);
+    public static String[] prefixEachString(String prefix, String... strings) {
+        return Stream.of(strings).map(s -> prefix + s).toArray(String[]::new);
     }
 
-    public String[] suffixEachString(String suffix, String... strings) {
-        List<String> stringList = new ArrayList<>();
-        for (String str : strings) {
-            stringList.add(str + suffix);
-        }
-        return stringList.toArray(new String[strings.length]);
+    public static String[] suffixEachString(String suffix, String... strings) {
+        return Stream.of(strings).map(s -> s + suffix).toArray(String[]::new);
     }
 
-    public static QuarSk getInstance() {
-        return instance;
-    }
-
-    public String getVersion() {
+    public static String getVersion() {
         return "1.2";
     }
 
     //All of the below functions are by bi0qaw cause I honestly can't do that kind of math. Thanks to you.
-    public Vector vectorFromLocations(Location from, Location to) {
+    public static Vector vectorFromLocations(Location from, Location to) {
         return new Vector(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ());
     }
 
-    public float getYaw(Vector vector) {
+    public static float getYaw(Vector vector) {
         if (((Double) vector.getX()).equals((double) 0) && ((Double) vector.getZ()).equals((double) 0)) {
             return 0;
         }
         return (float) (Math.atan2(vector.getZ(), vector.getX()) * RAD_TO_DEG);
     }
 
-    public float getPitch(Vector vector) {
+    public static float getPitch(Vector vector) {
         double xy = Math.sqrt(vector.getX() * vector.getX() + vector.getZ() * vector.getZ());
         return (float) (Math.atan(vector.getY() / xy) * RAD_TO_DEG);
     }
 
-    public float notchYaw(float yaw) {
+    public static float notchYaw(float yaw) {
         float y = yaw - 90;
         if (y < -180) {
             y += 360;
@@ -259,14 +273,12 @@ public class QuarSk extends JavaPlugin {
         return y;
     }
 
-    public float notchPitch(float pitch) {
+    public static float notchPitch(float pitch) {
         return -pitch;
     }
 
-    public void debug(Object... l) {
-        for (Object o : l) {
-            Bukkit.getLogger().log(Level.INFO, getPrefix() + " " + o.toString());
-        }
+    public static void debug(Object... l) {
+        Arrays.asList(l).forEach(s -> Bukkit.getLogger().log(Level.INFO, s.toString()));
     }
 
 }

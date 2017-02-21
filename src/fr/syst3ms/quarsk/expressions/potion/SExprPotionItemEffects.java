@@ -2,10 +2,12 @@ package fr.syst3ms.quarsk.expressions.potion;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import fr.syst3ms.quarsk.QuarSk;
 import fr.syst3ms.quarsk.util.PotionUtils;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -13,16 +15,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ARTHUR on 07/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class SExprPotionItemEffects extends SimpleExpression<PotionEffect> {
     private Expression<ItemStack> potionItem;
+
+    static {
+        QuarSk.newExpression(SExprPotionItemEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [potion] effect[s] (on|of) %itemstack%", "[(all|each) of] %itemstack%['s] [potion] effect[s]");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -34,16 +37,9 @@ public class SExprPotionItemEffects extends SimpleExpression<PotionEffect> {
     protected PotionEffect[] get(Event e) {
         if (potionItem != null) {
             if (potionItem.getSingle(e) != null) {
-                if (PotionUtils.getInstance().isPotionItem(potionItem.getSingle(e))) {
+                if (PotionUtils.isPotionItem(potionItem.getSingle(e))) {
                     PotionMeta meta = (PotionMeta) potionItem.getSingle(e).getItemMeta();
-                    List<PotionEffect> list = new ArrayList<>();
-                    if (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) {
-                        list.add(PotionUtils.getInstance().fromPotionData(meta.getBasePotionData()));
-                    }
-                    for (PotionEffect eff : meta.getCustomEffects()) {
-                        list.add(eff);
-                    }
-                    return list.toArray(new PotionEffect[meta.getCustomEffects().size() + ((meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) ? 1 : 0)]);
+                    return PotionUtils.actualPotionEffects(meta);
                 }
             }
         }
@@ -59,33 +55,27 @@ public class SExprPotionItemEffects extends SimpleExpression<PotionEffect> {
                         PotionMeta meta = ((PotionMeta) potionItem.getSingle(e).getItemMeta());
                         switch (mode) {
                             case ADD:
-                                for (Object o : delta) {
-                                    meta.addCustomEffect(((PotionEffect) o), false);
-                                }
+                                for (PotionEffect eff : (PotionEffect[]) delta)
+                                    meta.addCustomEffect(eff, true);
                                 potionItem.getSingle(e).setItemMeta(meta);
                                 break;
                             case SET:
                                 meta.clearCustomEffects();
-                                meta.setBasePotionData(PotionUtils.getInstance().emptyPotionData());
-                                for (Object o : delta) {
-                                    meta.addCustomEffect(((PotionEffect) o), false);
-                                }
+                                meta.setBasePotionData(PotionUtils.emptyPotionData());
+                                for (PotionEffect eff : (PotionEffect[]) delta)
+                                    meta.addCustomEffect(eff, true);
                                 potionItem.getSingle(e).setItemMeta(meta);
                                 break;
                             case REMOVE:
                             case REMOVE_ALL:
-                                for (Object o : delta) {
-                                    meta.removeCustomEffect(((PotionEffect) o).getType());
-                                    if (PotionUtils.getInstance().fromPotionData(meta.getBasePotionData()).getType() == ((PotionEffect) o).getType()) {
-                                        meta.setBasePotionData(PotionUtils.getInstance().emptyPotionData());
-                                    }
-                                }
+                                for (PotionEffectType type : (PotionEffectType[]) delta)
+                                    meta.removeCustomEffect(type);
                                 potionItem.getSingle(e).setItemMeta(meta);
                                 break;
                             case DELETE:
                             case RESET:
                                 meta.clearCustomEffects();
-                                meta.setBasePotionData(PotionUtils.getInstance().emptyPotionData());
+                                meta.setBasePotionData(PotionUtils.emptyPotionData());
                                 potionItem.getSingle(e).setItemMeta(meta);
                                 break;
                         }

@@ -1,18 +1,26 @@
 package fr.syst3ms.quarsk.expressions.potion;
 
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 
 /**
  * Created by ARTHUR on 08/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class ExprPotionEffectDuration extends SimpleExpression<Timespan> {
     private Expression<PotionEffect> effect;
+
+    static {
+        QuarSk.newExpression(ExprPotionEffectDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [potion] effect[s] %potioneffect%", "[potion] effect[s] %potioneffect%['s] (duration|length)");
+    }
+
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
         effect = (Expression<PotionEffect>) expr[0];

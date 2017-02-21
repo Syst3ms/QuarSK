@@ -2,11 +2,13 @@ package fr.syst3ms.quarsk.expressions.banner;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Color;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -16,9 +18,13 @@ import org.bukkit.event.Event;
 /**
  * Created by ARTHUR on 24/01/2017.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class SExprBannerBlockBaseColor extends SimpleExpression<Color> {
     private Expression<Block> block;
+
+    static {
+        QuarSk.newExpression(SExprBannerBlockBaseColor.class, Color.class, ExpressionType.COMBINED, "[banner] block bas(e|ic) color of block %block%", "block %block%['s] [banner] bas(e|ic) color");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {

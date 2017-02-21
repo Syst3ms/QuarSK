@@ -13,10 +13,15 @@ import org.bukkit.util.Vector;
 /**
  * Created by Syst3ms on 30/12/2016 in fr.syst3ms.quarsk.effects.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class EffOrientTowards extends Effect {
     private Expression<?> towards;
     private Expression<Entity> entity;
     private String mode;
+
+    static {
+        QuarSk.newEffect(EffOrientTowards.class, "orient %livingentity% (0¦towards|1¦away from) %location%", "make %livingentity% (face|look [at]) (0¦[towards]|1¦away from) %location%", "force %livingentity% to (face|look [at]) (0¦[towards]|1¦away from) %location%");
+    }
 
     //A crap ton of ternary operators
     @Override
@@ -25,16 +30,16 @@ public class EffOrientTowards extends Effect {
         Vector velocity = ent.getVelocity();
         float fallDistance = ent.getFallDistance();
         Location from = ent.getLocation();
-        Location to = (Location)((Expression<?>)towards).getSingle(e);//Getting the target location the location from the expression
-        Vector direction = (mode == "toward") ? QuarSk.getInstance().vectorFromLocations(from, to) : QuarSk.getInstance().vectorFromLocations(to, from); //Reversing the vector if the mdoe is "away"
+        Location to = (Location) towards.getSingle(e); //Getting the target location the location from the expression
+        Vector direction = (mode.equals("toward")) ? QuarSk.vectorFromLocations(from, to) : QuarSk.vectorFromLocations(to, from); //Reversing the vector if the mdoe is "away"
         entity.getSingle(e).teleport(
                 new Location(
                         ent.getWorld(),
                         ent.getLocation().getX(),
                         ent.getLocation().getY(),
                         ent.getLocation().getZ(),
-                        QuarSk.getInstance().notchYaw(QuarSk.getInstance().getYaw(direction)),
-                        QuarSk.getInstance().notchPitch(QuarSk.getInstance().getPitch(direction))
+                        QuarSk.notchYaw(QuarSk.getYaw(direction)),
+                        QuarSk.notchPitch(QuarSk.getPitch(direction))
                 )
         );
         ent.setVelocity(velocity);

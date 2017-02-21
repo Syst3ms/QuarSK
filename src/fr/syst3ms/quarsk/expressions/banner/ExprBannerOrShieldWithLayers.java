@@ -1,9 +1,11 @@
 package fr.syst3ms.quarsk.expressions.banner;
 
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.event.Event;
@@ -15,10 +17,14 @@ import java.util.Arrays;
 /**
  * Created by ARTHUR on 22/01/2017.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class ExprBannerOrShieldWithLayers extends SimpleExpression<ItemStack> {
     private Material mat;
     private Expression<Pattern> patterns;
+
+    static {
+        QuarSk.newExpression(ExprBannerOrShieldWithLayers.class, ItemStack.class, ExpressionType.COMBINED, "[new] (0¦banner|1¦shield) (from|with|using|of) [[banner] (layer|pattern)[s]] %bannerlayers%");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {

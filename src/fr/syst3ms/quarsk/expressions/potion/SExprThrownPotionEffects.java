@@ -2,10 +2,12 @@ package fr.syst3ms.quarsk.expressions.potion;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import fr.syst3ms.quarsk.QuarSk;
 import fr.syst3ms.quarsk.util.PotionUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -17,12 +19,18 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Arrays;
+
 /**
  * Created by PRODSEB on 29/01/2017.
  */
 @SuppressWarnings({"unused", "unchecked"})
 public class SExprThrownPotionEffects extends SimpleExpression<PotionEffect> {
     private Expression<Entity> entity;
+
+    static {
+        QuarSk.newExpression(SExprThrownPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[all] [potion] effects (of|on) (entity|thrown potion|tipped arrow) %entity%");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -35,11 +43,9 @@ public class SExprThrownPotionEffects extends SimpleExpression<PotionEffect> {
         if (entity != null) {
             if (entity.getSingle(e) != null) {
                 if (entity.getSingle(e) instanceof ThrownPotion) {
-                    ThrownPotion thrownPotion = ((ThrownPotion) entity.getSingle(e));
-                    return thrownPotion.getEffects().toArray(new PotionEffect[thrownPotion.getEffects().size()]);
+                    return ((ThrownPotion) entity.getSingle(e)).getEffects().stream().toArray(PotionEffect[]::new);
                 } else if (entity.getSingle(e) instanceof TippedArrow) {
-                    TippedArrow tippedArrow = ((TippedArrow) entity.getSingle(e));
-                    return tippedArrow.getCustomEffects().toArray(new PotionEffect[tippedArrow.getCustomEffects().size()]);
+                    return ((TippedArrow) entity.getSingle(e)).getCustomEffects().stream().toArray(PotionEffect[]::new);
                 }
             }
         }
@@ -49,29 +55,19 @@ public class SExprThrownPotionEffects extends SimpleExpression<PotionEffect> {
     @Override
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
         if (entity != null) {
-            if (PotionUtils.getInstance().isEntityThrownPotion(entity.getSingle(e))) {
+            if (PotionUtils.isEntityThrownPotion(entity.getSingle(e))) {
                 ItemStack item = ((ThrownPotion) entity.getSingle(e)).getItem();
                 PotionMeta potionMeta = ((PotionMeta) ((ThrownPotion) entity.getSingle(e)).getItem().getItemMeta());
                 switch (mode) {
                     case ADD:
-                        if (delta[0] instanceof PotionEffect) {
-                            for (PotionEffect effect : (PotionEffect[]) delta) {
-                                potionMeta.addCustomEffect(effect, true);
-                            }
-                        }
+                        Arrays.asList((PotionEffect[]) delta).forEach(eff -> potionMeta.addCustomEffect(eff, true));
                         break;
                     case SET:
-                        if (delta[0] instanceof PotionEffect) {
-                            potionMeta.clearCustomEffects();
-                            for (PotionEffect effect : (PotionEffect[]) delta) {
-                                potionMeta.addCustomEffect(effect, true);
-                            }
-                        }
+                        potionMeta.clearCustomEffects();
+                        Arrays.asList((PotionEffect[]) delta).forEach(eff -> potionMeta.addCustomEffect(eff, true));
                         break;
                     case REMOVE:
-                        if (delta[0] instanceof PotionEffectType) {
-                            potionMeta.removeCustomEffect((PotionEffectType) delta[0]);
-                        }
+                        potionMeta.removeCustomEffect((PotionEffectType) delta[0]);
                         break;
                     case DELETE:
                         potionMeta.clearCustomEffects();
@@ -83,24 +79,14 @@ public class SExprThrownPotionEffects extends SimpleExpression<PotionEffect> {
                 TippedArrow tippedArrow = (TippedArrow) entity.getSingle(e);
                 switch (mode) {
                     case ADD:
-                        if (delta[0] instanceof PotionEffect) {
-                            for (PotionEffect effect : (PotionEffect[]) delta) {
-                                tippedArrow.addCustomEffect(effect, true);
-                            }
-                        }
+                        Arrays.asList(((PotionEffect[]) delta)).forEach(eff -> tippedArrow.addCustomEffect(eff, true));
                         break;
                     case SET:
-                        if (delta[0] instanceof PotionEffect) {
-                            tippedArrow.clearCustomEffects();
-                            for (PotionEffect effect : (PotionEffect[]) delta) {
-                                tippedArrow.addCustomEffect(effect, true);
-                            }
-                        }
+                        tippedArrow.clearCustomEffects();
+                        Arrays.asList(((PotionEffect[]) delta)).forEach(eff -> tippedArrow.addCustomEffect(eff, true));
                         break;
                     case REMOVE:
-                        if (delta[0] instanceof PotionEffectType) {
-                            tippedArrow.removeCustomEffect((PotionEffectType) delta[0]);
-                        }
+                        tippedArrow.removeCustomEffect((PotionEffectType) delta[0]);
                         break;
                     case DELETE:
                         tippedArrow.clearCustomEffects();

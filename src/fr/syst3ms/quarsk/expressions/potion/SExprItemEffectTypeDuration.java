@@ -2,11 +2,13 @@ package fr.syst3ms.quarsk.expressions.potion;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import fr.syst3ms.quarsk.QuarSk;
 import fr.syst3ms.quarsk.util.PotionUtils;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -18,10 +20,14 @@ import org.bukkit.potion.PotionType;
 /**
  * Created by PRODSEB on 27/01/2017.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class SExprItemEffectTypeDuration extends SimpleExpression<Timespan> {
     private Expression<PotionEffectType> effectType;
     private Expression<ItemStack> item;
+
+    static {
+        QuarSk.newExpression(SExprItemEffectTypeDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (duration|length) on [item] %itemstack%");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -34,9 +40,9 @@ public class SExprItemEffectTypeDuration extends SimpleExpression<Timespan> {
     protected Timespan[] get(Event e) {
         if (effectType != null && item != null) {
             if (effectType.getSingle(e) != null && item.getSingle(e) != null) {
-                if (PotionUtils.getInstance().isPotionItem(item.getSingle(e))) {
+                if (PotionUtils.isPotionItem(item.getSingle(e))) {
                     PotionMeta meta = (PotionMeta) item.getSingle(e).getItemMeta();
-                    return new Timespan[]{Timespan.fromTicks_i(PotionUtils.getInstance().getEffectByEffectType(meta, effectType.getSingle(e)).getDuration())};
+                    return new Timespan[]{Timespan.fromTicks_i(PotionUtils.getEffectByEffectType(meta, effectType.getSingle(e)).getDuration())};
                 }
             }
         }
@@ -47,13 +53,13 @@ public class SExprItemEffectTypeDuration extends SimpleExpression<Timespan> {
     public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
         if (effectType != null && item != null) {
             if (effectType.getSingle(e) != null && item.getSingle(e) != null) {
-                if (PotionUtils.getInstance().isPotionItem(item.getSingle(e))) {
+                if (PotionUtils.isPotionItem(item.getSingle(e))) {
                     PotionMeta meta = (PotionMeta) item.getSingle(e).getItemMeta();
-                    PotionEffect potionEffect = (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) ? PotionUtils.getInstance().getEffectByEffectType(meta, effectType.getSingle(e)) : PotionUtils.getInstance().fromPotionData(meta.getBasePotionData());
+                    PotionEffect potionEffect = (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) ? PotionUtils.getEffectByEffectType(meta, effectType.getSingle(e)) : PotionUtils.fromPotionData(meta.getBasePotionData());
                     if (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) {
                         meta.removeCustomEffect(effectType.getSingle(e));
                     } else {
-                        meta.setBasePotionData(PotionUtils.getInstance().emptyPotionData());
+                        meta.setBasePotionData(PotionUtils.emptyPotionData());
                     }
                     Timespan timespan = (Timespan) delta[0];
                     switch (mode) {

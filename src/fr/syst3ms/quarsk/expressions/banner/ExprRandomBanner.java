@@ -1,9 +1,12 @@
 package fr.syst3ms.quarsk.expressions.banner;
 
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.util.ListUtils;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
@@ -21,6 +24,10 @@ import java.util.Random;
 public class ExprRandomBanner extends SimpleExpression<ItemStack> {
     private Material type;
 
+    static {
+        QuarSk.newExpression(ExprRandomBanner.class, ItemStack.class, ExpressionType.SIMPLE, "[a] [new] random (0¦banner|1¦shield)");
+    }
+
     @Override
     public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
         type = parseResult.mark == 0 ? Material.BANNER : Material.SHIELD;
@@ -31,13 +38,9 @@ public class ExprRandomBanner extends SimpleExpression<ItemStack> {
     protected ItemStack[] get(Event event) {
         ItemStack banner = new ItemStack(type);
         BannerMeta meta = (BannerMeta) banner.getItemMeta();
-        meta.setBaseColor(DyeColor.values()[new Random().nextInt(DyeColor.values().length)]);
-        for (int i = 0; i < (new Random().nextInt(5)) + 1; i++) {
-            meta.addPattern(new Pattern(
-                    DyeColor.values()[new Random().nextInt(DyeColor.values().length)],
-                    PatternType.values()[new Random().nextInt(PatternType.values().length)]
-            ));
-        }
+        meta.setBaseColor(ListUtils.randomElement(DyeColor.values()));
+        for (int i = 0; i < new Random().nextInt(7); i++)
+            meta.addPattern(new Pattern(ListUtils.randomElement(DyeColor.values()), ListUtils.randomElement(PatternType.values())));
         banner.setItemMeta(meta);
         return new ItemStack[]{banner};
     }

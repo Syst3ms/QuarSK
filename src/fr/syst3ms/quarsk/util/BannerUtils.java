@@ -15,18 +15,12 @@ import java.util.List;
  */
 @SuppressWarnings({"unused", "unchecked"})
 public class BannerUtils {
-    private static BannerUtils instance = new BannerUtils();
-
-    public static BannerUtils getInstance() {
-        return instance;
-    }
-
     /**
      * Converts a banner color from Miner Needs Cool Shoes
      * @param c the char representing the color
      * @return DyeColor
      */
-    public DyeColor colorFromMnc(char c) { //Don't question the characters, it's just like that.
+    public static DyeColor colorFromMnc(char c) { //Don't question the characters, it's just like that.
         switch (c) {
             case 'a':
                 return DyeColor.BLACK;
@@ -70,7 +64,7 @@ public class BannerUtils {
      * @param c the char representing the pattern
      * @return PatternType
      */
-    public PatternType patternTypeFromMnc(char c) {
+    public static PatternType patternTypeFromMnc(char c) {
         switch (c) {
             case 'b':
                 return PatternType.SQUARE_BOTTOM_LEFT;
@@ -153,17 +147,17 @@ public class BannerUtils {
         }
     }
     
-    public BannerMeta emptyBannerMeta() {
+    public static BannerMeta emptyBannerMeta() {
         return ((BannerMeta) new ItemStack(Material.BANNER).getItemMeta());
     }
 
-    public boolean isMncPattern(String code) {
+    public static boolean isMncPattern(String code) {
         return code.matches("[a-p]a([a-p][b-zA-M])+");
     }
 
-    public BannerMeta parseMncPattern(String mnc) {
+    public static BannerMeta parseMncPattern(String mnc) {
         if (mnc.matches("[a-p]a([a-p][b-zA-M])+")) {
-            List<String> groups = StringUtils.getInstance().sizedSplitString(mnc, 2, true);
+            List<String> groups = StringUtils.sizedSplitString(mnc, 2, true);
             BannerMeta meta = emptyBannerMeta();
             meta.setBaseColor(colorFromMnc(mnc.charAt(0)));
 
@@ -176,23 +170,23 @@ public class BannerUtils {
         return null;
     }
 
-    public char colorToMnc(DyeColor color) {
-        for (char c : StringUtils.getInstance().alphabetLetters()) {
+    public static char colorToMnc(DyeColor color) {
+        for (char c : StringUtils.alphabetLetters()) {
             if (colorFromMnc(c) == color)
                 return c;
         }
         return 0; //Will never happen
     }
 
-    public char patternTypeToMnc(PatternType patternType) {
-        for (char c : StringUtils.getInstance().alphabetLetters()) {
+    public static char patternTypeToMnc(PatternType patternType) {
+        for (char c : StringUtils.alphabetLetters()) {
             if (patternTypeFromMnc(c) == patternType)
                 return c;
         }
         return 0; //Will never happen
     }
 
-    public String toMncPattern(BannerMeta meta) {
+    public static String toMncPattern(BannerMeta meta) {
         List<String> stringList = new ArrayList<>();
         stringList.add(colorToMnc(meta.getBaseColor()) + "a");
         for (Pattern pattern : meta.getPatterns()) {
@@ -204,6 +198,6 @@ public class BannerUtils {
                 )
             );
         }
-        return StringUtils.getInstance().join(stringList.toArray(new String[stringList.size()]));
+        return StringUtils.join(stringList.toArray(new String[stringList.size()]));
     }
 }

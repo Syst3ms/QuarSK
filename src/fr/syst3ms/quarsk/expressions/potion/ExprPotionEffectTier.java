@@ -1,9 +1,11 @@
 package fr.syst3ms.quarsk.expressions.potion;
 
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 
@@ -12,6 +14,10 @@ import org.bukkit.potion.PotionEffect;
  */
 public class ExprPotionEffectTier extends SimpleExpression<Number> {
     private Expression<PotionEffect> effect;
+
+    static {
+        QuarSk.newExpression(ExprPotionEffectTier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [potion] [effect] %potioneffect%", "[potion] [effect] %potioneffect%['s] (tier|amplifier)");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {

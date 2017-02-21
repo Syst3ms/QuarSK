@@ -4,6 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
@@ -18,6 +19,10 @@ import org.bukkit.inventory.meta.BannerMeta;
 public class EffApplyBannerItemToBlock extends Effect {
     private Expression<ItemStack> item;
     private Expression<Block> block;
+
+    static {
+        QuarSk.newEffect(EffApplyBannerItemToBlock.class, "apply (banner|shield) [item] pattern[s] of %itemstack% to [banner] [block] %block%", "apply [item] %itemstack%['s] (banner|shield) pattern[s] to [banner] [block] %block%");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {

@@ -2,10 +2,12 @@ package fr.syst3ms.quarsk.expressions.beacon;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.BeaconInventory;
@@ -17,6 +19,10 @@ import org.bukkit.inventory.ItemStack;
 @SuppressWarnings({"unused", "unchecked"})
 public class SExprBeaconFuel extends SimpleExpression<ItemStack> {
     private Expression<Block> block;
+
+    static {
+        QuarSk.newExpression(SExprBeaconFuel.class, ItemStack.class, ExpressionType.COMBINED, "[the] beacon fuel[ing item[[ ]stack]] of [beacon] %block%", " %block%['s] beacon fuel[ing item[[ ]stack]]");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {

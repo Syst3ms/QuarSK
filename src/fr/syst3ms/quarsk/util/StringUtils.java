@@ -1,9 +1,9 @@
 package fr.syst3ms.quarsk.util;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,23 +11,30 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public class StringUtils {
-    private static final StringUtils instance = new StringUtils();
 
-    public static StringUtils getInstance() {
-        return instance;
-    }
-
-    public char[] alphabetLetters() {
+    public static char[] alphabetLetters() {
         return "abdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
     }
 
-    public List<String> sizedSplitString(CharSequence s, int groupSize, boolean equalGroupSizes) {
+    public static List<String> sizedSplitString(CharSequence s, int groupSize, boolean equalGroupSizes) {
         return equalGroupSizes ? s.length() % groupSize == 0 ? Splitter.fixedLength(groupSize).splitToList(s) : new ArrayList<>() : Splitter.fixedLength(groupSize).splitToList(s);
     }
 
-    public String join(CharSequence... strings) {
-        StringBuilder builder = new StringBuilder();
-        Arrays.asList(strings).forEach(builder::append);
-        return builder.toString();
+    public static String join(CharSequence... strings) {
+        return Joiner.on("").join(strings);
+    }
+
+    public static String space(String regex, String s) {
+        return sentenceCapitalization(Joiner.on(' ').join(s.split(regex)));
+    }
+
+    public static String sentenceCapitalization(String s) {
+        return setCharAt(s.toLowerCase(), 0, Character.toUpperCase(s.charAt(0)));
+    }
+
+    public static String setCharAt(String s, int index, char c) {
+        char[] chars = s.toCharArray();
+        chars[index] = c;
+        return new String(chars);
     }
 }

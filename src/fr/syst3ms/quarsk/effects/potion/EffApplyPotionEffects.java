@@ -4,6 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
@@ -11,9 +12,14 @@ import org.bukkit.potion.PotionEffect;
 /**
  * Created by ARTHUR on 07/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class EffApplyPotionEffects extends Effect {
     private Expression<LivingEntity> player;
     private Expression<PotionEffect> potionEffects;
+
+    static {
+        QuarSk.newEffect(EffApplyPotionEffects.class, "apply [potion] [effect[s] [of]] %potioneffects% to %livingentities%");
+    }
 
     @Override
     protected void execute(Event e) {

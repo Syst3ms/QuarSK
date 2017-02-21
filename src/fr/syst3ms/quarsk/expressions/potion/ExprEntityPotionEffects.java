@@ -1,21 +1,27 @@
 package fr.syst3ms.quarsk.expressions.potion;
 
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by ARTHUR on 07/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class ExprEntityPotionEffects extends SimpleExpression<PotionEffect> {
     private Expression<LivingEntity> targets;
+
+    static {
+        QuarSk.newExpression(ExprEntityPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [active] [potion] effect[s] (on|in) %livingentities%", "[(all|each) of] %livingentities%['s] [active] [potion] effect[s]");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -27,19 +33,10 @@ public class ExprEntityPotionEffects extends SimpleExpression<PotionEffect> {
     protected PotionEffect[] get(Event e) {
         if (targets != null) {
             if (targets.getArray(e).length > 0) {
-                List<PotionEffect> effects = new ArrayList<>();
-                for (LivingEntity ent : targets.getAll(e)) {
-                    for (PotionEffect eff : ent.getActivePotionEffects()) {
-                        effects.add(eff);
-                    }
-                }
-                return effects.toArray(new PotionEffect[effects.size()]);
-            } else {
-                return null;
+                return Stream.of(targets.getAll(e)).map(LivingEntity::getActivePotionEffects).toArray(PotionEffect[]::new);
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override

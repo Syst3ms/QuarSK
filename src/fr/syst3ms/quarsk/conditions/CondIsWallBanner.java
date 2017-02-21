@@ -4,6 +4,7 @@ import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.material.Banner;
@@ -14,6 +15,10 @@ import org.bukkit.material.Banner;
 @SuppressWarnings({"unused", "unchecked"})
 public class CondIsWallBanner extends Condition {
     private Expression<Block> block;
+
+    static {
+        QuarSk.newCondition(CondIsWallBanner.class, "[banner] [block] %block% (0¦is|1¦is(n't| not)) [a] wall banner");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {

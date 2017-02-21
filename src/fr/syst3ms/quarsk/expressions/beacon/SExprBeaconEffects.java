@@ -2,10 +2,12 @@ package fr.syst3ms.quarsk.expressions.beacon;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.Material;
 import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
@@ -16,9 +18,14 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Created by Syst3ms on 15/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class SExprBeaconEffects extends SimpleExpression<PotionEffect> {
     private Expression<Block> beacon;
     private int mode;
+
+    static {
+        QuarSk.newExpression(SExprBeaconEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[the] (0¦(first|primary)|1¦second[ary]) [potion] effect of [beacon] %block%", "[beacon] %block%['s] (0¦(first|primary)|1¦second[ary]) [potion] effect");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {

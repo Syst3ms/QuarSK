@@ -1,21 +1,30 @@
 package fr.syst3ms.quarsk.expressions.potion;
 
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 
+import java.util.stream.Stream;
+
 /**
  * Created by ARTHUR on 07/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class ExprCustomPotionItem extends SimpleExpression<ItemStack> {
     private Material material;
     private Expression<PotionEffect> potionEffects;
+
+    static {
+        QuarSk.newExpression(ExprCustomPotionItem.class, ItemStack.class, ExpressionType.COMBINED, "(0¦[normal] potion|1¦splash potion|2¦linger[ing] potion|3¦(potion|tipped) arrow) (of|by|with|from|using) [effect[s]] %potioneffects%");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -43,11 +52,8 @@ public class ExprCustomPotionItem extends SimpleExpression<ItemStack> {
     @Override
     protected ItemStack[] get(Event e) {
         ItemStack item = new ItemStack(material, 1);
-        PotionMeta meta = ((PotionMeta)item.getItemMeta()); //Getting PotionMeta
-        PotionEffect[] effect = potionEffects.getAll(e);
-        for (PotionEffect eff : effect) {
-            meta.addCustomEffect(eff, true);
-        }
+        PotionMeta meta = (PotionMeta) item.getItemMeta(); //Getting PotionMeta
+        Stream.of(potionEffects.getAll(e)).forEach(eff -> meta.addCustomEffect(eff, true));
         item.setItemMeta(meta);
         return new ItemStack[]{item};
     }
@@ -59,7 +65,7 @@ public class ExprCustomPotionItem extends SimpleExpression<ItemStack> {
 
     @Override
     public String toString(Event event, boolean b) {
-        return null;
+        return getClass().getName();
     }
 
     @Override

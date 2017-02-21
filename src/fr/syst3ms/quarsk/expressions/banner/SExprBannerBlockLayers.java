@@ -2,10 +2,12 @@ package fr.syst3ms.quarsk.expressions.banner;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
@@ -13,14 +15,17 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.event.Event;
 
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by ARTHUR on 23/01/2017.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class SExprBannerBlockLayers extends SimpleExpression<Pattern> {
     private Expression<Block> block;
+
+    static {
+        QuarSk.newExpression(SExprBannerBlockLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] (layer|pattern)[s] of [(block|banner)] %block%", "[(all|every|each) of] %block%['s] [banner] (layer|pattern)[s]");
+    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -33,8 +38,7 @@ public class SExprBannerBlockLayers extends SimpleExpression<Pattern> {
         if (block != null) {
             if (block.getSingle(e) != null) {
                 if (block.getSingle(e).getType() == Material.STANDING_BANNER || block.getSingle(e).getType() == Material.WALL_BANNER) {
-                    Banner banner = ((Banner) block.getSingle(e).getState());
-                    return banner.getPatterns().toArray(new Pattern[banner.getPatterns().size()]);
+                    return ((Banner) block.getSingle(e).getState()).getPatterns().stream().toArray(Pattern[]::new);
                 }
             }
         }
@@ -49,19 +53,15 @@ public class SExprBannerBlockLayers extends SimpleExpression<Pattern> {
                     Banner banner = (Banner) block.getSingle(e).getState();
                     switch (mode) {
                         case ADD:
-                            for (Object pat : delta) {
-                                banner.addPattern((Pattern) pat);
-                            }
+                            Arrays.asList(((Pattern[]) delta)).forEach(banner::addPattern);
                             break;
                         case SET:
-                            List<Pattern> patternList = Arrays.asList((Pattern[]) delta);
-                            banner.setPatterns(patternList);
+                            banner.setPatterns(Arrays.asList(((Pattern[]) delta)));
                             break;
                         case DELETE:
                         case RESET:
-                            for (int i = 1; i <= banner.numberOfPatterns(); i++) {
+                            for (int i = 1; i <= banner.numberOfPatterns(); i++)
                                 banner.removePattern(i);
-                            }
                             break;
                     }
                     banner.update(true, false);

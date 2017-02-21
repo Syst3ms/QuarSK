@@ -6,6 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.util.StringMode;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import fr.syst3ms.quarsk.classes.Reference;
 import org.bukkit.event.Event;
 
@@ -15,6 +16,10 @@ import org.bukkit.event.Event;
 public class EffLinkReference extends Effect {
     private VariableString refName;
     private Expression<?> exprToLink;
+
+    static {
+        QuarSk.newEffect(EffLinkReference.class, "link @<.+>@ to %object%");
+    }
 
     @Override
     protected void execute(Event e) {

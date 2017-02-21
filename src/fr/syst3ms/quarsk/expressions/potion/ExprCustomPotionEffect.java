@@ -1,11 +1,13 @@
 package fr.syst3ms.quarsk.expressions.potion;
 
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Color;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
+import fr.syst3ms.quarsk.QuarSk;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -13,11 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Created by ARTHUR on 06/01/2017.
  */
-/*
-@ExpressionRegistry.ReturnType(PotionEffect.class)
-@ExpressionRegistry.Type(ExpressionType.COMBINED)
-@ExpressionRegistry.Syntax("[[potion] effect [(with|by)]] %potioneffecttype% for %timespan% with [a] [tier [of]] %number% [particles %-boolean%[ with ambient [effect] %-boolean%[ and [particle] colo[u]r[ed] %-color%]]]]]")
-*/
+@SuppressWarnings({"unused", "unchecked"})
 public class ExprCustomPotionEffect extends SimpleExpression<PotionEffect> {
     private Expression<PotionEffectType> type;
     private Expression<Timespan> duration;
@@ -25,6 +23,10 @@ public class ExprCustomPotionEffect extends SimpleExpression<PotionEffect> {
     private Expression<Boolean> particles;
     private Expression<Boolean> ambient;
     private Expression<Color> color;
+
+    static {
+        QuarSk.newExpression(ExprCustomPotionEffect.class, PotionEffect.class, ExpressionType.COMBINED, "[[potion] effect [(with|by)]] %potioneffecttype% for %timespan% with [a] [tier [of]] %number% [particles %-boolean%[ with ambient [effect] %-boolean%[ and [particle] colo[u]r[ed] %-color%]]]]]");
+    }
 
     @Override
     protected PotionEffect[] get(Event e) {
