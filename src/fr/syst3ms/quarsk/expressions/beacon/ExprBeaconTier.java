@@ -5,7 +5,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import org.bukkit.block.Beacon;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -18,7 +18,7 @@ public class ExprBeaconTier extends SimpleExpression<Number> {
     private Expression<Block> beacon;
 
     static {
-        QuarSk.newExpression(ExprBeaconTier.class, Number.class, ExpressionType.COMBINED, "beacon (tier|level) of %block%", "%block%['s] beacon (tier|level)");
+        Quarsk.newExpression("Tier of a beacon", ExprBeaconTier.class, Number.class, ExpressionType.COMBINED, "beacon (tier|level) of %block%", "%block%['s] beacon (tier|level)");
     }
 
     @Override

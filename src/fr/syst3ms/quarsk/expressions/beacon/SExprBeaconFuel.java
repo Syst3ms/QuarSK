@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.BeaconInventory;
@@ -21,7 +21,7 @@ public class SExprBeaconFuel extends SimpleExpression<ItemStack> {
     private Expression<Block> block;
 
     static {
-        QuarSk.newExpression(SExprBeaconFuel.class, ItemStack.class, ExpressionType.COMBINED, "[the] beacon fuel[ing item[[ ]stack]] of [beacon] %block%", " %block%['s] beacon fuel[ing item[[ ]stack]]");
+        Quarsk.newExpression("Fuel item of a beacon", SExprBeaconFuel.class, ItemStack.class, ExpressionType.COMBINED, "[the] beacon fuel[ing item[[ ]stack]] of [beacon] %block%", " %block%['s] beacon fuel[ing item[[ ]stack]]");
     }
 
     @Override

@@ -6,7 +6,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Color;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.event.Event;
@@ -20,7 +20,7 @@ public class ExprCustomBannerLayer extends SimpleExpression<Pattern> {
     private Expression<Color> color;
 
     static {
-        QuarSk.newExpression(ExprCustomBannerLayer.class, Pattern.class, ExpressionType.COMBINED, "[new] [banner] (layer|pattern) (with|using|of|from) pattern [type] %bannerpattern% colo[u]r[ed] %color%");
+        Quarsk.newExpression("A custom banner layer", ExprCustomBannerLayer.class, Pattern.class, ExpressionType.COMBINED, "[new] [banner] (layer|pattern) (with|using|of|from) pattern [type] %bannerpattern% colo[u]r[ed] %color%");
     }
 
     @Override

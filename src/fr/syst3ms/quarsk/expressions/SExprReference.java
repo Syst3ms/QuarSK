@@ -10,7 +10,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.StringMode;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import fr.syst3ms.quarsk.classes.Reference;
 import org.bukkit.event.Event;
 
@@ -23,7 +23,7 @@ public class SExprReference extends SimpleExpression {
     private Reference refProp;
 
     static {
-        QuarSk.newExpression(SExprReference.class, Object.class, ExpressionType.SIMPLE, "@<.+>@");
+        Quarsk.newExpression("Reference expression", SExprReference.class, Object.class, ExpressionType.SIMPLE, "@<.+>@");
     }
 
     @Override

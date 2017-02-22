@@ -5,18 +5,19 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 
 /**
  * Created by ARTHUR on 08/01/2017.
  */
+@SuppressWarnings({"unused", "unchecked"})
 public class ExprPotionEffectTier extends SimpleExpression<Number> {
     private Expression<PotionEffect> effect;
 
     static {
-        QuarSk.newExpression(ExprPotionEffectTier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [potion] [effect] %potioneffect%", "[potion] [effect] %potioneffect%['s] (tier|amplifier)");
+        Quarsk.newExpression("Tier of a potion effect", ExprPotionEffectTier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [potion] [effect] %potioneffect%", "[potion] [effect] %potioneffect%['s] (tier|amplifier)");
     }
 
     @Override

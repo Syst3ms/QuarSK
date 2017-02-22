@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import fr.syst3ms.quarsk.util.PotionUtils;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -24,7 +24,7 @@ public class SExprPotionItemEffects extends SimpleExpression<PotionEffect> {
     private Expression<ItemStack> potionItem;
 
     static {
-        QuarSk.newExpression(SExprPotionItemEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [potion] effect[s] (on|of) %itemstack%", "[(all|each) of] %itemstack%['s] [potion] effect[s]");
+        Quarsk.newExpression("Potion effects of an item (any potion/tipped arrow)", SExprPotionItemEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [potion] effect[s] (on|of) %itemstack%", "[(all|each) of] %itemstack%['s] [potion] effect[s]");
     }
 
     @Override

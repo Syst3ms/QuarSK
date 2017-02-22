@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.material.Banner;
@@ -17,7 +17,7 @@ public class CondIsWallBanner extends Condition {
     private Expression<Block> block;
 
     static {
-        QuarSk.newCondition(CondIsWallBanner.class, "[banner] [block] %block% (0¦is|1¦is(n't| not)) [a] wall banner");
+        Quarsk.newCondition("Banner block is a wall banner condition", CondIsWallBanner.class, "[banner] [block] %block% (0¦is|1¦is(n't| not)) [a] wall banner");
     }
 
     @Override

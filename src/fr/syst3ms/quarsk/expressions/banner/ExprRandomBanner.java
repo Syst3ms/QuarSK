@@ -5,7 +5,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import fr.syst3ms.quarsk.util.ListUtils;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -25,7 +25,7 @@ public class ExprRandomBanner extends SimpleExpression<ItemStack> {
     private Material type;
 
     static {
-        QuarSk.newExpression(ExprRandomBanner.class, ItemStack.class, ExpressionType.SIMPLE, "[a] [new] random (0¦banner|1¦shield)");
+        Quarsk.newExpression("A fully randomized banner or shield", ExprRandomBanner.class, ItemStack.class, ExpressionType.SIMPLE, "[a] [new] random (0¦banner|1¦shield)");
     }
 
     @Override

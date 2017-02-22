@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -20,7 +20,7 @@ public class EffOrientTowards extends Effect {
     private String mode;
 
     static {
-        QuarSk.newEffect(EffOrientTowards.class, "orient %livingentity% (0¦towards|1¦away from) %location%", "make %livingentity% (face|look [at]) (0¦[towards]|1¦away from) %location%", "force %livingentity% to (face|look [at]) (0¦[towards]|1¦away from) %location%");
+        Quarsk.newEffect("Orients an entity towards a location or away from it", EffOrientTowards.class, "orient %livingentity% (0¦towards|1¦away from) %location%", "make %livingentity% (face|look [at]) (0¦[towards]|1¦away from) %location%", "force %livingentity% to (face|look [at]) (0¦[towards]|1¦away from) %location%");
     }
 
     //A crap ton of ternary operators
@@ -31,15 +31,15 @@ public class EffOrientTowards extends Effect {
         float fallDistance = ent.getFallDistance();
         Location from = ent.getLocation();
         Location to = (Location) towards.getSingle(e); //Getting the target location the location from the expression
-        Vector direction = (mode.equals("toward")) ? QuarSk.vectorFromLocations(from, to) : QuarSk.vectorFromLocations(to, from); //Reversing the vector if the mdoe is "away"
+        Vector direction = (mode.equals("toward")) ? Quarsk.vectorFromLocations(from, to) : Quarsk.vectorFromLocations(to, from); //Reversing the vector if the mdoe is "away"
         entity.getSingle(e).teleport(
                 new Location(
                         ent.getWorld(),
                         ent.getLocation().getX(),
                         ent.getLocation().getY(),
                         ent.getLocation().getZ(),
-                        QuarSk.notchYaw(QuarSk.getYaw(direction)),
-                        QuarSk.notchPitch(QuarSk.getPitch(direction))
+                        Quarsk.notchYaw(Quarsk.getYaw(direction)),
+                        Quarsk.notchPitch(Quarsk.getPitch(direction))
                 )
         );
         ent.setVelocity(velocity);

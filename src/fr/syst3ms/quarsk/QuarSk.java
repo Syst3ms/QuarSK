@@ -7,12 +7,14 @@ import ch.njol.skript.classes.Parser;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.registrations.Classes;
 import ch.njol.skript.util.PotionEffectUtils;
+import ch.njol.skript.util.Version;
 import com.sun.istack.internal.Nullable;
 import fr.syst3ms.quarsk.classes.EnumType;
 import fr.syst3ms.quarsk.util.ListUtils;
 import fr.syst3ms.quarsk.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.TreeSpecies;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.event.Event;
@@ -24,21 +26,19 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
 @SuppressWarnings({"unused", "unchecked"})
-public class QuarSk extends JavaPlugin {
+public class Quarsk extends JavaPlugin {
 
     private static final double RAD_TO_DEG = 180 / Math.PI;
     private static SkriptAddon addonInstance;
-    private static HashMap<Class<?>, String[]> events = new HashMap<>();
-    private static HashMap<Class<?>, String[]> conditions = new HashMap<>();
-    private static HashMap<Class<?>, String[]> effects = new HashMap<>();
-    private static HashMap<Class<?>, String[]> expressions = new HashMap<>();
+    private static Set<QuarskSyntaxInfo> expressions = new HashSet<>();
+    private static Set<QuarskSyntaxInfo> effects = new HashSet<>();
+    private static Set<QuarskSyntaxInfo> conditions = new HashSet<>();
+    private static Set<QuarskSyntaxInfo> events = new HashSet<>();
     private static JavaPlugin plugin;
 
     public void onEnable() {
@@ -114,13 +114,14 @@ public class QuarSk extends JavaPlugin {
             })
         );
         EnumType.newType(PatternType.class, "bannerpattern", "banner ?pattern(?: ?type)?");
+        EnumType.newType(TreeSpecies.class, "treespecie", "(?:tree|wood) ?specie");
         //Syntax registration
         try {
             getAddon().loadClasses("fr.syst3ms.quarsk", "conditions",  "effects", "events", "expressions");
             getAddon().loadClasses("fr.syst3ms.quarsk.effects", "banner", "potion");
             getAddon().loadClasses("fr.syst3ms.quarsk.expressions", "banner", "beacon", "eventvalues", "potion");
         } catch (IOException e) {
-            Skript.exception(e, "An error has occured while registering QuarSk's syntax", "Report this error to me, Syst3ms, and I will (hopefully) fix it");
+            Skript.exception(e, "An error has occured while registering Quarsk's syntax", "Report this error to me, Syst3ms, and I will (hopefully) fix it");
         }
     }
 
@@ -128,25 +129,55 @@ public class QuarSk extends JavaPlugin {
 
     }
 
-    public static <E extends Expression<T>, T> void newExpression(Class<E> clazz, Class<T> returnType, ExpressionType type, String... syntaxes) {
+    public static <E extends Expression<T>, T> void newExpression(String syntaxName, Class<E> clazz, Class<T> returnType, ExpressionType type, String... syntaxes) {
         Skript.registerExpression(clazz, returnType, type, prefixEachString(getSyntaxPrefix(), syntaxes));
-        expressions.put(clazz, syntaxes);
+        expressions.add(new QuarskSyntaxInfo(clazz, syntaxName, syntaxes));
     }
 
-    public static <E extends Effect> void newEffect(Class<E> clazz, String... syntaxes) {
+    public static <E extends Expression<T>, T> void newVersionDependantExpression(String syntaxName, Class<E> clazz, Class<T> returnType, ExpressionType type, Version version, String... syntaxes) {
+        if (Skript.isRunningMinecraft(version)) {
+            Skript.registerExpression(clazz, returnType, type, syntaxes);
+            expressions.add(new QuarskSyntaxInfo(clazz, syntaxName, syntaxes));
+        }
+    }
+
+    public static <E extends Effect> void newEffect(String syntaxName, Class<E> clazz, String... syntaxes) {
         Skript.registerEffect(clazz, prefixEachString(getSyntaxPrefix(), syntaxes));
-        effects.put(clazz, syntaxes);
+        effects.add(new QuarskSyntaxInfo(clazz, syntaxName, syntaxes));
     }
 
-    public static <C extends Condition> void newCondition(Class<C> clazz, String... syntaxes) {
+    public static <E extends Effect> void newVersionDependantEffect(String syntaxName, Class<E> clazz, Version version, String... syntaxes) {
+        if (Skript.isRunningMinecraft(version)) {
+            Skript.registerEffect(clazz, syntaxes);
+            effects.add(new QuarskSyntaxInfo(clazz, syntaxName, syntaxes));
+        }
+    }
+
+    public static <C extends Condition> void newCondition(String syntaxName, Class<C> clazz, String... syntaxes) {
         Skript.registerCondition(clazz, prefixEachString(getSyntaxPrefix(), syntaxes));
-        conditions.put(clazz, syntaxes);
+        conditions.add(new QuarskSyntaxInfo(clazz, syntaxName, syntaxes));
     }
 
-    public static  <E extends SkriptEvent> void newEvent(String name, Class<E> skriptEvent, Class<? extends Event> event, String... syntaxes) {
-        Skript.registerEvent(name, skriptEvent, event, syntaxes);
-        events.put(skriptEvent, syntaxes);
+    public static <C extends Condition> void newVersionDependantCondition(String syntaxName, Class<C> clazz, Version version, String... syntaxes) {
+        if (Skript.isRunningMinecraft(version)) {
+            Skript.registerCondition(clazz, syntaxes);
+            conditions.add(new QuarskSyntaxInfo(clazz, syntaxName, syntaxes));
+        }
     }
+
+    public static <E extends SkriptEvent> void newEvent(String syntaxName, String name, Class<E> skriptEvent, Class<? extends Event> event, String... syntaxes) {
+        Skript.registerEvent(name, skriptEvent, event, syntaxes);
+        events.add(new QuarskSyntaxInfo(skriptEvent, syntaxName, syntaxes));
+    }
+
+    public static <E extends SkriptEvent, S extends Event> void newVersionDependantEvent(String syntaxName, String name, Class<E> skriptEvent, Class<S> event, Version version, String... syntaxes) {
+        if (Skript.isRunningMinecraft(version)) {
+            Skript.registerEvent(name, skriptEvent, event, syntaxes);
+            events.add(new QuarskSyntaxInfo(skriptEvent, syntaxName, syntaxes));
+        }
+    }
+
+
 
     private static boolean generateFolder() {
         if (!getPlugin().getDataFolder().exists()) {
@@ -156,7 +187,7 @@ public class QuarSk extends JavaPlugin {
     }
 
     private static boolean generateSyntaxFile() {
-        File syntaxFile = new File(getPlugin(QuarSk.class).getDataFolder(), "syntax.txt");
+        File syntaxFile = new File(getPlugin(Quarsk.class).getDataFolder(), "syntax.txt");
         String newLine = System.getProperty("line.separator");
         if (!syntaxFile.exists()) {
             try {
@@ -175,31 +206,27 @@ public class QuarSk extends JavaPlugin {
         }
         try {
             writeLine(fileWriter, "Events :");
-            for (Map.Entry<Class<?>, String[]> entry : events.entrySet()) {
-                String syntaxName = StringUtils.space("(?<!^)(?=[A-Z])" , entry.getKey().getSimpleName().replaceAll("Skript", ""));
-                for (String s : entry.getValue()) {
-                    writeLine(fileWriter, "  - " + syntaxName + " : " + s);
+            for (QuarskSyntaxInfo info : events) {
+                for (String s : info.getPatterns()) {
+                    writeLine(fileWriter, "  - " + info.getSyntaxName() + " : " + s);
                 }
             }
             writeLine(fileWriter, "Conditions :");
-            for (Map.Entry<Class<?>, String[]> entry : conditions.entrySet()) {
-                String syntaxName = StringUtils.space("(?<!^)(?=[A-Z])" , entry.getKey().getSimpleName().replaceAll("^Cond", ""));
-                for (String s : entry.getValue()) {
-                    writeLine(fileWriter, "  - " + syntaxName + " : " + s);
+            for (QuarskSyntaxInfo info : conditions) {
+                for (String s : info.getPatterns()) {
+                    writeLine(fileWriter, "  - " + info.getSyntaxName() + " : " + s);
                 }
             }
             writeLine(fileWriter, "Effects :");
-            for (Map.Entry<Class<?>, String[]> entry : effects.entrySet()) {
-                String syntaxName = StringUtils.space("(?<!^)(?=[A-Z])" , entry.getKey().getSimpleName().replaceAll("^Eff", ""));
-                for (String s : entry.getValue()) {
-                    writeLine(fileWriter, "  - " + syntaxName + " : " + s);
+            for (QuarskSyntaxInfo info : effects) {
+                for (String s : info.getPatterns()) {
+                    writeLine(fileWriter, "  - " + info.getSyntaxName() + " : " + s);
                 }
             }
             writeLine(fileWriter, "Expressions :");
-            for (Map.Entry<Class<?>, String[]> entry : expressions.entrySet()) {
-                String syntaxName = StringUtils.space("(?<!^)(?=[A-Z])" , entry.getKey().getSimpleName().replaceAll("^S?Expr", ""));
-                for (String s : entry.getValue()) {
-                    writeLine(fileWriter, "  - " + syntaxName + " : " + s);
+            for (QuarskSyntaxInfo info : expressions) {
+                for (String s : info.getPatterns()) {
+                    writeLine(fileWriter, "  - " + info.getSyntaxName() + " : " + s);
                 }
             }
             return true;
@@ -216,7 +243,7 @@ public class QuarSk extends JavaPlugin {
 
     //Conventions
     public static String getPrefix() {
-        return "[QuarSk] ";
+        return "[Quarsk] ";
     }
 
     public static void writeLine(BufferedWriter writer, String s) throws IOException {
@@ -279,6 +306,41 @@ public class QuarSk extends JavaPlugin {
 
     public static void debug(Object... l) {
         Arrays.asList(l).forEach(s -> Bukkit.getLogger().log(Level.INFO, s.toString()));
+    }
+
+    private static class QuarskSyntaxInfo {
+        private Class<?> clazz;
+        private String syntaxName;
+        private List<String> patterns = new ArrayList<>();
+
+        public QuarskSyntaxInfo(Class<?> clazz, String... patterns) {
+            this(clazz, StringUtils.space("(?<!^)(?=[A-Z])" , clazz.getSimpleName().replaceAll("Skript", "")), patterns);
+        }
+
+        public QuarskSyntaxInfo(Class<?> clazz, String syntaxName, String... patterns) {
+            this.clazz = clazz;
+            this.syntaxName = syntaxName;
+            this.patterns = ListUtils.mapList(Arrays.asList(patterns), s -> s.replaceAll("(?<=%)(-[~*]|[~*])", "").replaceAll("(?<=[(|])\\d+?¦", "").replaceAll("@-?1(?=%)", ""));
+        }
+
+        public Class<?> getClazz() {
+            return clazz;
+        }
+
+        public String getSyntaxName() {
+            return syntaxName;
+        }
+
+        public String[] getPatterns() {
+            return patterns.toArray(new String[patterns.size()]);
+        }
+    }
+
+    public static final class MinecraftVersions {
+        public static final Version VERSION_1_8 = new Version(1, 8, 8);
+        public static final Version VERSION_1_9 = new Version(1, 9, 4);
+        public static final Version VERSION_1_10 = new Version(1, 10, 2);
+        public static final Version VERSION_1_11 = new Version(1, 11, 2);
     }
 
 }

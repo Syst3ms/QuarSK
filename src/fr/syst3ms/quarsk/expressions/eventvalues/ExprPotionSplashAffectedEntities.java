@@ -5,7 +5,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -17,7 +17,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 public class ExprPotionSplashAffectedEntities extends SimpleExpression<LivingEntity> {
 
     static {
-        QuarSk.newExpression(ExprPotionSplashAffectedEntities.class, LivingEntity.class, ExpressionType.SIMPLE, "[the] affected entities");
+        Quarsk.newExpression("Affected entities in the 'potion splash' event", ExprPotionSplashAffectedEntities.class, LivingEntity.class, ExpressionType.SIMPLE, "[the] affected entities");
     }
 
     @Override
