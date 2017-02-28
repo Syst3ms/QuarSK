@@ -22,15 +22,16 @@ public class ExprPotionSplashAffectedEntities extends SimpleExpression<LivingEnt
 
     @Override
     public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+        if (!ScriptLoader.isCurrentEvent(PotionSplashEvent.class)) {
+            Skript.error("The 'affected entities' expression can only be used in potion splash events", ErrorQuality.SEMANTIC_ERROR);
+			return false;  
+        }    
         return true;
     }
 
     @Override
     protected LivingEntity[] get(Event e) {
-        if (e instanceof PotionSplashEvent) {
-            return ((PotionSplashEvent) e).getAffectedEntities().stream().toArray(LivingEntity[]::new);
-        }
-        return null;
+        return ((PotionSplashEvent) e).getAffectedEntities().stream().toArray(LivingEntity[]::new);
     }
 
     @Override
