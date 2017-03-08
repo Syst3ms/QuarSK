@@ -8,7 +8,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import fr.syst3ms.quarsk.util.PotionUtils;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +26,7 @@ public class SExprItemEffectTypeDuration extends SimpleExpression<Timespan> {
     private Expression<ItemStack> item;
 
     static {
-        Quarsk.newExpression("Duration of a potion effect type on an item", SExprItemEffectTypeDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (duration|length) on [item] %itemstack%");
+        Registration.newExpression("Duration of a potion effect type on an item", SExprItemEffectTypeDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (duration|length) on [item] %itemstack%");
     }
 
     @Override

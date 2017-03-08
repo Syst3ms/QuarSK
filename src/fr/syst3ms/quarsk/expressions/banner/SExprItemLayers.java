@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.event.Event;
@@ -24,7 +24,7 @@ public class SExprItemLayers extends SimpleExpression<Pattern> {
     private Expression<ItemStack> item;
 
     static {
-        Quarsk.newExpression("The layers of a banner or a shield", SExprItemLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] (layer|pattern)[s] of [(shield|banner|item)] %itemstack%", "[(all|every|each) of] %itemstack%['s] [banner] (layer|pattern)[s]");
+        Registration.newExpression("The layers of a banner or a shield", SExprItemLayers.class, Pattern.class, ExpressionType.COMBINED, "[(all|each|every)] [banner] (layer|pattern)[s] of [(shield|banner|item)] %itemstack%", "[(all|every|each) of] %itemstack%['s] [banner] (layer|pattern)[s]");
     }
 
     @Override

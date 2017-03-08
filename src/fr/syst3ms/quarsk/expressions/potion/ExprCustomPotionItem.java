@@ -5,7 +5,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +23,7 @@ public class ExprCustomPotionItem extends SimpleExpression<ItemStack> {
     private Expression<PotionEffect> potionEffects;
 
     static {
-        Quarsk.newExpression("A potion or a tipped arrow made with the specified potion effects", ExprCustomPotionItem.class, ItemStack.class, ExpressionType.COMBINED, "(0¦[normal] potion|1¦splash potion|2¦linger[ing] potion|3¦(potion|tipped) arrow) (of|by|with|from|using) [effect[s]] %potioneffects%");
+        Registration.newExpression("A potion or a tipped arrow made with the specified potion effects", ExprCustomPotionItem.class, ItemStack.class, ExpressionType.COMBINED, "(0¦[normal] potion|1¦splash potion|2¦linger[ing] potion|3¦(potion|tipped) arrow) (of|by|with|from|using) [effect[s]] %potioneffects%");
     }
 
     @Override

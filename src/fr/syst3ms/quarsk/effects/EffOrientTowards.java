@@ -5,6 +5,7 @@ import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -20,7 +21,7 @@ public class EffOrientTowards extends Effect {
     private String mode;
 
     static {
-        Quarsk.newEffect("Orients an entity towards a location or away from it", EffOrientTowards.class, "orient %livingentity% (0¦towards|1¦away from) %location%", "make %livingentity% (face|look [at]) (0¦[towards]|1¦away from) %location%", "force %livingentity% to (face|look [at]) (0¦[towards]|1¦away from) %location%");
+        Registration.newEffect("Orients an entity towards a location or away from it", EffOrientTowards.class, "orient %livingentity% (0¦towards|1¦away from) %location%", "make %livingentity% (face|look [at]) (0¦[towards]|1¦away from) %location%", "force %livingentity% to (face|look [at]) (0¦[towards]|1¦away from) %location%");
     }
 
     //A crap ton of ternary operators

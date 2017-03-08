@@ -5,7 +5,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.Material;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.event.Event;
@@ -23,7 +23,7 @@ public class ExprBannerOrShieldWithLayers extends SimpleExpression<ItemStack> {
     private Expression<Pattern> patterns;
 
     static {
-        Quarsk.newExpression("A banner or a shield made of multiple layers and of a base color", ExprBannerOrShieldWithLayers.class, ItemStack.class, ExpressionType.COMBINED, "[new] (0¦banner|1¦shield) (from|with|using|of) [[banner] (layer|pattern)[s]] %bannerlayers%");
+        Registration.newExpression("A banner or a shield made of multiple layers and of a base color", ExprBannerOrShieldWithLayers.class, ItemStack.class, ExpressionType.COMBINED, "[new] (0¦banner|1¦shield) (from|with|using|of) [[banner] (layer|pattern)[s]] %bannerlayers%");
     }
 
     @Override

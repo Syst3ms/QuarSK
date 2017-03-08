@@ -5,7 +5,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.Block;
@@ -21,7 +21,7 @@ public class SExprItemOfBannerBlock extends SimpleExpression<ItemStack> {
     private Expression<Block> block;
 
     static {
-        Quarsk.newExpression("The banner representing a banner block", SExprItemOfBannerBlock.class, ItemStack.class, ExpressionType.COMBINED, "[banner] item of [banner] block %block%", "[banner] %block%['s] [banner] item");
+        Registration.newExpression("The banner representing a banner block", SExprItemOfBannerBlock.class, ItemStack.class, ExpressionType.COMBINED, "[banner] item of [banner] block %block%", "[banner] %block%['s] [banner] item");
     }
 
     @Override

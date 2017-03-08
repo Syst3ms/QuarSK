@@ -37,4 +37,8 @@ public class StringUtils {
         chars[index] = c;
         return new String(chars);
     }
+
+    public static boolean containsIgnoreCase(String s, String check) {
+        return s.toLowerCase().contains(check.toLowerCase());
+    }
 }

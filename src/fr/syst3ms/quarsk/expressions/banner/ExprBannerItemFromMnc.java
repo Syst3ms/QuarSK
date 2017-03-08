@@ -5,7 +5,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import fr.syst3ms.quarsk.util.BannerUtils;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -20,7 +20,7 @@ public class ExprBannerItemFromMnc extends SimpleExpression<ItemStack> {
     private Expression<String> mncCode;
 
     static {
-        Quarsk.newExpression("A banner or a shield made from a Miners Need Cool Shoes code", ExprBannerItemFromMnc.class, ItemStack.class, ExpressionType.COMBINED, "(0¦banner|1¦shield) [item] from [m[iners]]n[eed]c[ool][s[hoes]] [code] %string%");
+        Registration.newExpression("A banner or a shield made from a Miners Need Cool Shoes code", ExprBannerItemFromMnc.class, ItemStack.class, ExpressionType.COMBINED, "(0¦banner|1¦shield) [item] from [m[iners]]n[eed]c[ool][s[hoes]] [code] %string%");
     }
 
     @Override

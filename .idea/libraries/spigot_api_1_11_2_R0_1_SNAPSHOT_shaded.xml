@@ -3,11 +3,17 @@
     <CLASSES>
       <root url="jar://$USER_HOME$/Desktop/lib/Skript.jar!/" />
       <root url="jar://$USER_HOME$/Desktop/lib/spigot-1.11.2.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/Spigot 1.10/Spigot/Spigot-API/target/spigot-api-1.11.2-R0.1-SNAPSHOT-shaded.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/BuildTools/Spigot/Spigot-API/target/spigot-api-1.11.2-R0.1-SNAPSHOT-shaded.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Spigot 1.10/spigot-1.10.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Spigot 1.8/spigot-1.8.8.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Spigot 1.9/spigot-1.9.4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/Desktop/lib/spigot-1.11.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Spigot 1.10/spigot-1.10.2.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Spigot 1.8/spigot-1.8.8.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/Spigot 1.9/spigot-1.9.4.jar!/" />
     </SOURCES>
   </library>
 </component>

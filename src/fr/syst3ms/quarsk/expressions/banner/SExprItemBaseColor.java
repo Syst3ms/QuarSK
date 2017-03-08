@@ -8,7 +8,7 @@ import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Color;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
@@ -23,7 +23,7 @@ public class SExprItemBaseColor extends SimpleExpression<Color> {
     private Expression<ItemStack> item;
 
     static {
-        Quarsk.newExpression("The base color of a shield or a banner", SExprItemBaseColor.class, Color.class, ExpressionType.COMBINED, "[(banner|shield)] bas(e|ic) color of item %itemstack%", "item %itemstack%['s] [(banner|shield)] bas(e|ic) color");
+        Registration.newExpression("The base color of a shield or a banner", SExprItemBaseColor.class, Color.class, ExpressionType.COMBINED, "[(banner|shield)] bas(e|ic) color of item %itemstack%", "item %itemstack%['s] [(banner|shield)] bas(e|ic) color");
     }
 
     @Override

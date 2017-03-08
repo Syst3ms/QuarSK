@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import fr.syst3ms.quarsk.util.PotionUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -29,7 +29,7 @@ public class SExprThrownPotionEffects extends SimpleExpression<PotionEffect> {
     private Expression<Entity> entity;
 
     static {
-        Quarsk.newExpression("Effects of thrown potion", SExprThrownPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[all] [potion] effects (of|on) (entity|thrown potion|tipped arrow) %entity%");
+        Registration.newExpression("Effects of thrown potion", SExprThrownPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[all] [potion] effects (of|on) (entity|thrown potion|tipped arrow) %entity%");
     }
 
     @Override

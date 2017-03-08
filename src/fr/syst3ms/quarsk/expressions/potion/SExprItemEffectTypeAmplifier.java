@@ -7,7 +7,7 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import fr.syst3ms.quarsk.util.PotionUtils;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +25,7 @@ public class SExprItemEffectTypeAmplifier extends SimpleExpression<Number> {
     private Expression<ItemStack> item;
 
     static {
-        Quarsk.newExpression("Amplifier of an effect on an item", SExprItemEffectTypeAmplifier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (tier|amplifier) on [item] %itemstack%");
+        Registration.newExpression("Amplifier of an effect on an item", SExprItemEffectTypeAmplifier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (tier|amplifier) on [item] %itemstack%");
     }
 
     @Override

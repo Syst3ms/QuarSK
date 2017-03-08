@@ -5,7 +5,7 @@ import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -17,7 +17,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 public class ExprPotionSplashEventEntity extends SimpleExpression<Entity> {
 
     static {
-        Quarsk.newExpression("Thrown potion in the 'potion splash' event", ExprPotionSplashEventEntity.class, Entity.class, ExpressionType.SIMPLE, "[the] thrown potion [entity]");
+        Registration.newExpression("Thrown potion in the 'potion splash' event", ExprPotionSplashEventEntity.class, Entity.class, ExpressionType.SIMPLE, "[the] thrown potion [entity]");
     }
 
     @Override

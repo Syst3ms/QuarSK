@@ -12,7 +12,7 @@ public class ReflectionUtils {
         return (Class<T[]>) Array.newInstance(c, 0).getClass();
     }
 
-    private static Class<?> getNMSClass(String nmsClassString) throws ClassNotFoundException {
+    public static Class<?> getNMSClass(String nmsClassString) throws ClassNotFoundException {
         String version = org.bukkit.Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3] + ".";
         String name = "net.minecraft.server." + version + nmsClassString;
         return Class.forName(name);

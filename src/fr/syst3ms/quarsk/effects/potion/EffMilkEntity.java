@@ -4,7 +4,7 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
-import fr.syst3ms.quarsk.Quarsk;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
@@ -17,7 +17,7 @@ public class EffMilkEntity extends Effect {
     private Expression<LivingEntity> entity;
 
     static {
-        Quarsk.newEffect("Removes all potion effects from an entity", EffMilkEntity.class, "milk %livingentities%");
+        Registration.newEffect("Removes all potion effects from an entity", EffMilkEntity.class, "milk %livingentities%");
     }
 
     @Override

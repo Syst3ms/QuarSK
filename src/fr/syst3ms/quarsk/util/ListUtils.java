@@ -63,22 +63,36 @@ public class ListUtils {
         return reversed;
     }
 
-    public static <T> Stream<T> of(Iterable<T> iterable) {
+    public static <T> Stream<T> stream(Iterable<T> iterable) {
         return elements(iterable).stream();
     }
 
-    public static <T> Stream<T> of(Iterator<T> iterator) {
-        return ofIterator(iterator).stream();
+    public static <T> Stream<T> stream(Iterator<T> iterator) {
+        return elements(iterator).stream();
     }
 
-    public static <T> List<T> ofIterator(Iterator<T> iterator) {
+    public static <T> Iterator<T> fromEnumeration(Enumeration<T> enumeration) {
+        return new Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                return enumeration.hasMoreElements();
+            }
+
+            @Override
+            public T next() {
+                return enumeration.nextElement();
+            }
+        };
+    }
+
+    public static <T> Collection<T> elements(Iterator<T> iterator) {
         List<T> list = new ArrayList<>();
         while (iterator.hasNext())
             list.add(iterator.next());
         return list;
     }
 
-    public static <T> List<T> elements(Iterable<T> iterable) {
+    public static <T> Collection<T> elements(Iterable<T> iterable) {
         List<T> list = new ArrayList<>();
         iterable.forEach(list::add);
         return list;
@@ -97,6 +111,19 @@ public class ListUtils {
             size++;
         return size;
     }
+
+    public static <T> Collection<T> nestedElements(Collection<Collection<T>> list) {
+        List<T> each = new ArrayList<>();
+        for (Collection<T> coll : list)
+            coll.forEach(each::add);
+        return each;
+    }
+
+    public static <T> Collection<T> nestedElements(T[][] nested) {
+        List<T> list = new ArrayList<>();
+        forArray(t -> forArray(list::add, t), nested);
+        return list;
+     }
 
     @SafeVarargs
     public static <T> void forArray(Consumer<? super T> consumer, T... array) {
