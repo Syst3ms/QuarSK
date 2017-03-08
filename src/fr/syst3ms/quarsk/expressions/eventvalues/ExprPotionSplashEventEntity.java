@@ -22,15 +22,16 @@ public class ExprPotionSplashEventEntity extends SimpleExpression<Entity> {
 
     @Override
     public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+        if (!ScriptLoader.isCurrentEvent(PotionSplashEvent.class)) {
+            Skript.error("The 'thrown potion' expression can only be used in potion splash events", ErrorQuality.SEMANTIC_ERROR);
+			return false;    
+        }
         return true;
     }
 
     @Override
     protected Entity[] get(Event e) {
-        if (e instanceof PotionSplashEvent) {
-            return new Entity[]{((PotionSplashEvent) e).getEntity()};
-        }
-        return null;
+        return new Entity[]{((PotionSplashEvent) e).getEntity()};
     }
 
     @Override
