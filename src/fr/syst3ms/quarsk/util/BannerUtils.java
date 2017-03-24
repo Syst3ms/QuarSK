@@ -14,7 +14,7 @@ import java.util.List;
  * Created by ARTHUR on 25/01/2017.
  */
 @SuppressWarnings({"unused", "unchecked"})
-public class BannerUtils {
+public final class BannerUtils {
     /**
      * Converts a banner color from Miner Needs Cool Shoes
      * @param c the char representing the color

@@ -1,0 +1,5 @@
+types:
+    potioneffect: potion effect¦s
+    bannerlayer: banner (layer|pattern)¦s
+    bannerpattern: [banner] (pattern|layer) type¦s
+    spawnpotential: spawn potential¦s

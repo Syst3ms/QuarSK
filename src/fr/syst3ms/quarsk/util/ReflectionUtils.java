@@ -6,7 +6,7 @@ import java.lang.reflect.Array;
  * Created by ARTHUR on 22/02/2017.
  */
 @SuppressWarnings("unused")
-public class ReflectionUtils {
+public final class ReflectionUtils {
     @SuppressWarnings("unchecked")
     public static <T> Class<T[]> getArrayClass(Class<? extends T> c) {
         return (Class<T[]>) Array.newInstance(c, 0).getClass();

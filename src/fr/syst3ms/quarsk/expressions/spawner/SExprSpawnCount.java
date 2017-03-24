@@ -7,31 +7,30 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
+import ch.njol.util.Math2;
 import ch.njol.util.coll.CollectionUtils;
 import fr.syst3ms.quarsk.classes.Registration;
-import fr.syst3ms.quarsk.classes.SpawnPotential;
 import fr.syst3ms.quarsk.util.apis.SpawnerApi;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 
+import java.math.RoundingMode;
+
 /**
- * Created by ARTHUR on 08/03/2017.
+ * Created by PRODSEB on 15/03/2017.
  */
 @SuppressWarnings({"unused", "unchecked"})
-public class SExprSpawnerFixedDelay extends SimpleExpression<Timespan> {
+public class SExprSpawnCount extends SimpleExpression<Number> {
     private Expression<Block> spawner;
 
     static {
-        Registration.newDependantExpression(
-                "A spawner's fixed delay",
-                new String[]{"If the spawner has a min and max delay, it will return a mean of the two"},
-                SExprSpawnerFixedDelay.class,
-                Timespan.class,
+        Registration.newExpression(
+                "How many entities a spawner spawns at a time",
+                SExprSpawnCount.class,
+                Number.class,
                 ExpressionType.PROPERTY,
-                () -> !Bukkit.getPluginManager().isPluginEnabled("Skellett"),
-                "[fixed] spawn delay of [spawner] %block%", "[spawner] %block%['s] [fixed] spawn delay"
+                "spawn[ing] [entity] count of [spawner] %block%", "[spawner] %block%['s] spawn[ing] [entity] count"
         );
     }
 
@@ -42,11 +41,11 @@ public class SExprSpawnerFixedDelay extends SimpleExpression<Timespan> {
     }
 
     @Override
-    protected Timespan[] get(Event e) {
+    protected Number[] get(Event e) {
         if (spawner != null) {
             if (spawner.getSingle(e) != null) {
                 if (spawner.getSingle(e).getType() == Material.MOB_SPAWNER) {
-                    return new Timespan[]{SpawnerApi.getFixedDelay(spawner.getSingle(e))};
+                    return new Number[]{SpawnerApi.getSpawnCount(spawner.getSingle(e))};
                 }
             }
         }
@@ -58,16 +57,16 @@ public class SExprSpawnerFixedDelay extends SimpleExpression<Timespan> {
         if (spawner != null) {
             if (spawner.getSingle(e) != null) {
                 if (spawner.getSingle(e).getType() == Material.MOB_SPAWNER) {
-                    Timespan newValue = (Timespan) delta[0];
+                    Number newValue = Math2.round((Float) delta[0]);
                     switch (mode) {
+                        case SET:
+                            SpawnerApi.setSpawnCount(spawner.getSingle(e), newValue.shortValue());
+                            break;
                         case ADD:
-                            SpawnerApi.setFixedDelay(spawner.getSingle(e), new Timespan(SpawnerApi.getFixedDelay(spawner.getSingle(e)).getMilliSeconds() + newValue.getMilliSeconds()));
+                            SpawnerApi.setSpawnCount(spawner.getSingle(e), (short) (SpawnerApi.getSpawnCount(spawner.getSingle(e)) + newValue.shortValue()));
                             break;
                         case REMOVE:
-                            SpawnerApi.setFixedDelay(spawner.getSingle(e), new Timespan(SpawnerApi.getFixedDelay(spawner.getSingle(e)).getMilliSeconds() - newValue.getMilliSeconds()));
-                            break;
-                        case SET:
-                            SpawnerApi.setFixedDelay(spawner.getSingle(e), newValue);
+                            SpawnerApi.setSpawnCount(spawner.getSingle(e), (short) (SpawnerApi.getSpawnCount(spawner.getSingle(e)) - newValue.shortValue()));;
                             break;
                     }
                 }
@@ -77,13 +76,13 @@ public class SExprSpawnerFixedDelay extends SimpleExpression<Timespan> {
 
     @Override
     public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE ?
-                CollectionUtils.array(Timespan.class) : null;
+        return mode == Changer.ChangeMode.SET || mode == Changer.ChangeMode.ADD || mode == Changer.ChangeMode.REMOVE
+                ? CollectionUtils.array(Number.class) : null;
     }
 
     @Override
-    public Class<? extends Timespan> getReturnType() {
-        return Timespan.class;
+    public Class<? extends Number> getReturnType() {
+        return Number.class;
     }
 
     @Override

@@ -1,8 +1,10 @@
 package fr.syst3ms.quarsk.util.nms;
 
 import fr.syst3ms.quarsk.classes.SpawnPotential;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 
 import java.util.List;
 
@@ -38,4 +40,5 @@ public interface Nms {
     SpawnPotential nbtToSpawnPotential(Object compound);
 
     List<Object> getArrayElements(Object compoundList);
+
 }

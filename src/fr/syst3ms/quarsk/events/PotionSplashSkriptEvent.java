@@ -11,6 +11,8 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -35,8 +37,9 @@ public class PotionSplashSkriptEvent extends SkriptEvent {
         if (e instanceof PotionSplashEvent) {
             if (effectTypesLiteral != null) {
                 if (effectTypesLiteral.getAll().length > 0 && effectTypesLiteral.getAll() != null) {
-                    return Stream.of(effectTypesLiteral.getAll()).allMatch(t ->
-                            ListUtils.mapList(new ArrayList<>(((PotionSplashEvent) e).getEntity().getEffects()), PotionEffect::getType).contains(t));
+                    return ((PotionSplashEvent) e).getEntity()
+                                                  .getEffects()
+                                                  .containsAll(Arrays.asList(effectTypesLiteral.getAll()));
                 }
             }
             return true;

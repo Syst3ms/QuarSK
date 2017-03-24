@@ -33,7 +33,9 @@ public class ExprEntityPotionEffects extends SimpleExpression<PotionEffect> {
     protected PotionEffect[] get(Event e) {
         if (targets != null) {
             if (targets.getArray(e).length > 0) {
-                return Stream.of(targets.getAll(e)).map(LivingEntity::getActivePotionEffects).toArray(PotionEffect[]::new);
+                return Stream.of(targets.getAll(e))
+                             .flatMap(le -> le.getActivePotionEffects().stream())
+                             .toArray(PotionEffect[]::new);
             }
         }
         return null;

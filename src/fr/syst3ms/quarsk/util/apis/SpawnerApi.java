@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  * Created by ARTHUR on 06/03/2017.
  */
 @SuppressWarnings("unused")
-public class SpawnerApi {
+public final class SpawnerApi {
     private static final Nms nms = Quarsk.getNms();
 
     public static void setSingleSpawnedEntity(Block spawner, Entity entity) {

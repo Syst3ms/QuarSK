@@ -8,7 +8,7 @@ import ch.njol.skript.registrations.Classes;
 
 import javax.annotation.Nullable;
 
-public class EnumType {
+public final class EnumType {
 
     public static <T extends Enum<T>> void newType(final Class<T> c, String code, String regexUser){
             Classes.registerClass(new ClassInfo<>(c, code).user(regexUser).name(c.getSimpleName()).defaultExpression(new EventValueExpression<>(c)).parser(new Parser<T>(){

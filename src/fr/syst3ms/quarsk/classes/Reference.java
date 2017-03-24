@@ -8,8 +8,8 @@ import org.bukkit.event.Event;
 
 import java.util.Hashtable;
 
-public class Reference {
-    public static Hashtable<String, Reference> refs = new Hashtable<String, Reference>();
+public final class Reference {
+    public static Hashtable<String, Reference> refs = new Hashtable<>();
 
     public final String name;
     public Expression<?> expr;
@@ -23,8 +23,7 @@ public class Reference {
     }
 
     public static void newReference(String name, Expression<?> expr, Event e) {
-        Reference ref = new Reference(name, expr, e);
-        Reference.refs.put(name, ref);
+        new Reference(name, expr, e);
     }
 
     public String toString() {
