@@ -19,7 +19,7 @@ import java.util.stream.Stream;
  * Created by PRODSEB on 27/01/2017.
  */
 @SuppressWarnings("unused")
-public final class PotionUtils {
+public class PotionUtils {
 
     public static PotionEffect getEffectByEffectType(PotionMeta meta, PotionEffectType effectType) {
         List<PotionEffect> effectList = meta.getCustomEffects();

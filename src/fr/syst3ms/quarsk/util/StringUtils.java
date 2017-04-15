@@ -10,7 +10,7 @@ import java.util.List;
  * Created by ARTHUR on 03/02/2017.
  */
 @SuppressWarnings("unused")
-public final class StringUtils {
+public class StringUtils {
 
     public static char[] alphabetLetters() {
         return "abdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();

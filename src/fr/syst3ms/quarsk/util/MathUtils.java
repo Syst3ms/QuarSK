@@ -9,7 +9,7 @@ import java.util.stream.Stream;
  * Created by ARTHUR on 22/02/2017.
  */
 @SuppressWarnings("unused")
-public final class MathUtils {
+public class MathUtils {
 
     public static Number getDecimalPart(Number number) {
         return number.doubleValue() - Math.floor(number.doubleValue());

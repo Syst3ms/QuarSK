@@ -11,7 +11,6 @@ import ch.njol.skript.util.Version;
 import com.sun.istack.internal.Nullable;
 import fr.syst3ms.quarsk.classes.EnumType;
 import fr.syst3ms.quarsk.classes.Registration;
-import fr.syst3ms.quarsk.classes.SpawnPotential;
 import fr.syst3ms.quarsk.util.nms.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -70,15 +69,14 @@ public class Quarsk extends JavaPlugin {
     }
 
     private void normalRegister() {
-        addonInstance = Skript.registerAddon(this).setLanguageFileDirectory("lang");
+        addonInstance = Skript.registerAddon(this);
         /*
          * TYPES
          */
         //Potions
         Classes.registerClass(new ClassInfo<>(PotionEffect.class, "potioneffect")
-                .name("potioneffect")
+                .name("potion effect")
                 .description("A getter for potion effects")
-                .user("potion ?effect")
                 .parser(new Parser<PotionEffect>() {
                             @Override
                             @Nullable
@@ -106,7 +104,6 @@ public class Quarsk extends JavaPlugin {
         Classes.registerClass(new ClassInfo<>(Pattern.class, "bannerlayer")
             .name("banner layer")
             .description("A getter for banner layers")
-            .user("banner ?(layer|pattern)")
             .parser(new Parser<Pattern>() {
                 @Override
                 public Pattern parse(String s, ParseContext parseContext) {
@@ -130,27 +127,7 @@ public class Quarsk extends JavaPlugin {
             })
         );
         EnumType.newType(PatternType.class, "bannerpattern", "banner ?pattern(?: ?type)?");
-        Classes.registerClass(new ClassInfo<>(SpawnPotential.class, "spawnpotential")
-            .name("spawn potential")
-            .description("A getter for spawn potentials")
-            .user("spawn(?:ing)? ?potential")
-            .parser(new Parser<SpawnPotential>() {
-                @Override
-                public String toString(SpawnPotential spawnPotential, int i) {
-                    return spawnPotential.toString();
-                }
-
-                @Override
-                public String toVariableNameString(SpawnPotential spawnPotential) {
-                    return "potential;" + spawnPotential.getType() + ";" + spawnPotential.getWeight();
-                }
-
-                @Override
-                public String getVariableNamePattern() {
-                    return "potential;\\w+;\\d+";
-                }
-            })
-        );
+        EnumType.newType(TreeSpecies.class, "treespecie", "(?:tree|wood) ?specie");
         //Syntax registration
         try {
             getAddon().loadClasses("fr.syst3ms.quarsk", "conditions",  "effects", "events", "expressions");

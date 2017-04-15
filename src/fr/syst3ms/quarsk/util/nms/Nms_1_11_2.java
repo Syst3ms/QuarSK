@@ -1,16 +1,26 @@
 package fr.syst3ms.quarsk.util.nms;
 
-import com.google.common.base.Predicates;
 import fr.syst3ms.quarsk.classes.SpawnPotential;
-import net.minecraft.server.v1_11_R1.*;
+import net.minecraft.server.v1_11_R1.BlockPosition;
+import net.minecraft.server.v1_11_R1.IBlockData;
+import net.minecraft.server.v1_11_R1.NBTBase;
+import net.minecraft.server.v1_11_R1.NBTTagByte;
+import net.minecraft.server.v1_11_R1.NBTTagCompound;
+import net.minecraft.server.v1_11_R1.NBTTagDouble;
+import net.minecraft.server.v1_11_R1.NBTTagFloat;
+import net.minecraft.server.v1_11_R1.NBTTagInt;
+import net.minecraft.server.v1_11_R1.NBTTagList;
+import net.minecraft.server.v1_11_R1.NBTTagLong;
+import net.minecraft.server.v1_11_R1.NBTTagShort;
+import net.minecraft.server.v1_11_R1.NBTTagString;
+import net.minecraft.server.v1_11_R1.TileEntity;
+import net.minecraft.server.v1_11_R1.World;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
-import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -18,7 +28,7 @@ import java.util.stream.Stream;
 /**
  * Created by ARTHUR on 06/03/2017.
  */
-@SuppressWarnings({"unused", "deprecation"})
+@SuppressWarnings("unused")
 public class Nms_1_11_2 implements Nms {
     @Override
     public Object getNbtTag(Object compound, String tag) {
@@ -117,7 +127,6 @@ public class Nms_1_11_2 implements Nms {
                     return compound;
               })
               .forEach(tagList::add);
-        new Random().nextBoolean();
         return tagList;
     }
 
@@ -126,7 +135,7 @@ public class Nms_1_11_2 implements Nms {
         if (compound instanceof NBTTagCompound) {
             NBTTagCompound tagCompound = (NBTTagCompound) compound;
             if (tagCompound.hasKey("Type") && tagCompound.hasKey("Weight") && tagCompound.hasKey("Properties")) {
-                return new SpawnPotential(EntityType.fromName(tagCompound.getString("Type")), tagCompound.getShort("Weight"), tagCompound.getCompound("Properties"));
+                return new SpawnPotential(tagCompound.getString("Type"), tagCompound.getShort("Weight"), tagCompound.getCompound("Properties"));
             }
         }
         return null;
@@ -141,5 +150,4 @@ public class Nms_1_11_2 implements Nms {
         }
         return list;
     }
-
 }

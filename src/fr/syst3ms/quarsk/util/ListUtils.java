@@ -3,6 +3,7 @@ package fr.syst3ms.quarsk.util;
 import com.google.common.collect.Lists;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ import java.util.stream.Stream;
  * Created by ARTHUR on 21/02/2017.
  */
 @SuppressWarnings("unused")
-public final     class ListUtils {
+public class ListUtils {
 
     public static <T, U> List<U> mapList(List<T> list, Function<T, U> mapper) {
         return list.stream().map(mapper).collect(Collectors.toList());
@@ -111,16 +112,22 @@ public final     class ListUtils {
         return size;
     }
 
-    public static <T> List<T> flat(Collection<T[]> list) {
-        return list.stream()
-                   .flatMap(Stream::of)
-                   .collect(Collectors.toList());
+    public static <T> Collection<T> nestedElements(Collection<Collection<T>> list) {
+        List<T> each = new ArrayList<>();
+        for (Collection<T> coll : list)
+            coll.forEach(each::add);
+        return each;
     }
 
-    public static <T> List<T> flatten(List<Collection<T>> list) {
-        return list.stream()
-                   .flatMap(Collection::stream)
-                   .collect(Collectors.toList());
+    public static <T> Collection<T> nestedElements(T[][] nested) {
+        List<T> list = new ArrayList<>();
+        forArray(t -> forArray(list::add, t), nested);
+        return list;
+     }
+
+    @SafeVarargs
+    public static <T> void forArray(Consumer<? super T> consumer, T... array) {
+        Arrays.asList(array).forEach(consumer);
     }
 
     public static <T> boolean anyMatch(Predicate<? super T> predicate, Collection<T> coll) {

@@ -2,16 +2,13 @@ package fr.syst3ms.quarsk.expressions.spawner;
 
 import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.Timespan;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
-import fr.syst3ms.quarsk.classes.Registration;
 import fr.syst3ms.quarsk.classes.SpawnPotential;
 import fr.syst3ms.quarsk.util.apis.SpawnerApi;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -22,18 +19,6 @@ import org.bukkit.event.Event;
 @SuppressWarnings({"unused", "unchecked"})
 public class SExprSpawnerFixedDelay extends SimpleExpression<Timespan> {
     private Expression<Block> spawner;
-
-    static {
-        Registration.newDependantExpression(
-                "A spawner's fixed delay",
-                new String[]{"If the spawner has a min and max delay, it will return a mean of the two"},
-                SExprSpawnerFixedDelay.class,
-                Timespan.class,
-                ExpressionType.PROPERTY,
-                () -> !Bukkit.getPluginManager().isPluginEnabled("Skellett"),
-                "[fixed] spawn delay of [spawner] %block%", "[spawner] %block%['s] [fixed] spawn delay"
-        );
-    }
 
     @Override
     public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -46,7 +31,9 @@ public class SExprSpawnerFixedDelay extends SimpleExpression<Timespan> {
         if (spawner != null) {
             if (spawner.getSingle(e) != null) {
                 if (spawner.getSingle(e).getType() == Material.MOB_SPAWNER) {
-                    return new Timespan[]{SpawnerApi.getFixedDelay(spawner.getSingle(e))};
+                    return new Timespan[]{
+                            Timespan.fromTicks_i(SpawnerApi.getFixedDelay(spawner.getSingle(e)))
+                    };
                 }
             }
         }
@@ -61,13 +48,11 @@ public class SExprSpawnerFixedDelay extends SimpleExpression<Timespan> {
                     Timespan newValue = (Timespan) delta[0];
                     switch (mode) {
                         case ADD:
-                            SpawnerApi.setFixedDelay(spawner.getSingle(e), new Timespan(SpawnerApi.getFixedDelay(spawner.getSingle(e)).getMilliSeconds() + newValue.getMilliSeconds()));
+                            SpawnerApi.setFixedDelay(spawner.getSingle(e), new Timespan());
                             break;
                         case REMOVE:
-                            SpawnerApi.setFixedDelay(spawner.getSingle(e), new Timespan(SpawnerApi.getFixedDelay(spawner.getSingle(e)).getMilliSeconds() - newValue.getMilliSeconds()));
                             break;
                         case SET:
-                            SpawnerApi.setFixedDelay(spawner.getSingle(e), newValue);
                             break;
                     }
                 }
