@@ -59,9 +59,9 @@ public class QuarSk extends JavaPlugin {
 		}
 		getLogger().log(Level.INFO,
 			"Registered " + Registration.getEvents().size() + " events, " + Registration.getConditions().size()
-			+ " conditions, " + Registration.getEffects().size() + " effects and " + Registration.getExpressions()
-																								 .size()
-			+ " expressions ! Good game !"
+			+ " conditions, " + Registration.getEffects().size() + " effects and " + Registration
+				.getExpressions()
+				.size() + " expressions ! Good game !"
 		);
 	}
 
@@ -71,104 +71,76 @@ public class QuarSk extends JavaPlugin {
 		 * TYPES
          */
 		//Potions
-		Classes.registerClass(new ClassInfo<>(PotionEffect.class, "potioneffect").name("potioneffect")
-																				 .description(
-																					 "A getter for potion effects")
-																				 .user("potion ?effect")
-																				 .parser(new Parser<PotionEffect>() {
-																					 @org.jetbrains.annotations.Nullable
-																					 @Override
-																					 @Nullable
-																					 public PotionEffect parse(String obj, ParseContext context) {
-																						 return null;
-																					 }
+		Classes.registerClass(new ClassInfo<>(PotionEffect.class, "potioneffect")
+			.name("potioneffect")
+			.description("A getter for potion effects")
+			.user("potion ?effect")
+			.parser(new Parser<PotionEffect>() {
+				@org.jetbrains.annotations.Nullable
+				@Override
+				@Nullable
+				public PotionEffect parse(String obj, ParseContext context) {
+					return null;
+				}
 
-																					 @NotNull
-																					 @Override
-																					 public String toString(@NotNull PotionEffect potionEffect, int i) {
-																						 return
-																							 PotionEffectUtils.toString(
-																								 potionEffect.getType())
-																							 + " of tier "
-																							 + potionEffect.getAmplifier()
-																							 + " lasting "
-																							 + potionEffect.getDuration()
-																							 + " with particles " + (
-																								 potionEffect.hasParticles()
-																									 ? "enabled"
-																									 : "disabled")
-																							 + ", ambient effect " + (
-																								 potionEffect.isAmbient()
-																									 ? "enabled"
-																									 : "disabled");
-																					 }
+				@NotNull
+				@Override
+				public String toString(@NotNull PotionEffect potionEffect, int i) {
+					return PotionEffectUtils.toString(potionEffect.getType()) + " of tier "
+						   + potionEffect.getAmplifier() + " lasting " + potionEffect.getDuration() + " with particles "
+						   + (potionEffect.hasParticles() ? "enabled" : "disabled") + ", ambient effect " + (
+							   potionEffect.isAmbient()
+								   ? "enabled"
+								   : "disabled");
+				}
 
-																					 @NotNull
-																					 @Override
-																					 public String toVariableNameString(@NotNull PotionEffect potionEffect) {
-																						 return potionEffect.getType()
-																											.toString()
-																											.toLowerCase()
-																								+ ","
-																								+ potionEffect.getAmplifier()
-																								+ ","
-																								+ potionEffect.getDuration()
-																								+ ","
-																								+ potionEffect.hasParticles()
-																								+ ","
-																								+ potionEffect.isAmbient()
-																								+ ","
-																								+ potionEffect.getColor()
-																											  .toString()
-																											  .toLowerCase();
-																					 }
+				@NotNull
+				@Override
+				public String toVariableNameString(@NotNull PotionEffect potionEffect) {
+					return potionEffect.getType().toString().toLowerCase() + "," + potionEffect.getAmplifier() + ","
+						   + potionEffect.getDuration() + "," + potionEffect.hasParticles() + ","
+						   + potionEffect.isAmbient() + "," + potionEffect.getColor().toString().toLowerCase();
+				}
 
-																					 @NotNull
-																					 public String getVariableNamePattern() {
-																						 return "[a-z]+,\\d+,\\d+,(true|false),(true|false),[a-z]+";
-																					 }
-																				 }));
+				@NotNull
+				public String getVariableNamePattern() {
+					return "[a-z]+,\\d+,\\d+,(true|false),(true|false),[a-z]+";
+				}
+			}));
 		//Banners
-		Classes.registerClass(new ClassInfo<>(Pattern.class, "bannerlayer").name("banner layer")
-																		   .description("A getter for banner layers")
-																		   .user("banner ?(layer|pattern)")
-																		   .parser(new Parser<Pattern>() {
-																			   @org.jetbrains.annotations.Nullable
-																			   @Override
-																			   public Pattern parse(String s, ParseContext parseContext) {
-																				   return null;
-																			   }
+		Classes.registerClass(new ClassInfo<>(Pattern.class, "bannerlayer")
+			.name("banner layer")
+			.description("A getter for banner layers")
+			.user("banner ?(layer|pattern)")
+			.parser(new Parser<Pattern>() {
+				@org.jetbrains.annotations.Nullable
+				@Override
+				public Pattern parse(String s, ParseContext parseContext) {
+					return null;
+				}
 
-																			   @NotNull
-																			   @Override
-																			   public String toString(@NotNull Pattern pattern, int i) {
-																				   return "layer with pattern "
-																						  + EnumType.toString(pattern.getPattern()
-																													 .name())
-																						  + " and color "
-																						  + pattern.getColor()
-																								   .toString()
-																								   .toLowerCase();
-																			   }
+				@NotNull
+				@Override
+				public String toString(@NotNull Pattern pattern, int i) {
+					return "layer with pattern " + EnumType.toString(pattern.getPattern().name()) + " and color "
+						   + pattern.getColor().toString().toLowerCase();
+				}
 
-																			   @NotNull
-																			   @Override
-																			   public String toVariableNameString(@NotNull Pattern pattern) {
-																				   return "bannerlayer,"
-																						  + pattern.getPattern()
-																								   .toString()
-																								   .toLowerCase() + ","
-																						  + pattern.getColor()
-																								   .toString()
-																								   .toLowerCase();
-																			   }
+				@NotNull
+				@Override
+				public String toVariableNameString(@NotNull Pattern pattern) {
+					return "bannerlayer," + pattern.getPattern().toString().toLowerCase() + "," + pattern
+						.getColor()
+						.toString()
+						.toLowerCase();
+				}
 
-																			   @NotNull
-																			   @Override
-																			   public String getVariableNamePattern() {
-																				   return "bannerlayer,[a-z]+,[a-z]+";
-																			   }
-																		   }));
+				@NotNull
+				@Override
+				public String getVariableNamePattern() {
+					return "bannerlayer,[a-z]+,[a-z]+";
+				}
+			}));
 		EnumType.newType(PatternType.class, "bannerpattern", "banner ?pattern(?: ?type)?");
 		// Event values
 		EventValues.registerEventValue(PotionSplashEvent.class,
