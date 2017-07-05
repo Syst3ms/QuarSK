@@ -29,7 +29,7 @@ public class SExprBannerBlockLayers extends SimpleExpression<Pattern> {
 			Pattern.class,
 			ExpressionType.COMBINED,
 			"[banner] pattern[s] of %block%",
-			"%block%['s] [banner] (layer|pattern)[s]"
+			"%block%['s] [banner] pattern[s]"
 		);
 	}
 
