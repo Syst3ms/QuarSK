@@ -15,88 +15,133 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by PRODSEB on 27/01/2017.
  */
-@SuppressWarnings({"unused","unchecked"})
+@SuppressWarnings({"unused", "unchecked"})
 public class SExprItemEffectTypeAmplifier extends SimpleExpression<Number> {
-    private Expression<PotionEffectType> effectType;
-    private Expression<ItemStack> item;
+	static {
+		Registration.newExpression(
+			SExprItemEffectTypeAmplifier.class,
+			Number.class,
+			ExpressionType.COMBINED,
+			"(tier|amplifier) of %potioneffecttype% on %itemstack%",
+			"%potioneffecttype%['s] (tier|amplifier) on %itemstack%"
+		);
+	}
 
-    static {
-        Registration.newExpression("Amplifier of an effect on an item", SExprItemEffectTypeAmplifier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [[potion] effect [type]] %potioneffecttype% on [item] %itemstack%", "[[potion] effect [type]] %potioneffecttype%['s] (tier|amplifier) on [item] %itemstack%");
-    }
+	private Expression<PotionEffectType> effectType;
+	private Expression<ItemStack> item;
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        effectType = (Expression<PotionEffectType>) expr[0];
-        item = (Expression<ItemStack>) expr[1];
-        return true;
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+		effectType = (Expression<PotionEffectType>) expr[0];
+		item = (Expression<ItemStack>) expr[1];
+		return true;
+	}
 
-    @Override
-    protected Number[] get(Event e) {
-        if (effectType != null && item != null) {
-            if (effectType.getSingle(e) != null && item.getSingle(e) != null) {
-                if (PotionUtils.isPotionItem(item.getSingle(e))) {
-                    PotionMeta meta = (PotionMeta) item.getSingle(e).getItemMeta();
-                    return new Number[]{PotionUtils.getEffectByEffectType(meta, effectType.getSingle(e)).getAmplifier()};
-                }
-            }
-        }
-        return null;
-    }
+	@Nullable
+	@Override
+	protected Number[] get(Event e) {
+		ItemStack i = item.getSingle(e);
+		if (i == null) {
+			return null;
+		}
+		if (PotionUtils.isPotionItem(i)) {
+			PotionMeta meta = (PotionMeta) i.getItemMeta();
+			PotionEffect eff = PotionUtils.getEffectByEffectType(meta, effectType.getSingle(e));
+			if (eff == null) {
+				return null;
+			}
+			return new Number[]{eff.getAmplifier()};
+		}
+		return null;
+	}
 
-    @Override
-    public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
-        if (effectType != null && item != null) {
-            if (effectType.getSingle(e) != null && item.getSingle(e) != null) {
-                if (PotionUtils.isPotionItem(item.getSingle(e))) {
-                    PotionMeta meta = (PotionMeta) item.getSingle(e).getItemMeta();
-                    PotionEffect potionEffect = (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) ? PotionUtils.getEffectByEffectType(meta, effectType.getSingle(e)) : PotionUtils.fromPotionData(meta.getBasePotionData());
-                    if (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) {
-                        meta.removeCustomEffect(effectType.getSingle(e));
-                    } else {
-                        meta.setBasePotionData(PotionUtils.emptyPotionData());
-                    }
-                    Number number = (Number) delta[0];
-                    switch (mode) {
-                        case ADD:
-                            meta.addCustomEffect(new PotionEffect(potionEffect.getType(), potionEffect.getDuration(), potionEffect.getAmplifier() + number.intValue(), potionEffect.isAmbient(), potionEffect.hasParticles(), potionEffect.getColor()), true);
-                            break;
-                        case SET:
-                            meta.addCustomEffect(new PotionEffect(potionEffect.getType(),potionEffect.getDuration(), number.intValue(), potionEffect.isAmbient(), potionEffect.hasParticles(), potionEffect.getColor()), true);
-                            break;
-                        case REMOVE:
-                            meta.addCustomEffect(new PotionEffect(potionEffect.getType(), potionEffect.getDuration(), (potionEffect.getAmplifier() - number.intValue() > 0) ? potionEffect.getAmplifier() - number.intValue() : potionEffect.getAmplifier(), potionEffect.isAmbient(), potionEffect.hasParticles(), potionEffect.getColor()), true);
-                            break;
-                    }
-                }
-            }
-        }
-    }
 
-    @Override
-    public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if (mode != Changer.ChangeMode.REMOVE_ALL && mode != Changer.ChangeMode.RESET && mode != Changer.ChangeMode.DELETE) {
-            return CollectionUtils.array(Number.class);
-        }
-        return null;
-    }
+	@Override
+	public void change(Event e, Object[] delta, @NotNull Changer.ChangeMode mode) {
+		ItemStack i = item.getSingle(e);
+		if (i == null) {
+			return;
+		}
+		if (PotionUtils.isPotionItem(i)) {
+			PotionMeta meta = (PotionMeta) i.getItemMeta();
+			PotionEffect potionEffect = (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE)
+				? PotionUtils.getEffectByEffectType(meta, effectType.getSingle(e))
+				: PotionUtils.fromPotionData(meta.getBasePotionData());
+			if (potionEffect == null) {
+				return;
+			}
+			if (meta.getBasePotionData().getType() != PotionType.UNCRAFTABLE) {
+				meta.removeCustomEffect(effectType.getSingle(e));
+			} else {
+				meta.setBasePotionData(PotionUtils.emptyPotionData());
+			}
+			Number number = (Number) delta[0];
+			switch (mode) {
+				case ADD:
+					meta.addCustomEffect(new PotionEffect(
+						potionEffect.getType(),
+						potionEffect.getDuration(),
+						potionEffect.getAmplifier() + number.intValue(),
+						potionEffect.isAmbient(),
+						potionEffect.hasParticles(),
+						potionEffect.getColor()
+					), true);
+					break;
+				case SET:
+					meta.addCustomEffect(new PotionEffect(
+						potionEffect.getType(),
+						potionEffect.getDuration(),
+						number.intValue(),
+						potionEffect.isAmbient(),
+						potionEffect.hasParticles(),
+						potionEffect.getColor()
+					), true);
+					break;
+				case REMOVE:
+					meta.addCustomEffect(new PotionEffect(
+						potionEffect.getType(),
+						potionEffect.getDuration(),
+						(potionEffect.getAmplifier() - number.intValue() > 0)
+							? potionEffect.getAmplifier() - number.intValue()
+							: potionEffect.getAmplifier(),
+						potionEffect.isAmbient(),
+						potionEffect.hasParticles(),
+						potionEffect.getColor()
+					), true);
+					break;
+			}
+		}
+	}
 
-    @Override
-    public Class<? extends Number> getReturnType() {
-        return Number.class;
-    }
+	@Nullable
+	@Override
+	public Class<?>[] acceptChange(Changer.ChangeMode mode) {
+		if (mode != Changer.ChangeMode.REMOVE_ALL && mode != Changer.ChangeMode.RESET
+			&& mode != Changer.ChangeMode.DELETE) {
+			return CollectionUtils.array(Number.class);
+		}
+		return null;
+	}
 
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
+	@NotNull
+	@Override
+	public Class<? extends Number> getReturnType() {
+		return Number.class;
+	}
 
-    @Override
-    public String toString(Event event, boolean b) {
-        return getClass().getName();
-    }
+	@Override
+	public boolean isSingle() {
+		return true;
+	}
+
+	@Override
+	public String toString(Event event, boolean b) {
+		return "tier of " + effectType.toString(event, b) + " on " + item.toString(event, b);
+	}
 }

@@ -1,54 +1,40 @@
 package fr.syst3ms.quarsk.expressions.potion;
 
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import fr.syst3ms.quarsk.classes.Registration;
-import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by ARTHUR on 08/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
-public class ExprPotionEffectType extends SimpleExpression<PotionEffectType> {
-    private Expression<PotionEffect> effect;
+@SuppressWarnings({"unchecked"})
+public class ExprPotionEffectType extends SimplePropertyExpression<PotionEffect, PotionEffectType> {
 
-    static {
-        Registration.newExpression("Type of a potion effect", ExprPotionEffectType.class, PotionEffectType.class, ExpressionType.COMBINED, "potion[ ]effect[[ ]type][s] of %potioneffect%", "%potioneffect%['s] potion[ ]effect[[ ]type][s]");
-    }
+	static {
+		Registration.newPropertyExpression(ExprPotionEffectType.class,
+			PotionEffectType.class,
+			"[potion] effect type",
+			"potioneffect"
+		);
+	}
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        effect = (Expression<PotionEffect>) expr[0];
-        return true;
-    }
 
-    @Override
-    protected PotionEffectType[] get(Event e) {
-        if (effect != null) {
-            if (effect.getSingle(e) != null) {
-                return new PotionEffectType[]{effect.getSingle(e).getType()};
-            }
-        }
-        return null;
-    }
+	@Override
+	public PotionEffectType convert(@NotNull PotionEffect potionEffect) {
+		return potionEffect.getType();
+	}
 
-    @Override
-    public Class<? extends PotionEffectType> getReturnType() {
-        return PotionEffectType.class;
-    }
+	@NotNull
+	@Override
+	protected String getPropertyName() {
+		return "effect type";
+	}
 
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
-
-    @Override
-    public String toString(Event e, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	public Class<? extends PotionEffectType> getReturnType() {
+		return PotionEffectType.class;
+	}
 }

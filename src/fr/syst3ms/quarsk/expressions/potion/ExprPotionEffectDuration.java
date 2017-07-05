@@ -1,53 +1,36 @@
 package fr.syst3ms.quarsk.expressions.potion;
 
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.util.Timespan;
-import ch.njol.util.Kleenean;
 import fr.syst3ms.quarsk.classes.Registration;
-import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by ARTHUR on 08/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
-public class ExprPotionEffectDuration extends SimpleExpression<Timespan> {
-    private Expression<PotionEffect> effect;
+@SuppressWarnings({"unchecked"})
+public class ExprPotionEffectDuration extends SimplePropertyExpression<PotionEffect, Timespan> {
 
-    static {
-        Registration.newExpression("Duration of a potion effect", ExprPotionEffectDuration.class, Timespan.class, ExpressionType.COMBINED, "(duration|length) of [potion] effect[s] %potioneffect%", "[potion] effect[s] %potioneffect%['s] (duration|length)");
-    }
+	static {
+		Registration.newPropertyExpression(ExprPotionEffectDuration.class, Timespan.class, "duration", "potioneffect");
+	}
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        effect = (Expression<PotionEffect>) expr[0];
-        return true;
-    }
+	@NotNull
+	@Override
+	public Timespan convert(@NotNull PotionEffect potionEffect) {
+		return Timespan.fromTicks_i(potionEffect.getDuration());
+	}
 
-    @Override
-    protected Timespan[] get(Event e) {
-        if (effect.getSingle(e) != null) {
-            return new Timespan[]{Timespan.fromTicks_i(effect.getSingle(e).getDuration())};
-        } else {
-            return null;
-        }
-    }
+	@NotNull
+	@Override
+	protected String getPropertyName() {
+		return "duration";
+	}
 
-    @Override
-    public Class<? extends Timespan> getReturnType() {
-        return Timespan.class;
-    }
-
-    @Override
-    public String toString(Event e, boolean b) {
-        return getClass().getName();
-    }
-
-    @Override
-    public boolean isSingle() {
-        return false;
-    }
+	@NotNull
+	@Override
+	public Class<? extends Timespan> getReturnType() {
+		return Timespan.class;
+	}
 }

@@ -1,76 +1,60 @@
 package fr.syst3ms.quarsk.expressions;
 
 import ch.njol.skript.Skript;
-import ch.njol.skript.classes.Changer;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.StringMode;
 import ch.njol.util.Kleenean;
-import ch.njol.util.coll.CollectionUtils;
 import fr.syst3ms.quarsk.classes.Reference;
-import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.event.Event;
 
-/**
- * Created by Syst3ms on 29/12/2016 in fr.syst3ms.quarsk.expressions.
- */
-@SuppressWarnings({"unused", "unchecked"})
-public class SExprReference extends SimpleExpression {
-    private VariableString name;
-    private Reference refProp;
+import java.util.Optional;
 
-    static {
-        Registration.newExpression("Reference expression", SExprReference.class, Object.class, ExpressionType.SIMPLE, "@<.+>@");
-    }
+public class SExprReference extends SimpleExpression<Object> {
+	private VariableString variableName;
 
-    @Override
-    protected Object[] get(Event e) {
-        String stringName = name.toString(e);
-        Reference ref = Reference.referenceByName(stringName);
-        if (ref != null) {
-            refProp = ref;
-            return new Object[]{ref.getValue()};
-        } else {
-            return null;
-        }
-    }
+	@Override
+	public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+		VariableString v = VariableString.newInstance(parseResult.regexes.get(0).group(), StringMode.VARIABLE_NAME);
+		if (v == null) {
+			Skript.error("Invalid reference name.");
+			return false;
+		}
+		return true;
+	}
 
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
+	@Override
+	protected Object[] get(Event event) {
+		String name = variableName.toString(event);
+		Optional<Reference> optionalRef = Reference.byName(name);
+		if (optionalRef.isPresent()) {
+			Reference ref = optionalRef.get();
+			return new Object[]{ref.getExpr().getSingle(ref.getEvent())};
+		}
+		return null;
+	}
 
-    @Override
-    public Class getReturnType() {
-        return Object.class;
-    }
+	@Override
+	public Class<?> getReturnType() {
+		if (variableName.isSimple()) {
+			String simple = variableName.toString(null);
+			Optional<Reference> optionalRef = Reference.byName(simple);
+			if (optionalRef.isPresent()) {
+				return optionalRef.get().getExpr().getReturnType();
+			}
+		}
+		return Object.class;
+	}
 
-    public Class<?>[] acceptChange(Changer.ChangeMode changeMode) {
-        return CollectionUtils.array(Object.class);
-    }
+	@Override
+	public boolean isSingle() {
+		return true;
+	}
 
-    public void change(Event e, Object[] o, Changer.ChangeMode changeMode) {
-        if (this.acceptChange(changeMode) != null) {
-            refProp.expr.change(e, o, changeMode);
-        }
-    }
-
-    @Override
-    public String toString(Event e, boolean b) {
-        return getClass().getName();
-    }
-
-    @Override
-    public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        VariableString varString = VariableString.newInstance(parseResult.regexes.get(0).group(), StringMode.VARIABLE_NAME);
-        if (varString != null) {
-            name = varString;
-        } else {
-            Skript.error("Invalid reference name. Reference names should be written the same way as variable names.");
-        }
-        return (varString != null);
-    }
+	@Override
+	public String toString(Event event, boolean b) {
+		return "@" + ch.njol.util.StringUtils.substring(variableName.toString(event, b), 1, -1);
+	}
 }

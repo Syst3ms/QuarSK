@@ -1,75 +1,59 @@
 package fr.syst3ms.quarsk.expressions.beacon;
 
 import ch.njol.skript.classes.Changer;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.util.coll.CollectionUtils;
 import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.BeaconInventory;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by PRODSEB on 31/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
-public class SExprBeaconFuel extends SimpleExpression<ItemStack> {
-    private Expression<Block> block;
+@SuppressWarnings({"unchecked"})
+public class SExprBeaconFuel extends SimplePropertyExpression<Block, ItemStack> {
+	static {
+		Registration.newPropertyExpression(SExprBeaconFuel.class, ItemStack.class, "beacon fuel[ing] [item]", "block");
+	}
 
-    static {
-        Registration.newExpression("Fuel item of a beacon", SExprBeaconFuel.class, ItemStack.class, ExpressionType.COMBINED, "[the] beacon fuel[ing item[[ ]stack]] of [beacon] %block%", " %block%['s] beacon fuel[ing item[[ ]stack]]");
-    }
+	@Nullable
+	@Override
+	public ItemStack convert(@NotNull Block block) {
+		BlockState state = block.getState();
+		return state instanceof BeaconInventory ? ((BeaconInventory) state).getItem() : null;
+	}
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        block = (Expression<Block>) expr[0];
-        return true;
-    }
+	@NotNull
+	@Override
+	protected String getPropertyName() {
+		return "beacon fuel";
+	}
 
-    @Override
-    protected ItemStack[] get(Event e) {
-        if (block != null) {
-            if (block.getSingle(e) != null) {
-                if (block.getSingle(e).getState() instanceof BeaconInventory) {
-                    return new ItemStack[]{((BeaconInventory) block.getSingle(e).getState()).getItem()};
-                }
-            }
-        }
-        return null;
-    }
+	@Override
+	public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
+		Block b = getExpr().getSingle(e);
+		if (b == null) {
+			return;
+		}
+		if (b.getState() instanceof BeaconInventory) {
+			((BeaconInventory) b.getState()).setItem((ItemStack) delta[0]);
+		}
+	}
 
-    @Override
-    public void change(Event e, Object[] delta, Changer.ChangeMode mode) {
-        if (block != null) {
-            if (block.getSingle(e) != null) {
-                if (block.getSingle(e).getState() instanceof BeaconInventory) {
-                    ((BeaconInventory) block.getSingle(e).getState()).setItem((ItemStack) delta[0]);
-                }
-            }
-        }
-    }
+	@Nullable
+	@Override
+	public Class<?>[] acceptChange(Changer.ChangeMode mode) {
+		return mode == Changer.ChangeMode.SET ? CollectionUtils.array(ItemStack.class) : null;
+	}
 
-    @Override
-    public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        return (mode == Changer.ChangeMode.SET) ? CollectionUtils.array(ItemStack.class) : null;
-    }
-
-    @Override
-    public Class<? extends ItemStack> getReturnType() {
-        return ItemStack.class;
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
-
-    @Override
-    public String toString(Event event, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	public Class<? extends ItemStack> getReturnType() {
+		return ItemStack.class;
+	}
 }

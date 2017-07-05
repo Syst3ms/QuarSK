@@ -11,48 +11,59 @@ import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by ARTHUR on 03/02/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class ExprBannerItemToMnc extends SimpleExpression<String> {
-    private Expression<ItemStack> item;
+	static {
+		Registration.newExpression(
+			ExprBannerItemToMnc.class,
+			String.class,
+			ExpressionType.COMBINED,
+			"[m[iners]]n[eed]c[ool][s[hoes]] code of %itemstack%",
+			"%itemstack%['s] [m[iners]]n[eed]c[ool][s[hoes]] code"
+		);
+	}
 
-    static {
-        Registration.newExpression("The Miners Need Cool Shoes code of a banner or a shield", ExprBannerItemToMnc.class, String.class, ExpressionType.COMBINED, "[m[iners]]n[eed]c[ool][s[hoes]] code of [(banner|shield|item)] %itemstack%", "[(banner|shield|item)] %itemstack%['s] [m[iners]]n[eed]c[ool][s[hoes]] code");
-    }
+	private Expression<ItemStack> item;
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        item = (Expression<ItemStack>) expr[0];
-        return true;
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+		item = (Expression<ItemStack>) expr[0];
+		return true;
+	}
 
-    @Override
-    protected String[] get(Event e) {
-        if (item != null) {
-            if (item.getSingle(e) != null) {
-                if (item.getSingle(e).getType() == Material.BANNER || item.getSingle(e).getType() == Material.SHIELD) {
-                    return new String[]{BannerUtils.toMncPattern((BannerMeta) item.getSingle(e).getItemMeta())};
-                }
-            }
-        }
-        return null;
-    }
+	@Nullable
+	@Override
+	protected String[] get(Event e) {
+		ItemStack i = item.getSingle(e);
+		if (i == null) {
+			return null;
+		}
+		if (i.getType() == Material.BANNER || i.getType() == Material.SHIELD) {
+			return new String[]{BannerUtils.toMncPattern((BannerMeta) i.getItemMeta())};
+		}
+		return null;
+	}
 
-    @Override
-    public Class<? extends String> getReturnType() {
-        return String.class;
-    }
+	@NotNull
+	@Override
+	public Class<? extends String> getReturnType() {
+		return String.class;
+	}
 
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
+	@Override
+	public boolean isSingle() {
+		return true;
+	}
 
-    @Override
-    public String toString(Event event, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	public String toString(Event event, boolean b) {
+		return "mnc code of " + item.toString(event, b);
+	}
 }

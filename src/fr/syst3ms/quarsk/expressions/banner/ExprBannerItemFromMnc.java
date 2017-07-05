@@ -10,52 +10,62 @@ import fr.syst3ms.quarsk.util.BannerUtils;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by PRODSEB on 28/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class ExprBannerItemFromMnc extends SimpleExpression<ItemStack> {
-    private Material material;
-    private Expression<String> mncCode;
+	static {
+		Registration.newExpression(
+			ExprBannerItemFromMnc.class,
+			ItemStack.class,
+			ExpressionType.COMBINED,
+			"(0¦banner|1¦shield) from [m[iners]]n[eed]c[ool][s[hoes]] [code] %string%"
+		);
+	}
 
-    static {
-        Registration.newExpression("A banner or a shield made from a Miners Need Cool Shoes code", ExprBannerItemFromMnc.class, ItemStack.class, ExpressionType.COMBINED, "(0¦banner|1¦shield) [item] from [m[iners]]n[eed]c[ool][s[hoes]] [code] %string%");
-    }
+	private Material material;
+	private Expression<String> mncCode;
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        material = (parseResult.mark == 0) ? Material.BANNER : Material.SHIELD;
-        mncCode = (Expression<String>) expr[0];
-        return true;
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, @NotNull SkriptParser.ParseResult parseResult) {
+		material = (parseResult.mark == 0) ? Material.BANNER : Material.SHIELD;
+		mncCode = (Expression<String>) expr[0];
+		return true;
+	}
 
-    @Override
-    protected ItemStack[] get(Event e) {
-        if (mncCode != null) {
-            if (mncCode.getSingle(e) != null) {
-                if (BannerUtils.isMncPattern(mncCode.getSingle(e))) {
-                    ItemStack item = new ItemStack(material);
-                    item.setItemMeta(BannerUtils.parseMncPattern(mncCode.getSingle(e)));
-                    return new ItemStack[]{item};
-                }
-            }
-        }
-        return null;
-    }
+	@Nullable
+	@Override
+	protected ItemStack[] get(Event e) {
+		String code = mncCode.getSingle(e);
+		if (code == null) {
+			return null;
+		}
+		if (BannerUtils.isMncPattern(code)) {
+			ItemStack item = new ItemStack(material);
+			item.setItemMeta(BannerUtils.parseMncPattern(code));
+			return new ItemStack[]{item};
+		}
+		return null;
+	}
 
-    @Override
-    public Class<? extends ItemStack> getReturnType() {
-        return ItemStack.class;
-    }
+	@NotNull
+	@Override
+	public Class<? extends ItemStack> getReturnType() {
+		return ItemStack.class;
+	}
 
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
+	@Override
+	public boolean isSingle() {
+		return true;
+	}
 
-    @Override
-    public String toString(Event event, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	public String toString(Event event, boolean b) {
+		return material.name().toLowerCase() + " from mnc code " + mncCode.toString(event, b);
+	}
 }

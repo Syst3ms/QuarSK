@@ -14,83 +14,102 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by Syst3ms on 15/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class SExprBeaconEffects extends SimpleExpression<PotionEffect> {
-    private Expression<Block> beacon;
-    private int mode;
+	static {
+		Registration.newExpression(
+			SExprBeaconEffects.class,
+			PotionEffect.class,
+			ExpressionType.COMBINED,
+			"[the] (0¦(first|primary)|1¦second[ary]) [potion] effect of [beacon] %block%",
+			"[beacon] %block%['s] (0¦(first|primary)|1¦second[ary]) [potion] effect"
+		);
+	}
 
-    static {
-        Registration.newExpression("Potion effects of a beacon", SExprBeaconEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[the] (0¦(first|primary)|1¦second[ary]) [potion] effect of [beacon] %block%", "[beacon] %block%['s] (0¦(first|primary)|1¦second[ary]) [potion] effect");
-    }
+	private Expression<Block> beacon;
+	private boolean isPrimary;
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        beacon = (Expression<Block>) expr[0];
-        mode = parseResult.mark;
-        return true;
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, @NotNull SkriptParser.ParseResult parseResult) {
+		beacon = (Expression<Block>) expr[0];
+		isPrimary = parseResult.mark == 0;
+		return true;
+	}
 
-    @Override
-    protected PotionEffect[] get(Event e) {
-        if (beacon.getSingle(e) != null) {
-            if (beacon.getSingle(e).getType() == Material.BEACON) {
-                return new PotionEffect[]{mode == 0 ? ((Beacon) beacon.getSingle(e).getState()).getPrimaryEffect() : ((Beacon) beacon.getSingle(e).getState()).getSecondaryEffect()};
-            }
-        }
-        return null;
-    }
+	@Nullable
+	@Override
+	protected PotionEffect[] get(Event e) {
+		Block b = beacon.getSingle(e);
+		if (b == null) {
+			return null;
+		}
+		if (b.getType() == Material.BEACON) {
+			return new PotionEffect[]{isPrimary
+				? ((Beacon) b.getState()).getPrimaryEffect()
+				: ((Beacon) b.getState()).getSecondaryEffect()};
+		}
+		return null;
+	}
 
-    @Override
-    public void change(Event e, Object[] delta, Changer.ChangeMode changeMode) {
-        if (beacon.getSingle(e) != null) {
-            if (beacon.getSingle(e).getType() == Material.BEACON) {
-                Beacon state = ((Beacon) beacon.getSingle(e).getState());
-                switch (changeMode) {
-                    case SET:
-                        if (mode == 0) {
-                            state.setPrimaryEffect((PotionEffectType) delta[0]);
-                        } else {
-                            state.setSecondaryEffect((PotionEffectType) delta[0]);
-                        }
-                        break;
-                    case DELETE:
-                    case RESET:
-                        if (mode == 0) {
-                            state.setPrimaryEffect(null);
-                        } else {
-                            state.setSecondaryEffect(null);
-                        }
-                        break;
-                }
-                state.update(true, false);
-            }
-        }
-    }
+	@Override
+	public void change(Event e, Object[] delta, @NotNull Changer.ChangeMode changeMode) {
+		Block b = beacon.getSingle(e);
+		if (b == null) {
+			return;
+		}
+		if (b.getType() == Material.BEACON) {
+			Beacon state = ((Beacon) b.getState());
+			switch (changeMode) {
+				case SET:
+					if (isPrimary) {
+						state.setPrimaryEffect((PotionEffectType) delta[0]);
+					} else {
+						state.setSecondaryEffect((PotionEffectType) delta[0]);
+					}
+					break;
+				case DELETE:
+				case RESET:
+					if (isPrimary) {
+						state.setPrimaryEffect(null);
+					} else {
+						state.setSecondaryEffect(null);
+					}
+					break;
+			}
+			state.update(true, false);
+		}
+	}
 
-    @Override
-    public Class<?>[] acceptChange(Changer.ChangeMode mode) {
-        if (mode != Changer.ChangeMode.REMOVE && mode != Changer.ChangeMode.REMOVE_ALL && mode != Changer.ChangeMode.ADD) {
-            return CollectionUtils.array(PotionEffectType.class);
-        }
-        return null;
-    }
+	@Nullable
+	@Override
+	public Class<?>[] acceptChange(Changer.ChangeMode mode) {
+		if (mode != Changer.ChangeMode.REMOVE && mode != Changer.ChangeMode.REMOVE_ALL
+			&& mode != Changer.ChangeMode.ADD) {
+			return CollectionUtils.array(PotionEffectType.class);
+		}
+		return null;
+	}
 
-    @Override
-    public Class<? extends PotionEffect> getReturnType() {
-        return null;
-    }
+	@Nullable
+	@Override
+	public Class<? extends PotionEffect> getReturnType() {
+		return PotionEffect.class;
+	}
 
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
+	@Override
+	public boolean isSingle() {
+		return true;
+	}
 
-    @Override
-    public String toString(Event event, boolean b) {
-        return null;
-    }
+	@Nullable
+	@Override
+	public String toString(Event event, boolean b) {
+		return ((isPrimary) ? "primary " : "secondary ") + "effect of " + beacon.toString(event, b);
+	}
 }

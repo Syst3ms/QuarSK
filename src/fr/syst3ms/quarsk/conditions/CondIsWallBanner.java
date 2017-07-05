@@ -1,47 +1,29 @@
 package fr.syst3ms.quarsk.conditions;
 
-import ch.njol.skript.lang.Condition;
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.util.Kleenean;
+import ch.njol.skript.conditions.base.PropertyCondition;
 import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.block.Block;
-import org.bukkit.event.Event;
 import org.bukkit.material.Banner;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by PRODSEB on 30/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
-public class CondIsWallBanner extends Condition {
-    private Expression<Block> block;
+@SuppressWarnings({"unchecked"})
+public class CondIsWallBanner extends PropertyCondition<Block> {
 
-    static {
-        Registration.newCondition("Banner block is a wall banner condition", CondIsWallBanner.class, "[banner] [block] %block% (0¦is|1¦is(n't| not)) [a] wall banner");
-    }
+	static {
+		Registration.newPropertyCondition(CondIsWallBanner.class, "[a] wall banner", "block");
+	}
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        block = (Expression<Block>) expr[0];
-        setNegated(parseResult.mark == 1);
-        return true;
-    }
+	@Override
+	public boolean check(Block block) {
+		return block instanceof Banner && ((Banner) block).isWallBanner();
+	}
 
-    @Override
-    public boolean check(Event e) {
-        if (block != null) {
-            if (block.getSingle(e) != null) {
-                if (block.getSingle(e).getState() instanceof Banner) {
-                    Banner banner = (Banner) block.getSingle(e).getState();
-                    return isNegated() != banner.isWallBanner();
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public String toString(Event event, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	protected String getPropertyName() {
+		return "a wall banner";
+	}
 }

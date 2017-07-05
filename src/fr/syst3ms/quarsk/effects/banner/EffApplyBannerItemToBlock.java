@@ -11,43 +11,50 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by PRODSEB on 28/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class EffApplyBannerItemToBlock extends Effect {
-    private Expression<ItemStack> item;
-    private Expression<Block> block;
+	static {
+		Registration.newEffect(
+			EffApplyBannerItemToBlock.class,
+			"apply [(banner|shield)] patterns of %itemstack% to %block%",
+			"apply %itemstack%['s] [(banner|shield)] pattern[s] to %block%"
+		);
+	}
 
-    static {
-        Registration.newEffect("Make a banner block look exactly like a banner item", EffApplyBannerItemToBlock.class, "apply (banner|shield) [item] pattern[s] of %itemstack% to [banner] [block] %block%", "apply [item] %itemstack%['s] (banner|shield) pattern[s] to [banner] [block] %block%");
-    }
+	private Expression<ItemStack> item;
+	private Expression<Block> block;
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        item = (Expression<ItemStack>) expr[0];
-        block = (Expression<Block>) expr[1];
-        return true;
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+		item = (Expression<ItemStack>) expr[0];
+		block = (Expression<Block>) expr[1];
+		return true;
+	}
 
-    @Override
-    protected void execute(Event e) {
-        if (item != null && block != null) {
-            if (item.getSingle(e) != null && block.getSingle(e) != null) {
-                if ((item.getSingle(e).getType() == Material.BANNER || item.getSingle(e).getType() == Material.SHIELD) && block.getSingle(e).getType() == Material.BANNER) {
-                    BannerMeta itemMeta = ((BannerMeta) item.getSingle(e).getItemMeta());
-                    Banner blockMeta = ((Banner) block.getSingle(e).getState());
-                    blockMeta.setPatterns(itemMeta.getPatterns());
-                    blockMeta.setBaseColor(itemMeta.getBaseColor());
-                    blockMeta.update(true, false);
-                }
-            }
-        }
-    }
+	@Override
+	protected void execute(Event e) {
+		ItemStack i = item.getSingle(e);
+		Block b = block.getSingle(e);
+		if (i == null || b == null) {
+			return;
+		}
+		if ((i.getType() == Material.BANNER || i.getType() == Material.SHIELD) && b.getType() == Material.BANNER) {
+			BannerMeta itemMeta = ((BannerMeta) i.getItemMeta());
+			Banner blockMeta = ((Banner) b.getState());
+			blockMeta.setPatterns(itemMeta.getPatterns());
+			blockMeta.setBaseColor(itemMeta.getBaseColor());
+			blockMeta.update(true, false);
+		}
+	}
 
-    @Override
-    public String toString(Event event, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	public String toString(Event event, boolean b) {
+		return "apply patterns of " + item.toString(event, b) + " to " + block.toString(event, b);
+	}
 }

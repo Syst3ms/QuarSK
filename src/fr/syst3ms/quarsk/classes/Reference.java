@@ -6,44 +6,44 @@ package fr.syst3ms.quarsk.classes;
 import ch.njol.skript.lang.Expression;
 import org.bukkit.event.Event;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 public class Reference {
-    public static Hashtable<String, Reference> refs = new Hashtable<String, Reference>();
+	private final static Map<String, Reference> referenceMap = new HashMap<>();
 
-    public final String name;
-    public Expression<?> expr;
-    public Event event;
+	private final String name;
+	private final Expression<?> expr;
+	private final Event event;
 
-    public Reference(String name, Expression<?> expr, Event e) {
-        this.name = name;
-        this.expr = expr;
-        this.event = e;
-        Reference.refs.put(name, this);
-    }
+	private Reference(String name, Expression<?> expr, Event event) {
+		this.name = name;
+		this.expr = expr;
+		this.event = event;
+	}
 
-    public static void newReference(String name, Expression<?> expr, Event e) {
-        Reference ref = new Reference(name, expr, e);
-        Reference.refs.put(name, ref);
-    }
+	public static Optional<Reference> byName(String name) {
+		return Optional.ofNullable(referenceMap.getOrDefault(name, null));
+	}
 
-    public String toString() {
-        return "\nName : " + this.name + "\nExpression : " + this.expr.toString(this.event, false) + "\nEvent : " + this.event.toString();
-    }
+	public static void newInstance(String name, Expression<?> value, Event e) {
+		referenceMap.put(name, new Reference(name, value, e));
+	}
 
-    public Object getValue() {
-        return this.expr.getSingle(this.event);
-    }
+	public static void removeReference(String name) {
+		referenceMap.remove(name);
+	}
 
-    public static void clear(String name) {
-        Reference.refs.remove(name);
-    }
+	public String getName() {
+		return name;
+	}
 
-    public static Reference referenceByName(String name) {
-        return (Reference.refs.containsKey(name)) ? Reference.refs.get(name) : null;
-    }
+	public Expression<?> getExpr() {
+		return expr;
+	}
 
-    public static boolean referenceExists(String name) {
-        return Reference.refs.containsKey(name);
-    }
+	public Event getEvent() {
+		return event;
+	}
 }

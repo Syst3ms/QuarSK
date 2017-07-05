@@ -9,48 +9,59 @@ import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.stream.Stream;
 
 /**
  * Created by ARTHUR on 07/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class ExprEntityPotionEffects extends SimpleExpression<PotionEffect> {
-    private Expression<LivingEntity> targets;
+	static {
+		Registration.newExpression(
+			ExprEntityPotionEffects.class,
+			PotionEffect.class,
+			ExpressionType.COMBINED,
+			"[potion] effects (on|of) %livingentities%",
+			"%livingentities%['s] [potion] effects"
+		);
+	}
 
-    static {
-        Registration.newExpression("All potion effects on an entity", ExprEntityPotionEffects.class, PotionEffect.class, ExpressionType.COMBINED, "[(all|every|each)] [active] [potion] effect[s] (on|in) %livingentities%", "[(all|each) of] %livingentities%['s] [active] [potion] effect[s]");
-    }
+	private Expression<LivingEntity> targets;
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        targets = (Expression<LivingEntity>) expr[0];
-        return true;
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+		targets = (Expression<LivingEntity>) expr[0];
+		return true;
+	}
 
-    @Override
-    protected PotionEffect[] get(Event e) {
-        if (targets != null) {
-            if (targets.getArray(e).length > 0) {
-                return Stream.of(targets.getAll(e)).map(LivingEntity::getActivePotionEffects).toArray(PotionEffect[]::new);
-            }
-        }
-        return null;
-    }
+	@Nullable
+	@Override
+	protected PotionEffect[] get(Event e) {
+		if (targets.getArray(e).length > 0) {
+			return Stream.of(targets.getAll(e))
+						 .flatMap(le -> le.getActivePotionEffects().stream())
+						 .toArray(PotionEffect[]::new);
+		}
+		return null;
+	}
 
-    @Override
-    public Class getReturnType() {
-        return PotionEffect.class;
-    }
+	@NotNull
+	@Override
+	public Class getReturnType() {
+		return PotionEffect.class;
+	}
 
-    @Override
-    public String toString(Event e, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	public String toString(Event e, boolean b) {
+		return "potion effects on " + targets.toString(e, b);
+	}
 
-    @Override
-    public boolean isSingle() {
-        return false;
-    }
+	@Override
+	public boolean isSingle() {
+		return false;
+	}
 }

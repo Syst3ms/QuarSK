@@ -12,54 +12,65 @@ import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by ARTHUR on 21/02/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class SExprItemOfBannerBlock extends SimpleExpression<ItemStack> {
-    private Expression<Block> block;
+	static {
+		Registration.newExpression(
+			SExprItemOfBannerBlock.class,
+			ItemStack.class,
+			ExpressionType.COMBINED,
+			"banner item of [banner] %block%",
+			"[banner] %block%['s] banner item"
+		);
+	}
 
-    static {
-        Registration.newExpression("The banner representing a banner block", SExprItemOfBannerBlock.class, ItemStack.class, ExpressionType.COMBINED, "[banner] item of [banner] block %block%", "[banner] %block%['s] [banner] item");
-    }
+	private Expression<Block> block;
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        block = (Expression<Block>) expr[0];
-        return true;
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+		block = (Expression<Block>) expr[0];
+		return true;
+	}
 
-    @Override
-    protected ItemStack[] get(Event e) {
-        if (block != null) {
-            if (block.getSingle(e) != null) {
-                if (block.getSingle(e).getType() == Material.STANDING_BANNER || block.getSingle(e).getType() == Material.WALL_BANNER) {
-                    Banner banner = (Banner) block.getSingle(e).getState();
-                    ItemStack item = new ItemStack(Material.BANNER);
-                    BannerMeta meta = (BannerMeta) item.getItemMeta();
-                    meta.setPatterns(banner.getPatterns());
-                    meta.setBaseColor(banner.getBaseColor());
-                    item.setItemMeta(meta);
-                    return new ItemStack[]{item};
-                }
-            }
-        }
-        return null;
-    }
+	@Nullable
+	@Override
+	protected ItemStack[] get(Event e) {
+		Block b = block.getSingle(e);
+		if (b == null) {
+			return null;
+		}
+		if (b.getType() == Material.STANDING_BANNER || b.getType() == Material.WALL_BANNER) {
+			Banner banner = (Banner) b.getState();
+			ItemStack item = new ItemStack(Material.BANNER);
+			BannerMeta meta = (BannerMeta) item.getItemMeta();
+			meta.setPatterns(banner.getPatterns());
+			meta.setBaseColor(banner.getBaseColor());
+			item.setItemMeta(meta);
+			return new ItemStack[]{item};
+		}
+		return null;
+	}
 
-    @Override
-    public Class<? extends ItemStack> getReturnType() {
-        return ItemStack.class;
-    }
+	@NotNull
+	@Override
+	public Class<? extends ItemStack> getReturnType() {
+		return ItemStack.class;
+	}
 
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
+	@Override
+	public boolean isSingle() {
+		return true;
+	}
 
-    @Override
-    public String toString(Event event, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	public String toString(Event event, boolean b) {
+		return "banner item of " + block.toString(event, b);
+	}
 }

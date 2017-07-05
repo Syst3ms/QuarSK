@@ -2,6 +2,7 @@ package fr.syst3ms.quarsk.util;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,36 +10,35 @@ import java.util.List;
 /**
  * Created by ARTHUR on 03/02/2017.
  */
-@SuppressWarnings("unused")
-public class StringUtils {
+public final class StringUtils {
 
-    public static char[] alphabetLetters() {
-        return "abdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
-    }
+	public static char[] alphabetLetters() {
+		return "abdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+	}
 
-    public static List<String> sizedSplitString(CharSequence s, int groupSize, boolean equalGroupSizes) {
-        return equalGroupSizes ? s.length() % groupSize == 0 ? Splitter.fixedLength(groupSize).splitToList(s) : new ArrayList<>() : Splitter.fixedLength(groupSize).splitToList(s);
-    }
+	@NotNull
+	public static List<String> sizedSplitString(@NotNull CharSequence s, int groupSize, boolean equalGroupSizes) {
+		if (s.length() % groupSize == 0) {
+			return Splitter.fixedLength(groupSize).splitToList(s);
+		} else {
+			return equalGroupSizes ? new ArrayList<String>() : Splitter.fixedLength(groupSize).splitToList(s);
+		}
+	}
 
-    public static String join(CharSequence... strings) {
-        return Joiner.on("").join(strings);
-    }
+	public static String join(@NotNull CharSequence... strings) {
+		return Joiner.on("").join(strings);
+	}
 
-    public static String space(String regex, String s) {
-        return sentenceCapitalization(Joiner.on(' ').join(s.split(regex)));
-    }
-
-    public static String sentenceCapitalization(String s) {
-        return setCharAt(s.toLowerCase(), 0, Character.toUpperCase(s.charAt(0)));
-    }
-
-    public static String setCharAt(String s, int index, char c) {
-        char[] chars = s.toCharArray();
-        chars[index] = c;
-        return new String(chars);
-    }
-
-    public static boolean containsIgnoreCase(String s, String check) {
-        return s.toLowerCase().contains(check.toLowerCase());
-    }
+	public static String englishJoin(@NotNull String[] parts) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < parts.length; i++) {
+			String part = parts[i];
+			if (i + 1 == parts.length) {
+				sb.append(" and ").append(part);
+			} else {
+				sb.append(", ").append(part);
+			}
+		}
+		return sb.toString();
+	}
 }

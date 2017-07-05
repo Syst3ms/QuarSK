@@ -1,53 +1,33 @@
 package fr.syst3ms.quarsk.expressions.potion;
 
-import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
-import ch.njol.skript.lang.SkriptParser;
-import ch.njol.skript.lang.util.SimpleExpression;
-import ch.njol.util.Kleenean;
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import fr.syst3ms.quarsk.classes.Registration;
-import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by ARTHUR on 08/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
-public class ExprPotionEffectTier extends SimpleExpression<Number> {
-    private Expression<PotionEffect> effect;
+@SuppressWarnings({"unchecked"})
+public class ExprPotionEffectTier extends SimplePropertyExpression<PotionEffect, Number> {
 
-    static {
-        Registration.newExpression("Tier of a potion effect", ExprPotionEffectTier.class, Number.class, ExpressionType.COMBINED, "(tier|amplifier) of [potion] [effect] %potioneffect%", "[potion] [effect] %potioneffect%['s] (tier|amplifier)");
-    }
+	static {
+		Registration.newPropertyExpression(ExprPotionEffectTier.class, Number.class, "tier", "potioneffect");
+	}
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        effect = (Expression<PotionEffect>) expr[0];
-        return true;
-    }
+	@Override
+	public Number convert(PotionEffect potionEffect) {
+		return potionEffect.getAmplifier();
+	}
 
-    @Override
-    protected Number[] get(Event e) {
-       if (effect.getSingle(e) != null) {
-           return new Number[]{effect.getSingle(e).getAmplifier()};
-       } else {
-           return null;
-       }
-    }
+	@Override
+	protected String getPropertyName() {
+		return "tier";
+	}
 
-
-    @Override
-    public Class<? extends Number> getReturnType() {
-        return Number.class;
-    }
-
-    @Override
-    public String toString(Event e, boolean b) {
-        return getClass().getName();
-    }
-
-    @Override
-    public boolean isSingle() {
-        return true;
-    }
+	@NotNull
+	@Override
+	public Class<? extends Number> getReturnType() {
+		return Number.class;
+	}
 }

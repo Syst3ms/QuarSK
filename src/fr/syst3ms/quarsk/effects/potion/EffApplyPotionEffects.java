@@ -8,40 +8,40 @@ import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 /**
  * Created by ARTHUR on 07/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class EffApplyPotionEffects extends Effect {
-    private Expression<LivingEntity> player;
-    private Expression<PotionEffect> potionEffects;
+	static {
+		Registration.newEffect(EffApplyPotionEffects.class, "apply %potioneffects% to %livingentities%");
+	}
 
-    static {
-        Registration.newEffect("Applies one or more potion effects to an entity", EffApplyPotionEffects.class, "apply [potion] [effect[s] [of]] %potioneffects% to %livingentities%");
-    }
+	private Expression<LivingEntity> targets;
+	private Expression<PotionEffect> potionEffects;
 
-    @Override
-    protected void execute(Event e) {
-        if (potionEffects.getAll(e) != null && potionEffects.getAll(e).length > 0) {
-            LivingEntity[] target = player.getAll(e);
-            for (PotionEffect eff : potionEffects.getAll(e)) {
-                for (LivingEntity ent : target) {
-                    eff.apply(ent);
-                }
-            }
-        }
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+		potionEffects = (Expression<PotionEffect>) expr[0];
+		targets = (Expression<LivingEntity>) expr[1];
+		return true;
+	}
 
-    @Override
-    public String toString(Event e, boolean b) {
-        return e.toString();
-    }
+	@Override
+	protected void execute(Event e) {
+		if (potionEffects.getAll(e).length > 0 && targets.getAll(e).length > 0) {
+			Stream.of(targets.getAll(e)).forEach(t -> t.addPotionEffects(Arrays.asList(potionEffects.getAll(e))));
+		}
+	}
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        potionEffects = (Expression<PotionEffect>) expr[0];
-        player = (Expression<LivingEntity>) expr[1];
-        return true;
-    }
+	@NotNull
+	@Override
+	public String toString(Event e, boolean b) {
+		return "apply " + potionEffects.toString(e, b) + " to " + targets.toString(e, b);
+	}
 }

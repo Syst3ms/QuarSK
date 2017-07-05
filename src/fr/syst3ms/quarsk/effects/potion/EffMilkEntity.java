@@ -8,37 +8,37 @@ import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by ARTHUR on 12/01/2017.
  */
-@SuppressWarnings({"unused", "unchecked"})
+@SuppressWarnings({"unchecked"})
 public class EffMilkEntity extends Effect {
-    private Expression<LivingEntity> entity;
+	static {
+		Registration.newEffect(EffMilkEntity.class, "milk %livingentities%");
+	}
 
-    static {
-        Registration.newEffect("Removes all potion effects from an entity", EffMilkEntity.class, "milk %livingentities%");
-    }
+	private Expression<LivingEntity> entities;
 
-    @Override
-    public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-        entity = (Expression<LivingEntity>) expr[0];
-        return true;
-    }
+	@Override
+	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+		entities = (Expression<LivingEntity>) expr[0];
+		return true;
+	}
 
-    @Override
-    protected void execute(Event e) {
-        if (entity.getAll(e) != null) {
-            for (LivingEntity ent : entity.getAll(e)) {
-                for (PotionEffect eff : ent.getActivePotionEffects()) {
-                    ent.removePotionEffect(eff.getType());
-                }
-            }
-        }
-    }
+	@Override
+	protected void execute(Event e) {
+		for (LivingEntity ent : entities.getAll(e)) {
+			for (PotionEffect eff : ent.getActivePotionEffects()) {
+				ent.removePotionEffect(eff.getType());
+			}
+		}
+	}
 
-    @Override
-    public String toString(Event e, boolean b) {
-        return getClass().getName();
-    }
+	@NotNull
+	@Override
+	public String toString(Event e, boolean b) {
+		return "milk " + entities.toString(e, b);
+	}
 }
