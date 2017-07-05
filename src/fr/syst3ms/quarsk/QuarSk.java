@@ -49,6 +49,7 @@ public class QuarSk extends JavaPlugin {
 			getLogger().log(Level.INFO, "");
 			getServer().getPluginManager().disablePlugin(this);
 		}
+		getLogger().log(Level.INFO,  "Starting up QuarSk v" + getPlugin().getDescription().getVersion() + " !");
 		plugin = this;
 		normalRegister();
 		if (Registration.generateFolder()) {
