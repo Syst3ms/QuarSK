@@ -76,7 +76,6 @@ public class QuarSk extends JavaPlugin {
 			.description("A getter for potion effects")
 			.user("potion ?effect")
 			.parser(new Parser<PotionEffect>() {
-				@org.jetbrains.annotations.Nullable
 				@Override
 				@Nullable
 				public PotionEffect parse(String obj, ParseContext context) {
