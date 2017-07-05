@@ -1,5 +1,6 @@
 package fr.syst3ms.quarsk.expressions.beacon;
 
+import ch.njol.skript.expressions.base.SimplePropertyExpression;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -16,34 +17,25 @@ import org.jetbrains.annotations.Nullable;
  * Created by Syst3ms on 16/01/2017.
  */
 @SuppressWarnings({"unchecked"})
-public class ExprBeaconTier extends SimpleExpression<Number> {
+public class ExprBeaconTier extends SimplePropertyExpression<Block, Number> {
 	static {
-		Registration.newExpression(
+		Registration.newPropertyExpression(
 			ExprBeaconTier.class,
 			Number.class,
-			ExpressionType.COMBINED,
-			"beacon (tier|level) of %block%",
-			"%block%['s] beacon (tier|level)"
+			"beacon (tier|level)",
+			"block"
 		);
 	}
 
-	private Expression<Block> beacon;
-
 	@Override
-	public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
-		beacon = (Expression<Block>) expr[0];
-		return true;
+	protected String getPropertyName() {
+		return "beacon tier";
 	}
 
-	@Nullable
 	@Override
-	protected Number[] get(Event e) {
-		Block b = beacon.getSingle(e);
-		if (b == null) {
-			return null;
-		}
+	public Number convert(Block b) {
 		if (b.getState() instanceof Beacon) {
-			return new Number[]{((Beacon) b.getState()).getTier()};
+			return ((Beacon) b.getState()).getTier();
 		}
 		return null;
 	}
@@ -52,16 +44,5 @@ public class ExprBeaconTier extends SimpleExpression<Number> {
 	@Override
 	public Class<? extends Number> getReturnType() {
 		return Number.class;
-	}
-
-	@NotNull
-	@Override
-	public String toString(Event event, boolean b) {
-		return "beacon tier of " + beacon.toString(event, b);
-	}
-
-	@Override
-	public boolean isSingle() {
-		return true;
 	}
 }

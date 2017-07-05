@@ -28,11 +28,91 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="EvtPotionSplash.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/events/EvtPotionSplash.java">
+      <file leaf-file-name="BannerUtils.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/util/BannerUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="26" column="13" lean-forward="true" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="67" />
+            <state relative-caret-position="681">
+              <caret line="85" column="20" lean-forward="false" selection-start-line="85" selection-start-column="20" selection-end-line="85" selection-end-column="20" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SExprItemBaseColor.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprItemBaseColor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="272">
+              <caret line="29" column="13" lean-forward="true" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SExprItemLayers.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprItemLayers.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="31" column="49" lean-forward="true" selection-start-line="30" selection-start-column="12" selection-end-line="31" selection-end-column="49" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExprItemOfBannerBlock.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprItemOfBannerBlock.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="187">
+              <caret line="28" column="19" lean-forward="true" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExprBeaconTier.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/ExprBeaconTier.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="196">
+              <caret line="25" column="19" lean-forward="true" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExprEntitiesInRange.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/ExprEntitiesInRange.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="26" column="50" lean-forward="true" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="50" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SExprBeaconEffects.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/SExprBeaconEffects.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="30" column="82" lean-forward="false" selection-start-line="30" selection-start-column="82" selection-end-line="30" selection-end-column="82" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SExprBeaconFuel.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/SExprBeaconFuel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-68">
+              <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ExprPotionSplashAffectedEntities.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/eventvalues/ExprPotionSplashAffectedEntities.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="20" column="13" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -40,93 +120,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ExprBannerItemFromMnc.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprBannerItemFromMnc.java">
+      <file leaf-file-name="QuarSk.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/QuarSk.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="25" column="85" lean-forward="false" selection-start-line="25" selection-start-column="85" selection-end-line="25" selection-end-column="85" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExprBannerOrShieldWithLayers.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprBannerOrShieldWithLayers.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="41" column="43" lean-forward="false" selection-start-line="41" selection-start-column="43" selection-end-line="41" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExprCustomBannerLayer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprCustomBannerLayer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="25" column="124" lean-forward="false" selection-start-line="25" selection-start-column="13" selection-end-line="25" selection-end-column="124" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ExprRandomBanner.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprRandomBanner.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="24" column="13" lean-forward="false" selection-start-line="24" selection-start-column="13" selection-end-line="24" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SExprBannerBlockBaseColor.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprBannerBlockBaseColor.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="23" column="28" lean-forward="true" selection-start-line="23" selection-start-column="28" selection-end-line="23" selection-end-column="28" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Registration.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/classes/Registration.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="42" column="63" lean-forward="false" selection-start-line="42" selection-start-column="63" selection-end-line="42" selection-end-column="63" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SExprBannerBlockLayers.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprBannerBlockLayers.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="31" column="44" lean-forward="false" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EffOrientTowards.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/effects/EffOrientTowards.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EvtLingeringPotionSplash.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/events/EvtLingeringPotionSplash.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" column="87" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="87" />
+            <state relative-caret-position="391">
+              <caret line="153" column="10" lean-forward="true" selection-start-line="153" selection-start-column="10" selection-end-line="153" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#4812#4990#0" expanded="true" />
+                <element signature="e#4989#4990#0" expanded="true" />
+                <element signature="e#5093#5307#0" expanded="true" />
+                <element signature="e#5306#5307#0" expanded="true" />
+                <element signature="e#5406#5612#0" expanded="true" />
+                <element signature="e#5611#5612#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -205,7 +211,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/conditions/CondHasPotionEffect.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/conditions/CondIsWallBanner.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/effects/banner/EffApplyBannerItemToBlock.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/effects/potion/EffApplyPotionEffects.java" />
@@ -218,8 +223,6 @@
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprCustomBannerLayer.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprRandomBanner.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprItemLayers.java" />
-        <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprItemOfBannerBlock.java" />
-        <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/ExprBeaconTier.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/ExprEntitiesInRange.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/SExprBeaconEffects.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/SExprBeaconFuel.java" />
@@ -256,6 +259,9 @@
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/QuarSk.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprBannerOrShieldWithLayers.java" />
         <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprBannerBlockLayers.java" />
+        <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprItemOfBannerBlock.java" />
+        <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprItemOfBannerBlock.java" />
+        <option value="$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/ExprBeaconTier.java" />
       </list>
     </option>
   </component>
@@ -513,6 +519,32 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="eventvalues" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QuarSK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="QuarSK" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="quarsk" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="expressions" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="beacon" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -878,7 +910,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1456" height="876" extended-state="7" />
+    <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -952,62 +984,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/potion/ExprEntityPotionEffects.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="20" column="77" lean-forward="false" selection-start-line="20" selection-start-column="77" selection-end-line="20" selection-end-column="77" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/potion/ExprPotionEffectDuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="15" column="116" lean-forward="false" selection-start-line="15" selection-start-column="116" selection-end-line="15" selection-end-column="116" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/potion/ExprPotionEffectTier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="14" column="90" lean-forward="false" selection-start-line="14" selection-start-column="90" selection-end-line="14" selection-end-column="90" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/potion/ExprPotionEffectType.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="31" column="16" lean-forward="false" selection-start-line="31" selection-start-column="16" selection-end-line="31" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/potion/SExprItemEffectTypeAmplifier.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-153">
-          <caret line="34" column="52" lean-forward="false" selection-start-line="34" selection-start-column="52" selection-end-line="34" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/potion/SExprItemEffectTypeDuration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1276">
-          <caret line="144" column="97" lean-forward="false" selection-start-line="144" selection-start-column="97" selection-end-line="144" selection-end-column="97" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/potion/SExprPotionItemEffects.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1751">
-          <caret line="119" column="64" lean-forward="false" selection-start-line="119" selection-start-column="64" selection-end-line="119" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/potion/SExprThrownPotionEffects.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1887">
@@ -1017,16 +993,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/util/ListUtils.java" />
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/util/BannerUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1292">
-          <caret line="85" column="20" lean-forward="false" selection-start-line="85" selection-start-column="20" selection-end-line="85" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/util/MathUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="119">
@@ -1222,37 +1188,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/eventvalues/ExprPotionSplashAffectedEntities.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-26">
-          <caret line="20" column="13" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/conditions/CondIsWallBanner.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="187">
           <caret line="15" column="28" lean-forward="false" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/QuarSk.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="78" column="25" lean-forward="true" selection-start-line="78" selection-start-column="25" selection-end-line="78" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4812#4990#0" expanded="true" />
-            <element signature="e#4989#4990#0" expanded="true" />
-            <element signature="e#5093#5307#0" expanded="true" />
-            <element signature="e#5306#5307#0" expanded="true" />
-            <element signature="e#5406#5612#0" expanded="true" />
-            <element signature="e#5611#5612#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1366,8 +1306,98 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprBannerBlockLayers.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="30" column="12" lean-forward="true" selection-start-line="30" selection-start-column="12" selection-end-line="31" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprItemBaseColor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="29" column="13" lean-forward="true" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/SExprItemLayers.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="31" column="44" lean-forward="false" selection-start-line="31" selection-start-column="44" selection-end-line="31" selection-end-column="44" />
+          <caret line="31" column="49" lean-forward="true" selection-start-line="30" selection-start-column="12" selection-end-line="31" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/banner/ExprItemOfBannerBlock.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="28" column="19" lean-forward="true" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/ExprBeaconTier.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="25" column="19" lean-forward="true" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/ExprEntitiesInRange.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="26" column="50" lean-forward="true" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/SExprBeaconEffects.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="30" column="82" lean-forward="false" selection-start-line="30" selection-start-column="82" selection-end-line="30" selection-end-column="82" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/eventvalues/ExprPotionSplashAffectedEntities.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="20" column="13" lean-forward="false" selection-start-line="20" selection-start-column="13" selection-end-line="20" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/expressions/beacon/SExprBeaconFuel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-68">
+          <caret line="18" column="13" lean-forward="false" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/QuarSk.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="391">
+          <caret line="153" column="10" lean-forward="true" selection-start-line="153" selection-start-column="10" selection-end-line="153" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4812#4990#0" expanded="true" />
+            <element signature="e#4989#4990#0" expanded="true" />
+            <element signature="e#5093#5307#0" expanded="true" />
+            <element signature="e#5306#5307#0" expanded="true" />
+            <element signature="e#5406#5612#0" expanded="true" />
+            <element signature="e#5611#5612#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/fr/syst3ms/quarsk/util/BannerUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="681">
+          <caret line="85" column="20" lean-forward="false" selection-start-line="85" selection-start-column="20" selection-end-line="85" selection-end-column="20" />
           <folding />
         </state>
       </provider>
