@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 @SuppressWarnings({"unchecked"})
-public class QuarSk extends JavaPlugin {
+public class Quarsk extends JavaPlugin {
 	private static SkriptAddon addonInstance;
 	private static JavaPlugin plugin;
 
@@ -45,18 +45,22 @@ public class QuarSk extends JavaPlugin {
 	}
 
 	public void onEnable() {
-		if (getServer().getBukkitVersion().startsWith("1.7")) {
-			getLogger().log(Level.INFO, "");
+		if (!Skript.isRunningMinecraft(1, 9)) {
+			getLogger().log(Level.INFO, "Outdated Minecraft version ! Update to 1.9 or newer !");
 			getServer().getPluginManager().disablePlugin(this);
 		}
-		getLogger().log(Level.INFO,  "Starting up QuarSk v" + getPlugin().getDescription().getVersion() + " !");
+		if (Skript.getVersion().getRevision() < 26) {
+			getLogger().log(Level.INFO, "Outdated Skript version ! Update to dev26 or newer !");
+			getServer().getPluginManager().disablePlugin(this);
+		}
 		plugin = this;
+		getLogger().log(Level.INFO,  "Starting up Quarsk v" + getPlugin().getDescription().getVersion() + " !");
 		normalRegister();
 		if (Registration.generateFolder()) {
-			getLogger().log(Level.INFO, "Created QuarSk's folder !");
+			getLogger().log(Level.INFO, "Created Quarsk's folder !");
 		}
 		if (Registration.generateSyntaxFile()) {
-			getLogger().log(Level.INFO, "Generated QuarSk's syntax file !");
+			getLogger().log(Level.INFO, "Generated Quarsk's syntax file !");
 		}
 		getLogger().log(Level.INFO,
 			"Registered " + Registration.getEvents().size() + " events, " + Registration.getConditions().size()

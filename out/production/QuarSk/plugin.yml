@@ -1,6 +1,5 @@
-name: QuarSk
+name: Quarsk
 version: 1.3
 author: Syst3ms
 main: fr.syst3ms.quarsk.Quarsk
 depend: [Skript]
-soft-depend: [Skellett]

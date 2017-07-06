@@ -6,7 +6,7 @@ import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.*;
 import ch.njol.skript.registrations.Classes;
 import com.google.common.collect.ImmutableSet;
-import fr.syst3ms.quarsk.QuarSk;
+import fr.syst3ms.quarsk.Quarsk;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -78,11 +78,11 @@ public final class Registration {
 	}
 
 	public static boolean generateFolder() {
-		return !QuarSk.getPlugin().getDataFolder().exists() && QuarSk.getPlugin().getDataFolder().mkdirs();
+		return !Quarsk.getPlugin().getDataFolder().exists() && Quarsk.getPlugin().getDataFolder().mkdirs();
 	}
 
 	public static boolean generateSyntaxFile() {
-		File syntaxFile = new File(JavaPlugin.getPlugin(QuarSk.class).getDataFolder(), "syntax.txt");
+		File syntaxFile = new File(JavaPlugin.getPlugin(Quarsk.class).getDataFolder(), "syntax.txt");
 		if (!syntaxFile.exists()) {
 			try {
 				syntaxFile.createNewFile();
@@ -115,7 +115,7 @@ public final class Registration {
 				for (String s : info.getPatterns())
 					writeLine(
 						fileWriter,
-						"  - " + s + " >> returns a(n) " + Classes.getExactClassInfo(info.getReturnType())
+						"  - " + s + " >> returns " + Classes.getExactClassInfo(info.getReturnType())
 																  .getName()
 																  .withIndefiniteArticle()
 					);
