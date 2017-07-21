@@ -12,6 +12,7 @@ import ch.njol.skript.util.PotionEffectUtils;
 import com.sun.istack.internal.Nullable;
 import fr.syst3ms.quarsk.classes.EnumType;
 import fr.syst3ms.quarsk.classes.Registration;
+import fr.syst3ms.quarsk.util.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -26,6 +27,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.logging.Level;
+import java.util.regex.Matcher;
 
 @SuppressWarnings({"unchecked"})
 public class Quarsk extends JavaPlugin {
@@ -49,7 +51,7 @@ public class Quarsk extends JavaPlugin {
 			getLogger().log(Level.INFO, "Outdated Minecraft version ! Update to 1.9 or newer !");
 			getServer().getPluginManager().disablePlugin(this);
 		}
-		if (Skript.getVersion().getRevision() < 26) {
+		if (getSkriptRevision() < 26) {
 			getLogger().log(Level.INFO, "Outdated Skript version ! Update to dev26 or newer !");
 			getServer().getPluginManager().disablePlugin(this);
 		}
@@ -68,6 +70,21 @@ public class Quarsk extends JavaPlugin {
 				.getExpressions()
 				.size() + " expressions ! Good game !"
 		);
+	}
+
+	private int getSkriptRevision() {
+		String postfix = (String) ReflectionUtils.getInstanceField(Skript.getVersion(), "postfix");
+		if (postfix == null)
+			return -1;
+		java.util.regex.Pattern pat = java.util.regex.Pattern.compile("dev(\\d+).?");
+		Matcher m = pat.matcher(postfix);
+		int rev;
+		try {
+			rev = m.matches() ? Integer.parseInt(m.group(1)) : -1;
+		} catch (NumberFormatException e) {
+			rev = -1;
+		}
+		return rev;
 	}
 
 	private void normalRegister() {

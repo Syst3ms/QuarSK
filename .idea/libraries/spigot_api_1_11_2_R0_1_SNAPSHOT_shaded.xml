@@ -4,21 +4,11 @@
       <root url="file://$PROJECT_DIR$" />
     </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$USER_HOME$/Desktop/BuildTools/Spigot/Spigot-API/target/spigot-api-1.12-R0.1-SNAPSHOT-shaded.jar!/" />
       <root url="jar://$USER_HOME$/Downloads/Skript (4).jar!/" />
-      <root url="jar://$USER_HOME$/Downloads/jsr305-1.3.9.jar/jsr305-1.3.9.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/BuildTools/spigot-1.12.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/BuildTools/Spigot/Spigot-API/target/spigot-api-1.11.2-R0.1-SNAPSHOT-shaded.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$USER_HOME$/Downloads/Skript (4).jar!/" />
-      <root url="jar://$USER_HOME$/Downloads/jsr305-1.3.9.jar/jsr305-1.3.9.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/BuildTools/spigot-1.12.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/BuildTools/spigot-1.12.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/BuildTools/Spigot/Spigot-API/target/spigot-api-1.12-R0.1-SNAPSHOT-shaded.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/BuildTools/spigot-1.12.jar!/" />
-      <root url="jar://$USER_HOME$/Desktop/BuildTools/Spigot/Spigot-API/target/spigot-api-1.12-R0.1-SNAPSHOT-shaded.jar!/" />
-      <root url="jar://$USER_HOME$/Downloads/Skript (4).jar!/" />
       <root url="jar://$USER_HOME$/Downloads/Skript (4).jar!/" />
     </SOURCES>
   </library>
