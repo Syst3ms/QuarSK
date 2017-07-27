@@ -3,9 +3,6 @@
     <output-path>$USER_HOME$/Desktop/BuildTools/Spigot/Spigot-Server/target/test-server/plugins</output-path>
     <root id="archive" name="QuarSk.jar">
       <element id="module-output" name="QuarSk" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../BuildTools/spigot-api-1.11.2-R0.1-SNAPSHOT-shaded.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../BuildTools/spigot-1.11.2.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../BuildTools/test-server/plugins/Skript-oldparser.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
