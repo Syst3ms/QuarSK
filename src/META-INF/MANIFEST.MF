@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: fr.syst3ms.quarsk.Quarsk
+Main-Class: fr.syst3ms.quarsk.QuarSk

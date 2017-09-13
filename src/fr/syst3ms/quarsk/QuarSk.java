@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import java.util.regex.Matcher;
 
 @SuppressWarnings({"unchecked"})
-public class Quarsk extends JavaPlugin {
+public class QuarSk extends JavaPlugin {
     private static SkriptAddon addonInstance;
     private static JavaPlugin plugin;
 

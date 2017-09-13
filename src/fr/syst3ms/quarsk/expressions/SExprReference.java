@@ -2,18 +2,24 @@ package fr.syst3ms.quarsk.expressions;
 
 import ch.njol.skript.Skript;
 import ch.njol.skript.lang.Expression;
+import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.skript.lang.VariableString;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.skript.util.StringMode;
 import ch.njol.util.Kleenean;
 import fr.syst3ms.quarsk.classes.Reference;
+import fr.syst3ms.quarsk.classes.Registration;
 import org.bukkit.event.Event;
 
 import java.util.Optional;
 
 public class SExprReference extends SimpleExpression<Object> {
 	private VariableString variableName;
+
+	static {
+		Registration.newExpression(SExprReference.class, Object.class, ExpressionType.SIMPLE, "@<.+?>@");
+	}
 
 	@Override
 	public boolean init(Expression<?>[] expressions, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
@@ -22,6 +28,7 @@ public class SExprReference extends SimpleExpression<Object> {
 			Skript.error("Invalid reference name.");
 			return false;
 		}
+		variableName = v;
 		return true;
 	}
 
