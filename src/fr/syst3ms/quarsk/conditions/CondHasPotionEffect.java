@@ -1,5 +1,9 @@
 package fr.syst3ms.quarsk.conditions;
 
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Condition;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
@@ -13,6 +17,15 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by ARTHUR on 12/01/2017.
  */
+@Name("Has Potion Effect")
+@Description("Checks if the specified entity has an active potion effect of the specified type")
+@Examples({
+	"on damage:",
+	"	if victim is a squid:",
+	"		if attacker has a water breathing effect:",
+	"			add 2 to damage"
+})
+@Since("1.1")
 @SuppressWarnings({"unchecked"})
 public class CondHasPotionEffect extends Condition {
 	static {

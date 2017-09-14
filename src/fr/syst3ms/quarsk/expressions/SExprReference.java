@@ -1,6 +1,10 @@
 package fr.syst3ms.quarsk.expressions;
 
 import ch.njol.skript.Skript;
+import ch.njol.skript.doc.Description;
+import ch.njol.skript.doc.Examples;
+import ch.njol.skript.doc.Name;
+import ch.njol.skript.doc.Since;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser;
@@ -14,6 +18,24 @@ import org.bukkit.event.Event;
 
 import java.util.Optional;
 
+@Name("Reference")
+@Description({
+	"The expression to access a reference by name.",
+	"The name can have spaces and expressions in it",
+	"If the expression originally linked to this reference is changed, then this returns value will too"
+})
+@Examples({
+	"on chat:",
+	"	link @name::%player%@ to player's display name",
+	"	cancel event",
+	"	send \"%@name::%player%@% >> %message%\" # Will be the current player's display name",
+	"",
+	"command /whyareyoureadingthis:",
+	"	trigger:",
+	"		set player's display name to \"&1%player's display name%\"",
+	"		send colored \"Your display name is now : %@name::%player%@%\" # Will be the player's new display name"
+})
+@Since("1.0")
 public class SExprReference extends SimpleExpression<Object> {
 	private VariableString variableName;
 
